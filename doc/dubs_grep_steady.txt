@@ -1,0 +1,79 @@
+*dubs_grep_steady.txt*	For Vim version 7.4.	Last change: 2015 Jan 23
+
+Dubsacks Vim -- Grep Steady~
+
+SEARCHING AND REPLACING TEXT		*dubs-grep-steady*
+
+1. About This Plugin			|dubs-grepst-about|
+2. Prerequisites			|dubs-grepst-prerequisites|
+3. Plugin Setup				|dubs-grepst-setup|
+4. Searching Files			|dubs-grepst-commands|
+
+==============================================================================
+1. About This Plugin			*dubs-grepst-about*
+
+This plugin sets up a powerful text search utility.
+
+Project page: https://github.com/landonb/dubs_grep_steady
+
+==============================================================================
+2. Prerequisites			*dubs-grepst-prerequisites*
+
+This script uses an external grep utility, preferably
+`The` `Silver` `Searcher` <http://geoff.greer.fm/ag/>
+(`/usr/bin/ag`) but alternatively falls back on `egrep`.
+The former is a tad faster and it honors `.agignore`
+and `.gitignore` files, which makes it easy to filter
+out the cruft when searching.
+
+Run `sudo` `apt-get` `install` `-y` `ag` to install Silver Searcher.
+
+==============================================================================
+3. Plugin Setup				*dubs-grepst-setup*
+
+After installing this plugin and first running Vim,
+Dubsacks will copy the `dubs_projects.vim.template`
+file to `dubs_grep_steady/dubs_projects.vim`.
+
+Find and open the file and follow the instructions therein.
+Basically, add your project paths to the file, and when you
+search, you'll be asked to choose one of the project paths
+you defined as the base of the search.
+
+You can still search any arbitrary directory when grepping,
+but if you find yourself searching the same project folders
+often, setting up the `dubs_projects.vim` file can save you
+from repeating yourself anytime you search.
+
+==============================================================================
+4. Searching Files			*dubs-grepst-commands*
+
+				*<Leader>g* *\g* *{GrepPrompt_Simple}*
+<Leader>g		Search in Project Files.
+			- Uses *ag* (The Silver Searcher).
+                        - Customize projects by editing '.vimprojects'.
+
+				*<Leader>g <Up>* *\g <Up>*
+<Leader>g<Up>		Show previous search term from search history.
+
+				*<Leader>g <Down>* *\g <Down>*
+<Leader>g<Down>		Show next search term from search history.
+
+				*:gr* *{regex}* *{dir}*
+:gr! "{regex}" {dir}	Search for {regex} matches in files under {dir}.
+
+				*<Shift-F4>* *<S-F4>*
+<Shift-F4>		Start Project search on selected text or word under
+			cursor. Prompts you to choose which project to search.
+
+				*<F4>*
+<F4>			Quick Project Search using selected text or word under
+			cursor and using search location from previous search.
+
+				*<Ctrl-F4>* *<C-F4>*
+<Ctrl-F4>		Start Project search using search location from
+			previous search. Prompts you for search term.
+
+
+ vim:tw=78:ts=8:ft=help:norl:
+

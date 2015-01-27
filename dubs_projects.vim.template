@@ -1,0 +1,71 @@
+" ====================================================================
+" This file is part of Dubsacks.
+"  https://github.com/landonb/dubsacks_vim
+" ====================================================================
+" This file is sourced by dubs_grep_steady/plugin/dubs_grep_steady.vim
+" ====================================================================
+" This script customizes the grep project lookup table.
+
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" Default Search Directory Choices
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+" This is the list of directories you see after starting a search
+" using the <Leader>g or <F4> commands. See :h dubs-grep-steady
+
+" This list isn't intelligent like the :b command or Command-T lists.
+" You'll see the list of projects you can search, and then you enter
+" a number.
+"
+" CUSTOMIZE THE LIST.
+" 
+" Add your own paths and reorder this list however you'd like.
+" Note: the numbers that are already in the list are just there
+" as placeholders; they indicate the number associated with that
+" list entry. If this list is too tall for your Vim window, you'll
+" have to hit Space to scroll it.
+
+let g:ds_simple_grep_locat_lookup = [
+  \ "Search in:",
+  \ "[Enter 1 to Cancel]",
+  \ "path/to/my/project",
+  \ "another/project",
+  \ "4",
+  \ "5",
+  \ "6",
+  \ "7",
+  \ "8",
+  \ $HOME . "/.vim "
+  \   . "`echo " . $HOME . "/.bashrc*` ",
+  \ "10",
+  \ "11",
+  \ "12",
+  \ "13",
+  \ "14",
+  \ "15",
+  \ "16",
+  \ "17",
+  \ "18",
+  \ "19",
+  \ "20",
+  \ "21",
+  \ "22",
+  \ "23",
+  \ "24",
+  \ "25",
+  \ "26",
+  \ "27",
+  \ "28",
+  \ "29",
+  \ "30",
+  \ "31",
+  \ "32",
+  \ "33",
+  \ "34",
+  \ "35",
+  \ "36"
+  \]
+
+let g:ds_simple_grep_locat_lookup_len = 
+  \ len(g:ds_simple_grep_locat_lookup)
+
