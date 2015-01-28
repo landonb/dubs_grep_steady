@@ -6,7 +6,29 @@ About This Plugin
 
 This plugin sets up a powerful text search utility.
 
-Project page: https://github.com/landonb/dubs_grep_steady
+Installation
+------------
+
+Standard Pathogen installation:
+
+.. code-block:: bash
+
+   cd ~/.vim/bundle/
+   git clone https://github.com/landonb/dubs_grep_steady.git
+
+Or, Standard submodule installation:
+
+.. code-block:: bash
+
+   cd ~/.vim/bundle/
+   git submodule add https://github.com/landonb/dubs_grep_steady.git
+
+Online help:
+
+.. code-block:: vim
+
+   :Helptags
+   :help dubs-grep-steady
 
 Prerequisities
 ^^^^^^^^^^^^^^
