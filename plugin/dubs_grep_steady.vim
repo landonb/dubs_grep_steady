@@ -1,6 +1,6 @@
 " File: dubs_grep_steady.vim
 " Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
-" Last Modified: 2015.01.27
+" Last Modified: 2015.03.24
 " Project Page: https://github.com/landonb/dubs_grep_steady
 " Summary: Dubsacks Text Search Commands
 " License: GPLv3
@@ -55,12 +55,16 @@ let g:plugin_dubs_grep_steady = 1
 " only lets you ignore files matching a specific name or file within a
 " specific parent directory.
 
+" See also another Ag plugin, https://github.com/rking/ag.vim.
+" And the Perl-encoded Ack, at http://beyondgrep.com,
+" and the list of other tools, http://betterthanack.com.
+
 if filereadable("/usr/bin/ag")
   " *nix w/ The Silver Searcher
   " -A --after [LINES]      Print lines before match (Default: 2)
   " -B --before [LINES]     Print lines after match (Default: 2)
-  " -S --smart-case         Match case insensitively unless PATTERN contains
-  "                         uppercase characters
+  " -S --smart-case         Match case insensitively unless
+  "                         PATTERN contains uppercase characters
   set grepprg=ag\ -A\ 0\ -B\ 0\ --smart-case\ --hidden
 else
   " Grep options:
@@ -91,14 +95,15 @@ else
     " Windows w/ egrep
     set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"$USERPROFILE/vimfiles/grep-exclude\"
   else
-    let l:exclf = findfile('grep-exclude',
+    let s:exclf = findfile('grep-exclude',
                            \ pathogen#split(&rtp)[0] . "/**")
-    if l:exclf != ''
+    if s:exclf != ''
       " Turn into a full path. See :h filename-modifiers
-      let l:exclf = fnamemodify(l:exclf, ":p")
-      execute 'set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"'.l:exclf.'\"'
+      let s:exclf = fnamemodify(s:exclf, ":p")
+      execute 'set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"'.s:exclf.'\"'
     else
-      echomsg 'Warning: Dubs could find grep-exclude file'
+      "echomsg 'Warning: Dubs could find grep-exclude file'
+      set grepprg=egrep\ -n\ -R\ -i
     endif
   endif
 endif
@@ -213,7 +218,8 @@ function s:GrepPrompt_Simple(term, locat_index)
     "if new_i > 0
     if new_i > 1
       let locat = g:ds_simple_grep_locat_lookup[new_i]
-      execute "silent gr! \"" . the_term . "\" " . locat
+      let options = get(g:ds_simple_grep_ag_options_map, new_i, '')
+      execute "silent gr! " . options . " \"" . the_term . "\" " . locat
       let s:simple_grep_last_i = new_i
       :QFix!(0)
       ":QFix(1, 1)
@@ -450,6 +456,11 @@ if !exists('g:ds_simple_grep_locat_lookup')
 
   let g:ds_simple_grep_locat_lookup_len = 
     \ len(g:ds_simple_grep_locat_lookup)
+
+  " A map of ds_simple_grep_locat_lookup indices to ag --options.
+  " E.g., let g:ds_simple_grep_ag_options_map = {
+  "         \ '13': '--skip-vcs-ignores' }
+  let g:ds_simple_grep_ag_options_map = {}
 
 endif
 

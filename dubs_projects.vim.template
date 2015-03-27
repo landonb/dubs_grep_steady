@@ -69,3 +69,8 @@ let g:ds_simple_grep_locat_lookup = [
 let g:ds_simple_grep_locat_lookup_len = 
   \ len(g:ds_simple_grep_locat_lookup)
 
+" A map of ds_simple_grep_locat_lookup indices to ag --options.
+" E.g., let g:ds_simple_grep_ag_options_map = {
+"         \ '13': '--skip-vcs-ignores' }
+let g:ds_simple_grep_ag_options_map = {}
+
