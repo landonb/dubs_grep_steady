@@ -94,3 +94,30 @@ Key Mapping                  Description                   Notes
 ``:gr! "<regex>" "<dir>"``   Search in Any Location        To search locations that are not in the project list, use the raw grep command.
 ===========================  ============================  ==============================================================================================
 
+Tips 'n Tricks
+--------------
+
+Find Non-Ascii Characters
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+To exclude ASCII values when searching, use the search query:
+
+.. code-block:: vim
+
+    /[^\x00-\x7F]
+
+Find Whole Words
+^^^^^^^^^^^^^^^^
+
+When using The Silver Searcher to search multiple documents,
+e.g., after typing ``\g``, use the boundary identifer, ``\b``.
+
+For example, ``\bthing\b`` finds instances of 'thing' but not 'things'
+or 'something', etc.
+
+However, when searching within a file, e.g., after typing ``/``,
+use the boundary identifiers, ``\<`` and ``\>.``
+
+For example, ``\<thing\>`` finds uses of the whole word, 'thing'.
+
+
