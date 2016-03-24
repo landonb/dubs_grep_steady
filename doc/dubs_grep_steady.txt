@@ -8,6 +8,7 @@ SEARCHING AND REPLACING TEXT		*dubs-grep-steady*
 2. Prerequisites			|dubs-grepst-prerequisites|
 3. Plugin Setup				|dubs-grepst-setup|
 4. Searching Files			|dubs-grepst-commands|
+5. Tips 'n Tricks			|dubs-grepst-tipsntricks|
 
 ==============================================================================
 1. About This Plugin			*dubs-grepst-about*
@@ -74,6 +75,29 @@ from repeating yourself anytime you search.
 <Ctrl-F4>		Start Project search using search location from
 			previous search. Prompts you for search term.
 
+==============================================================================
+5. Tips 'n Tricks			*dubs-grepst-tipsntricks*
+
+Find Non-Ascii Characters
+-------------------------
+
+To exclude ASCII values when searching, use the search query:
+
+ `/[^\x00-\x7F]`
+
+Find Whole Words
+----------------
+
+When using The Silver Searcher to search multiple documents,
+e.g., after typing `\g`, use the boundary identifer, `\b`.
+
+For example, `\bthing\b` finds instances of 'thing' but not 'things'
+or 'something', etc.
+
+However, when searching within a file, e.g., after typing `/`,
+use the boundary identifiers, `\<` and `\>.`
+
+For example, `\<thing\>` finds uses of the whole word, 'thing'.
 
  vim:tw=78:ts=8:ft=help:norl:
 
