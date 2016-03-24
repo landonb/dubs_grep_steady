@@ -1,6 +1,6 @@
 " File: dubs_grep_steady.vim
 " Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
-" Last Modified: 2015.03.24
+" Last Modified: 2015.06.11
 " Project Page: https://github.com/landonb/dubs_grep_steady
 " Summary: Dubsacks Text Search Commands
 " License: GPLv3
@@ -59,14 +59,21 @@ let g:plugin_dubs_grep_steady = 1
 " And the Perl-encoded Ack, at http://beyondgrep.com,
 " and the list of other tools, http://betterthanack.com.
 
+let s:using_ag = -1
 if filereadable("/usr/bin/ag")
+  let s:using_ag = 1
   " *nix w/ The Silver Searcher
-  " -A --after [LINES]      Print lines before match (Default: 2)
-  " -B --before [LINES]     Print lines after match (Default: 2)
+  " -A --after [LINES]      Print lines before match (Default: 2).
+  " -B --before [LINES]     Print lines after match (Default: 2).
   " -S --smart-case         Match case insensitively unless
-  "                         PATTERN contains uppercase characters
-  set grepprg=ag\ -A\ 0\ -B\ 0\ --smart-case\ --hidden
+  "                         PATTERN contains uppercase characters.
+  " -f --follow             Follow symlinks.
+  " SYNC: set grepprg=ag...
+  set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow
+  " Same, and more anal:
+  "set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ $*
 else
+  let s:using_ag = 0
   " Grep options:
   "  -n makes grep show line numbers
   "  -R recurses directories
@@ -107,6 +114,12 @@ else
     endif
   endif
 endif
+" This is Vim's default grepformat. First to match wins.
+" 1.  file:line:message
+" 2.  file:linemessage
+" 3.  file  linemessage
+" Already set to:
+"  set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
 
 " Grep notes:
 " NOTE: The grep exclude-from file *must* be saved 
@@ -145,7 +158,7 @@ let s:simple_grep_last_i = 0
 " Map <Plug> to an <SID> function
 map <silent> <unique> <script> 
   \ <Plug>GrepPrompt_Simple 
-  \ :call <SID>GrepPrompt_Simple("", 0)<CR><CR>
+  \ :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
 
 " And finally thunk to the script fcn.
 ""function <SID>GrepPrompt_Simple()
@@ -164,6 +177,9 @@ map <silent> <unique> <script>
 "                      "" if we should ask the user
 "                    locat_index is the location index
 "                      to search, or 0 to ask user for it
+"                    case_sensitive enforces strict sensitivity
+"                      (ag already enforces case if there 1+ uppers)
+"                    limit_matches prints just the first match per file
 " If the callee supplies both term and locat_index, we automatically complete
 " the search. However, this bypasses input(), which means term doesn't get
 " added to the input() history. This is annoying if you auto-search a lot and
@@ -171,29 +187,29 @@ map <silent> <unique> <script>
 " use :cold to jump back in the quickfix history). I don't think we can add to
 " the histories, and I can't think of a good solution (we could call input()
 " with a default value, but that's probably annoying).
-function s:GrepPrompt_Simple(term, locat_index)
+function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
   call inputsave()
-  let the_term = a:term
+  let l:the_term = a:term
   if a:term == ""
     " There's a newline in the buffer, so call inputsave
     "call inputsave()
-    let the_term = input("Search for: ")
+    let l:the_term = input("Search for: ")
     "call inputrestore()
-    "echo "The term is" . the_term
+    "echo "The term is" . l:the_term
     "let TBD = input("Hit any key to continue: ")
   endif
   " Check for <ESC> lest we dismiss a help 
   " page (or something not in the buffer list)
-  if the_term != ""
+  if l:the_term != ""
     " Ask the user to enter/confirm the search location
-    let new_i = a:locat_index
-    if new_i == 0
+    let l:new_i = a:locat_index
+    if l:new_i == 0
       "call inputsave()
-      let new_i = inputlist(s:GrepPrompt_Simple_GetInputlist(
+      let l:new_i = inputlist(s:GrepPrompt_Simple_GetInputlist(
         \ s:simple_grep_last_i))
       "call inputrestore()
     endif
-    "echo "=== new_i: " . new_i
+    "echo "=== new_i: " . l:new_i
     "let TBD = input("Hit any key to continue: ")
     " If the user hits Enter or Escape, inputlist returns 0, which is also
     " the very first item in the list. However, we put "Search in:" as the
@@ -206,21 +222,65 @@ function s:GrepPrompt_Simple(term, locat_index)
     " same location.  UG. This lasted ten minutes. I can't live without
     " double-return, either!
     " Trying "1" as the cancel indicator
-    if new_i == 0
-      let new_i = s:simple_grep_last_i
-      if new_i == 0
+    if l:new_i == 0
+      let l:new_i = s:simple_grep_last_i
+      if l:new_i == 0
         "call inputsave()
-        let new_i = inputlist(s:GrepPrompt_Simple_GetInputlist(
+        let l:new_i = inputlist(s:GrepPrompt_Simple_GetInputlist(
           \ s:simple_grep_last_i))
         "call inputrestore()
       endif
     endif
-    "if new_i > 0
-    if new_i > 1
-      let locat = g:ds_simple_grep_locat_lookup[new_i]
-      let options = get(g:ds_simple_grep_ag_options_map, new_i, '')
-      execute "silent gr! " . options . " \"" . the_term . "\" " . locat
-      let s:simple_grep_last_i = new_i
+    "if l:new_i > 0
+    if l:new_i > 1
+      let l:locat = g:ds_simple_grep_locat_lookup[l:new_i]
+      let l:options = get(g:ds_simple_grep_ag_options_map, l:new_i, '')
+      " Case (in)sensitive flags.
+      if a:case_sensitive == 1
+        if s:using_ag == 1
+          let l:options = l:options . " --case-sensitive"
+        " else, egrep only defines -i
+        endif
+      else
+        if s:using_ag == 1
+          let l:options = l:options . " --smart-case"
+        else
+          let l:options = l:options . " --ignore-case"
+        endif
+      endif
+      " Limit matches flags.
+      if s:using_ag == 1
+        if a:limit_matches == 0
+          " SYNC: set grepprg=ag...
+          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow
+        else
+          " The Silver Search says "ERR: Too many matches" for each file
+          " after printing one line, but the err come randomly from a thread
+          " on stderr, and those messages and the search results end up being
+          " interleaved. Since we can't easily pipe between two executables
+          " using grepprg, and since Vim ends our grepprg with 2>&1, we have
+          " to go through an external party to suppress the bad messages.
+"          set grepprg=ag_peek
+"          set grepprg=\(ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ 2>/dev/null\)
+"          set grepprg=(ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ 2>/dev/null)
+"          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ $*\ \\\|\ ag\ ".*"
+"          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ $*\ \\|\ ag\ ".*"
+"          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"\ 2\>\/dev\/null
+" 2015.06.11: ARGH: Cannot get this to work... just punting for now...
+          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"
+        endif
+      else
+        if a:limit_matches == 0
+          let l:options = l:options . " --max-count 1"
+        endif
+      endif
+      " HINT: Try: :verbose set grepprg and :verbose gr to see what happened.
+      execute "silent gr! " . l:options . " \"" . l:the_term . "\" " . l:locat
+      "if s:using_ag == 1
+      "  " SYNC: set grepprg=ag...
+      "  set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow
+      "endif
+      let s:simple_grep_last_i = l:new_i
       :QFix!(0)
       ":QFix(1, 1)
     endif
@@ -267,11 +327,11 @@ endfunction
 " \g
 
 "map <silent> <unique> <Leader>g <Plug>GrepPrompt_Simple
-noremap <silent> <Leader>g :call <SID>GrepPrompt_Simple("", 0)<CR>
-inoremap <silent> <Leader>g <C-O>:call <SID>GrepPrompt_Simple("", 0)<CR>
-"cnoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0)<CR>
+noremap <silent> <Leader>g :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
+inoremap <silent> <Leader>g <C-O>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
+"cnoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
 " Can't do unique on onoremap 'cause it's already set?
-" onoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0)<CR>
+" onoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
 " Selected word
 "vnoremap <silent> <Leader>g :<C-U>call <SID>GrepPrompt_Auto_Ask_Location(<C-R>)<CR>
 "vnoremap <Leader>g :<C-U>echo "Hello ". @"
@@ -280,16 +340,32 @@ inoremap <silent> <Leader>g <C-O>:call <SID>GrepPrompt_Simple("", 0)<CR>
 "vnoremap <Leader>g :<C-U>
 "  \ let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
 "  \ gvy
-"  \ :call <SID>GrepPrompt_Simple(@@, 0)<CR>
+"  \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 0)<CR>
 "  \ gV
 "  \ :call setreg('"', old_reg, old_regtype)<CR>
 " Better: (keeps stuff selected)
 vnoremap <silent> <Leader>g :<C-U>
   \ <CR>gvy
-  \ :call <SID>GrepPrompt_Simple(@@, 0)<CR>
+  \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 0)<CR>
 
 "xnoremap <silent> <Leader>g <C-U>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-R>")<CR>
 "snoremap <silent> <Leader>g <C-U>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R>")<CR>
+
+" 2015.06.11: Early birthday present: Case-sensitive, for
+"             when you want ag to recognize all-lowercase.
+noremap <silent> <Leader>G :call <SID>GrepPrompt_Simple("", 0, 1, 0)<CR>
+inoremap <silent> <Leader>G <C-O>:call <SID>GrepPrompt_Simple("", 0, 1, 0)<CR>
+vnoremap <silent> <Leader>G :<C-U>
+  \ <CR>gvy
+  \ :call <SID>GrepPrompt_Simple(@@, 0, 1, 0)<CR>
+
+" Limit search results to one per file, if you
+" just want an idea which files contain matches.
+noremap <silent> <Leader>C :call <SID>GrepPrompt_Simple("", 0, 0, 1)<CR>
+inoremap <silent> <Leader>C <C-O>:call <SID>GrepPrompt_Simple("", 0, 0, 1)<CR>
+vnoremap <silent> <Leader>C :<C-U>
+  \ <CR>gvy
+  \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 1)<CR>
 
 " Search for Word under Cursor
 " ------------------------------------------------------
@@ -319,18 +395,18 @@ cnoremap <silent> <C-F4> <C-C>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-
 onoremap <silent> <C-F4> <C-C>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
 
 function s:GrepPrompt_Term_Prev_Location(term)
-  call s:GrepPrompt_Simple("", s:simple_grep_last_i)
+  call s:GrepPrompt_Simple("", s:simple_grep_last_i, 0, 0)
 endfunction
 
 function s:GrepPrompt_Auto_Prev_Location(term)
   if a:term != ""
-    call s:GrepPrompt_Simple(a:term, s:simple_grep_last_i)
+    call s:GrepPrompt_Simple(a:term, s:simple_grep_last_i, 0, 0)
   endif
 endfunction
 
 function s:GrepPrompt_Auto_Ask_Location(term)
   if a:term != ""
-    call s:GrepPrompt_Simple(a:term, 0)
+    call s:GrepPrompt_Simple(a:term, 0, 0, 0)
   endif
 endfunction
 
