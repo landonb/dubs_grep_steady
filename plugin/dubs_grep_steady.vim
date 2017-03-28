@@ -6,19 +6,19 @@
 " License: GPLv3
 " -------------------------------------------------------------------
 " Copyright © 2009, 2015, 2017 Landon Bouma.
-" 
+"
 " This file is part of Dubsacks.
-" 
+"
 " Dubsacks is free software: you can redistribute it and/or
 " modify it under the terms of the GNU General Public License
 " as published by the Free Software Foundation, either version
 " 3 of the License, or (at your option) any later version.
-" 
+"
 " Dubsacks is distributed in the hope that it will be useful,
 " but WITHOUT ANY WARRANTY; without even the implied warranty
 " of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
 " the GNU General Public License for more details.
-" 
+"
 " You should have received a copy of the GNU General Public License
 " along with Dubsacks. If not, see <http://www.gnu.org/licenses/>
 " or write Free Software Foundation, Inc., 51 Franklin Street,
@@ -78,8 +78,8 @@ else
   "  -n makes grep show line numbers
   "  -R recurses directories
   "  -i --ignore-case
-  "  -E uses extended regexp (same as egrep) 
-  "       so that alternation (|) works, 
+  "  -E uses extended regexp (same as egrep)
+  "       so that alternation (|) works,
   "       among other opts
   "  --exclude-from specifies a file containing
   "                 filename globs used to exclude
@@ -122,11 +122,11 @@ endif
 "  set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
 
 " Grep notes:
-" NOTE: The grep exclude-from file *must* be saved 
-"       in unix format 
-"       i.e., if :set ff is 'dos', it won't work! 
+" NOTE: The grep exclude-from file *must* be saved
+"       in unix format
+"       i.e., if :set ff is 'dos', it won't work!
 "       so :set ff=unix
-" NOTE: The exclude-from file has one file glob 
+" NOTE: The exclude-from file has one file glob
 "       per line, i.e.,
 "         *.sql
 "         *.skipme
@@ -156,8 +156,8 @@ let s:simple_grep_last_i = 0
 "endif
 
 " Map <Plug> to an <SID> function
-map <silent> <unique> <script> 
-  \ <Plug>DubsGrepSteady_GrepPrompt_Simple 
+map <silent> <unique> <script>
+  \ <Plug>DubsGrepSteady_GrepPrompt_Simple
   \ :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
 
 " And finally thunk to the script fcn.
@@ -168,12 +168,12 @@ map <silent> <unique> <script>
 " Let the user map their own command to the
 " toggle function by making it a <Plug>
 "   1. Make the <Plug>
-""map <silent> <unique> <script> 
-""  \ <Plug>DubsGrepSteady_GrepPrompt_Simple 
+""map <silent> <unique> <script>
+""  \ <Plug>DubsGrepSteady_GrepPrompt_Simple
 ""  \ :call <SID>GrepPrompt_Simple()<CR>
 "   2. Thunk the <Plug>
 "
-" GrepPrompt_Simple: term is the term to search, or 
+" GrepPrompt_Simple: term is the term to search, or
 "                      "" if we should ask the user
 "                    locat_index is the location index
 "                      to search, or 0 to ask user for it
@@ -198,7 +198,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
     "echo "The term is" . l:the_term
     "let TBD = input("Hit any key to continue: ")
   endif
-  " Check for <ESC> lest we dismiss a help 
+  " Check for <ESC> lest we dismiss a help
   " page (or something not in the buffer list)
   if l:the_term != ""
     " Ask the user to enter/confirm the search location
@@ -530,7 +530,7 @@ if !exists('g:ds_simple_grep_locat_lookup')
     \ "36"
     \]
 
-  let g:ds_simple_grep_locat_lookup_len = 
+  let g:ds_simple_grep_locat_lookup_len =
     \ len(g:ds_simple_grep_locat_lookup)
 
   " A map of ds_simple_grep_locat_lookup indices to ag --options.
