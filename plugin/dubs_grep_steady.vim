@@ -1,11 +1,11 @@
 " File: dubs_grep_steady.vim
 " Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
-" Last Modified: 2015.06.11
+" Last Modified: 2017.03.28
 " Project Page: https://github.com/landonb/dubs_grep_steady
 " Summary: Dubsacks Text Search Commands
 " License: GPLv3
 " -------------------------------------------------------------------
-" Copyright © 2009, 2015 Landon Bouma.
+" Copyright © 2009, 2015, 2017 Landon Bouma.
 " 
 " This file is part of Dubsacks.
 " 
@@ -150,14 +150,14 @@ let s:simple_grep_last_i = 0
 " ------------------------------------------------------
 
 "" Map <Leader>G0 to the Grep Prompt
-"if !hasmapto('<Plug>GrepPrompt_Simple')
+"if !hasmapto('<Plug>DubsGrepSteady_GrepPrompt_Simple')
 "  map <silent> <unique> <Leader>g
-"    \ <Plug>GrepPrompt_Simple
+"    \ <Plug>DubsGrepSteady_GrepPrompt_Simple
 "endif
 
 " Map <Plug> to an <SID> function
 map <silent> <unique> <script> 
-  \ <Plug>GrepPrompt_Simple 
+  \ <Plug>DubsGrepSteady_GrepPrompt_Simple 
   \ :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
 
 " And finally thunk to the script fcn.
@@ -169,7 +169,7 @@ map <silent> <unique> <script>
 " toggle function by making it a <Plug>
 "   1. Make the <Plug>
 ""map <silent> <unique> <script> 
-""  \ <Plug>GrepPrompt_Simple 
+""  \ <Plug>DubsGrepSteady_GrepPrompt_Simple 
 ""  \ :call <SID>GrepPrompt_Simple()<CR>
 "   2. Thunk the <Plug>
 "
@@ -326,7 +326,7 @@ endfunction
 " ------------------------------------------------------
 " \g
 
-"map <silent> <unique> <Leader>g <Plug>GrepPrompt_Simple
+"map <silent> <unique> <Leader>g <Plug>DubsGrepSteady_GrepPrompt_Simple
 noremap <silent> <Leader>g :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
 inoremap <silent> <Leader>g <C-O>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
 "cnoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
