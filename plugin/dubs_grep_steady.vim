@@ -1,6 +1,6 @@
 " File: dubs_grep_steady.vim
 " Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
-" Last Modified: 2017.03.28
+" Last Modified: 2017.04.29
 " Project Page: https://github.com/landonb/dubs_grep_steady
 " Summary: Dubsacks Text Search Commands
 " License: GPLv3
@@ -69,7 +69,9 @@ if filereadable("/usr/bin/ag")
   "                         PATTERN contains uppercase characters.
   " -f --follow             Follow symlinks.
   " SYNC: set grepprg=ag...
-  set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow
+  "set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow
+  " 2017-04-29: Ignore .gitignore files??
+  set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
   " Same, and more anal:
   "set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ $*
 else
@@ -253,6 +255,8 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
         if a:limit_matches == 0
           " SYNC: set grepprg=ag...
           set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow
+          " 2017-04-29: Ignore .gitignore files??
+          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
         else
           " The Silver Search says "ERR: Too many matches" for each file
           " after printing one line, but the err come randomly from a thread
