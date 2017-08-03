@@ -1,6 +1,6 @@
 " File: dubs_grep_steady.vim
 " Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
-" Last Modified: 2017.04.29
+" Last Modified: 2017.08.02
 " Project Page: https://github.com/landonb/dubs_grep_steady
 " Summary: Dubsacks Text Search Commands
 " License: GPLv3
@@ -476,7 +476,7 @@ else
   echomsg 'Warning: Dubsacks could not find dubs_projects.vim'
 endif
 
-" Obsolete. Has since been extracted and templatized...
+" Obsolete. Has since been extracted and templatized... [see previous block]
 "
 " " If the user did not make a project search listing, we'll
 " " set it using the first default we find from the project-specific
