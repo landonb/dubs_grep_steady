@@ -1,6 +1,6 @@
 " File: dubs_grep_steady.vim
 " Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
-" Last Modified: 2017.08.02
+" Last Modified: 2017.09.13
 " Project Page: https://github.com/landonb/dubs_grep_steady
 " Summary: Dubsacks Text Search Commands
 " License: GPLv3
@@ -60,7 +60,12 @@ let g:plugin_dubs_grep_steady = 1
 " and the list of other tools, http://betterthanack.com.
 
 let s:using_ag = -1
-if filereadable("/usr/bin/ag")
+if executable("rg")
+  " 2017-09-13: Because `ag` sees one of my reST files as binary.
+  " See comments for ag; the differences are: -U is --no-ignore-vcs,
+  " and if not in a tty, ripgrep doesn't spit out line numbers.
+  set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number
+elseif executable("ag")
   let s:using_ag = 1
   " *nix w/ The Silver Searcher
   " -A --after [LINES]      Print lines before match (Default: 2).
