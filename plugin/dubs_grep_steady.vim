@@ -61,10 +61,10 @@ let g:plugin_dubs_grep_steady = 1
 
 let s:using_ag = -1
 if executable("rg")
-  " 2017-09-13: Because `ag` sees one of my reST files as binary.
+  " 2017-09-13: Switching to `rg` b/c `ag` seeing a reST file as binary.
   " See comments for ag; the differences are: -U is --no-ignore-vcs,
   " and if not in a tty, ripgrep doesn't spit out line numbers.
-  set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number
+  set grepprg=rg\ -A\ 0\ -B\ 0\ --smart-case\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename
 elseif executable("ag")
   let s:using_ag = 1
   " *nix w/ The Silver Searcher
@@ -279,7 +279,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
           set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"
         endif
       else
-        if a:limit_matches == 0
+        if a:limit_matches != 0
           let l:options = l:options . " --max-count 1"
         endif
       endif
