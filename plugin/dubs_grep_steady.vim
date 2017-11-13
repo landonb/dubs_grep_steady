@@ -1,6 +1,6 @@
 " File: dubs_grep_steady.vim
 " Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
-" Last Modified: 2017.09.13
+" Last Modified: 2017.11.12
 " Project Page: https://github.com/landonb/dubs_grep_steady
 " Summary: Dubsacks Text Search Commands
 " License: GPLv3
@@ -173,7 +173,7 @@ map <silent> <unique> <script>
 ""endfunction
 
 " Let the user map their own command to the
-" toggle function by making it a <Plug>
+" toggle function by making it a <Plug>.
 "   1. Make the <Plug>
 ""map <silent> <unique> <script>
 ""  \ <Plug>DubsGrepSteady_GrepPrompt_Simple
