@@ -60,13 +60,17 @@ let g:plugin_dubs_grep_steady = 1
 " and the list of other tools, http://betterthanack.com.
 
 let s:using_ag = -1
+let s:using_rg = -1
 if executable("rg")
+  let s:using_ag = 0
+  let s:using_rg = 1
   " 2017-09-13: Switching to `rg` b/c `ag` seeing a reST file as binary.
   " See comments for ag; the differences are: -U is --no-ignore-vcs,
   " and if not in a tty, ripgrep doesn't spit out line numbers.
-  set grepprg=rg\ -A\ 0\ -B\ 0\ --smart-case\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename
+  set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename
 elseif executable("ag")
   let s:using_ag = 1
+  let s:using_rg = 0
   " *nix w/ The Silver Searcher
   " -A --after [LINES]      Print lines before match (Default: 2).
   " -B --before [LINES]     Print lines after match (Default: 2).
@@ -81,6 +85,7 @@ elseif executable("ag")
   "set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ $*
 else
   let s:using_ag = 0
+  let s:using_rg = 0
   " Grep options:
   "  -n makes grep show line numbers
   "  -R recurses directories
@@ -238,18 +243,22 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
         "call inputrestore()
       endif
     endif
-    "if l:new_i > 0
     if l:new_i > 1
       let l:locat = g:ds_simple_grep_locat_lookup[l:new_i]
-      let l:options = get(g:ds_simple_grep_ag_options_map, l:new_i, '')
+      let l:options = ''
+      if s:using_rg == 1
+        let l:options = get(g:ds_simple_grep_rg_options_map, l:new_i, '')
+      elseif s:using_ag == 1
+        let l:options = get(g:ds_simple_grep_ag_options_map, l:new_i, '')
+      endif
       " Case (in)sensitive flags.
       if a:case_sensitive == 1
-        if s:using_ag == 1
+        if s:using_rg == 1 || s:using_ag == 1
           let l:options = l:options . " --case-sensitive"
         " else, egrep only defines -i
         endif
       else
-        if s:using_ag == 1
+        if s:using_rg == 1 || s:using_ag == 1
           let l:options = l:options . " --smart-case"
         else
           let l:options = l:options . " --ignore-case"
@@ -269,16 +278,19 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
           " interleaved. Since we can't easily pipe between two executables
           " using grepprg, and since Vim ends our grepprg with 2>&1, we have
           " to go through an external party to suppress the bad messages.
-"          set grepprg=ag_peek
-"          set grepprg=\(ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ 2>/dev/null\)
-"          set grepprg=(ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ 2>/dev/null)
-"          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ $*\ \\\|\ ag\ ".*"
-"          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ $*\ \\|\ ag\ ".*"
-"          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"\ 2\>\/dev\/null
-" 2015.06.11: ARGH: Cannot get this to work... just punting for now...
+          "
+          " 2015.06.11: ARGH: Cannot get any of these to work...
+          "     set grepprg=ag_peek
+          "     set grepprg=\(ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ 2>/dev/null\)
+          "     set grepprg=(ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ 2>/dev/null)
+          "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ $*\ \\\|\ ag\ ".*"
+          "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ $*\ \\|\ ag\ ".*"
+          "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"\ 2\>\/dev\/null
+          " so just punting: [2018-01-12: And I cannot remember the issue anymore]:
           set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"
         endif
       else
+        " RipGrep and Grep both support --max-count.
         if a:limit_matches != 0
           let l:options = l:options . " --max-count 1"
         endif
