@@ -172,6 +172,39 @@ map <silent> <unique> <script>
   \ <Plug>DubsGrepSteady_GrepPrompt_Simple
   \ :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
 
+" ***
+
+" STOLEN! From vim-abolish. Shameless!!
+
+function! s:camelcase(word)
+  let word = substitute(a:word, '-', '_', 'g')
+  if word !~# '_' && word =~# '\l'
+    return substitute(word,'^.','\l&','')
+  else
+    return substitute(word,'\C\(_\)\=\(.\)','\=submatch(1)==""?tolower(submatch(2)) : toupper(submatch(2))','g')
+  endif
+endfunction
+
+function! s:snakecase(word)
+  let word = substitute(a:word,'::','/','g')
+  let word = substitute(word,'\(\u\+\)\(\u\l\)','\1_\2','g')
+  let word = substitute(word,'\(\l\|\d\)\(\u\)','\1_\2','g')
+  let word = substitute(word,'[.-]','_','g')
+  let word = tolower(word)
+  return word
+endfunction
+
+"function! s:dashcase(word)
+function! s:traincase(word)
+  return substitute(s:snakecase(a:word),'_','-','g')
+endfunction
+
+function! s:uppercase(word)
+  return toupper(s:snakecase(a:word))
+endfunction
+
+" ***
+
 " And finally thunk to the script fcn.
 ""function <SID>GrepPrompt_Simple()
 ""  call s:GrepPrompt_Simple()
@@ -295,8 +328,22 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
           let l:options = l:options . " --max-count 1"
         endif
       endif
-      " HINT: Try: :verbose set grepprg and :verbose gr to see what happened.
-      execute "silent gr! " . l:options . " \"" . l:the_term . "\" " . l:locat
+
+      " 2018-03-29: Crude implementation of caseless-grep.
+      if g:DubsGrepSteady_GrepAllTheCases
+        " Search on 3 casings: Camel, Snake, and Train.
+        " NOTE: Coverting to snakecase downcases it.
+        let l:the_term =
+          \ "--ignore-case \""
+          \ . s:camelcase(l:the_term) . "\\|"
+          \ . s:snakecase(l:the_term) . "\\|"
+          \ . s:traincase(l:the_term) . "\""
+      else
+        let l:the_term = "\"" . l:the_term . "\""
+      endif
+
+      " HINT: Try: `:verbose set grepprg` and `:verbose gr` to see what happened.
+      execute "silent gr! " . l:options . " " . l:the_term . " " . l:locat
       "if s:using_ag == 1
       "  " SYNC: set grepprg=ag...
       "  set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow
@@ -428,6 +475,31 @@ endfunction
 function s:GrepPrompt_Auto_Ask_Location(term)
   if a:term != ""
     call s:GrepPrompt_Simple(a:term, 0, 0, 0)
+  endif
+endfunction
+
+" Toggle GrepCase
+" ------------------------------------------------------
+" I.e., search for exact work; or include case permutations,
+" e.g., search for FOO_BAR; or include fooBar, foo_bar, foo-bar.
+
+"unmap <silent> <unique> <Leader>c
+"map <silent> <unique> <Leader>c let g:DubsGrepSteady_GrepAllTheCases
+"  \ = !g:DubsGrepSteady_GrepAllTheCases<CR>
+"nnoremap <buffer> <silent> <LocalLeader>c :call <SID>Toggle_GrepAllTheCases()<CR>
+"
+"if !hasmapto('<SID>Toggle_GrepAllTheCases')
+map <silent> <unique> <Leader>c :call <SID>Toggle_GrepAllTheCases()<CR>
+"endif
+
+let g:DubsGrepSteady_GrepAllTheCases = 0
+
+function! s:Toggle_GrepAllTheCases()
+  let g:DubsGrepSteady_GrepAllTheCases = !g:DubsGrepSteady_GrepAllTheCases
+  if (g:DubsGrepSteady_GrepAllTheCases == 0)
+    echomsg 'Grep back to normal'
+  else
+    echomsg 'Grep match-all-the-cases'
   endif
 endfunction
 
