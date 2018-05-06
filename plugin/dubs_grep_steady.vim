@@ -68,7 +68,28 @@ function! s:SetGrepprgRg()
   " 2017-09-13: Switching to `rg` b/c `ag` seeing a reST file as binary.
   " See comments for ag; the differences are: -U is --no-ignore-vcs,
   " and if not in a tty, ripgrep doesn't spit out line numbers.
-  set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename
+  "
+  " FIXME/2018-05-06: (lb): I finally want sorted, deterministic results!
+  "   So what's faster? `rg --sort-files`, or `| sort` ?
+  " The problem with sort is speed... so maybe I should set it just for
+  "   certain projects?
+  " Says Rip Grep:
+  "    Sort results by file path. Note that this currently disables all
+  "    parallelism and runs search in a single thread.
+  " 2018-05-06: Hrmm. rg --sort-files results are always in the same order,
+  "   but they're not alphabetical!
+  "
+  "set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename\ --sort-files
+  "
+  " Use a wrapper I made that pipes to sort, because Vim don't pipe.
+  " FIXME/2018-05-06: (lb): Support non-standard/non-Pathogen paths.
+  "   Or let user override.
+  let l:ripgrep_shim = $HOME . '/.vim/bundle/dubs_grep_steady/bin/vim-grepprg-rg-sort'
+  if executable(l:ripgrep_shim)
+    execute 'set grepprg=' . l:ripgrep_shim
+  else
+    set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename
+  endif
 endfunction
 
 function! s:SetGrepprgAg()

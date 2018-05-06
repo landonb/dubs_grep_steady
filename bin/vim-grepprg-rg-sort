@@ -1,0 +1,22 @@
+# vim:tw=0:ts=2:sw=2:noet:norl:ft=bash:
+
+rip_grep_sleep_repeat() {
+  /usr/local/bin/rg \
+		-A 0 \
+		-B 0 \
+		--hidden \
+		--follow \
+		--no-ignore-vcs \
+		--line-number \
+		--no-heading \
+		--with-filename \
+		"$@" \
+		| sort
+}
+
+main() {
+	rip_grep_sleep_repeat "$@"
+}
+
+main "$@"
+
