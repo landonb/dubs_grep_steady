@@ -61,14 +61,17 @@ let g:plugin_dubs_grep_steady = 1
 
 let s:using_ag = -1
 let s:using_rg = -1
-if executable("rg")
+
+function! s:SetGrepprgRg()
   let s:using_ag = 0
   let s:using_rg = 1
   " 2017-09-13: Switching to `rg` b/c `ag` seeing a reST file as binary.
   " See comments for ag; the differences are: -U is --no-ignore-vcs,
   " and if not in a tty, ripgrep doesn't spit out line numbers.
   set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename
-elseif executable("ag")
+endfunction
+
+function! s:SetGrepprgAg()
   let s:using_ag = 1
   let s:using_rg = 0
   " *nix w/ The Silver Searcher
@@ -83,7 +86,9 @@ elseif executable("ag")
   set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
   " Same, and more anal:
   "set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ $*
-else
+endfunction
+
+function! s:SetGrepprgGrep()
   let s:using_ag = 0
   let s:using_rg = 0
   " Grep options:
@@ -125,7 +130,8 @@ else
       set grepprg=egrep\ -n\ -R\ -i
     endif
   endif
-endif
+endfunction
+
 " This is Vim's default grepformat. First to match wins.
 " 1.  file:line:message
 " 2.  file:linemessage
@@ -150,6 +156,20 @@ endif
 "        return to the first term's result.
 " DISCOVER: Can you show search results in a window's location list?
 "           Would you want to?
+
+function! s:SetGrepprg()
+  if executable("rg")
+    call s:SetGrepprgRg()
+  elseif executable("ag")
+    call s:SetGrepprgAg()
+  else
+    call s:SetGrepprgGrep()
+  endif
+endfunction
+
+" FIXME/2018-05-06: (lb): Should probably function-ize everything
+" and make a main().
+call s:SetGrepprg()
 
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " Setup Search Features
