@@ -1,5 +1,56 @@
-# vim:tw=0:ts=2:sw=2:noet:norl:ft=bash:
+# vim:tw=0:ts=2:sw=2:noet:norl:ft=bash:nospell
 
+# For a discussion of the ``rg`` the options below, see:
+#
+#   dubs_grep_steady/plugins/dubs_grep_steady.vim::SetGrepprgRg
+
+# For a discussion of the ``sort`` options, let me explain!
+#
+# - The RipGrep results are of the form: /path/to/file:linenumber:matching text
+#
+#   E.g.,
+#
+#     vim-grepprg-rg-sort:10:	# - The RipGrep results are of the form: ...
+#
+# - Tell ``sort`` to sort alphabetically by filename, then numerically by line.
+#
+#   Options we use:
+#
+#     -t     --field-separator=SEP
+#
+#              For sorting by fields.
+#
+#              ``-t:`` means we split the line on colons.
+#
+#     -k      --key=KEYDEF
+#
+#              Says ``man``:
+#
+#             "KEYDEF is F[.C][OPTS][,F[.C][OPTS]] for start and stop
+#              position, where F is a field number and C a character
+#              position in the field; both are origin 1, and the stop
+#              position defaults to the line's end.
+#
+#             "OPTS is one or more single-letter ordering options
+#              [bdfgiMhnRrV], which override global ordering options for
+#              that key. If no key is given, use the entire line as the
+#              key."
+#
+#     So... ``-k1,1`` means we sort first by first field (filename).
+#
+#              (NOTE: Don't do just ``-k1``, or ``sort`` walks to end of string.)
+#
+#    and... ``-k2,2n`` uses the second field to sort further, if necessary.
+#              The ``n`` is ``--numeric-sort``, giving the numbers a true sort.
+#
+#     --debug  "Use --debug to diagnose incorrect key usage."
+#
+#              (lb): Very Helpful!! E.g.,
+#
+#                 rg ... \
+#
+#                  | sort --debug -t: -k1,1 -k2,2n
+#
 rip_grep_sleep_repeat() {
 	/usr/local/bin/rg \
 		-A 0 \
