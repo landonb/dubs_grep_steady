@@ -1,7 +1,7 @@
 # vim:tw=0:ts=2:sw=2:noet:norl:ft=bash:
 
 rip_grep_sleep_repeat() {
-  /usr/local/bin/rg \
+	/usr/local/bin/rg \
 		-A 0 \
 		-B 0 \
 		--hidden \
@@ -11,7 +11,7 @@ rip_grep_sleep_repeat() {
 		--no-heading \
 		--with-filename \
 		"$@" \
-		| sort
+		| sort -t: -k1,1 -k2,2n
 }
 
 main() {
