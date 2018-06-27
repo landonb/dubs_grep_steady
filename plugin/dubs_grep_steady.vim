@@ -216,6 +216,8 @@ map <silent> <unique> <script>
 " ***
 
 " STOLEN! From vim-abolish. Shameless!!
+" FIXME/2018-06-27/DRY: Make a util plugin for this!
+"   These are duplicated in: vim-aboilsh; dubs_grep_steady; dubs_edit_juice
 
 function! s:camelcase(word)
   let word = substitute(a:word, '-', '_', 'g')
@@ -235,7 +237,7 @@ function! s:snakecase(word)
   return word
 endfunction
 
-"function! s:dashcase(word)
+" A/k/a kebab-case | spinal-case | Train-Case | Lisp-case | dash-case
 function! s:traincase(word)
   return substitute(s:snakecase(a:word),'_','-','g')
 endfunction
@@ -371,20 +373,44 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
       endif
 
       " 2018-03-29: Crude implementation of caseless-grep.
+      let l:new_term = l:the_term
       if g:DubsGrepSteady_GrepAllTheCases
         " Search on 3 casings: Camel, Snake, and Train.
-        " NOTE: Coverting to snakecase downcases it.
-        let l:the_term =
-          \ "--ignore-case \""
-          \ . s:camelcase(l:the_term) . "\\|"
-          \ . s:snakecase(l:the_term) . "\\|"
-          \ . s:traincase(l:the_term) . "\""
+        " NOTE: Converting to snakecase downcases it.
+        let l:new_term = ''
+          \ . tolower(s:camelcase(l:the_term)) . "\\|"
+          \ . tolower(s:snakecase(l:the_term)) . "\\|"
+          \ . tolower(s:traincase(l:the_term))
+      endif
+
+      " 2018-06-27: Whoa, how did I not know about histadd??! This is **AWESOME**!!
+      "  Add the search term to the _input_ history. E.g., if user is on a work and
+      "  presses [F4] to grep word-under-cursor, add that word to the input history,
+      "  such that if the user later does a `\g` to initiate an interactive search,
+      "  then that term is available in the input history list. SO OBVI!
+      " NOTE: Use lower case, because --smart-case.
+      " NOTE: This is similar to dubs_edit_juice's InstallHighlightOnEnter(),
+      "       except that function bounds the terms with \b\b or \<\> word boundaries.
+      call histadd("input", tolower(l:new_term))
+      " Hrmmmm. We could do cross-history maintenance, too, so that the term is also
+      " available in the `/` buffer search history list. AHAHAHAHA, I feel sorry for
+      " my former, past selves having had to live without this killer feature!
+      call histadd("/", tolower(l:new_term))
+      " NOTE: If user greps for words matches, e.g., "\bword\b", the / history
+      "       pattern won't work because of the difference in the word delimiters,
+      "       e.g., the equivalent word history boundary in / is "\<word\>".
+
+      " 2018-03-29: Crude implementation of caseless-grep.
+      if g:DubsGrepSteady_GrepAllTheCases
+        " Search on 3 casings: Camel, Snake, and Train.
+        " NOTE: Converting to Snake_Case downcases it.
+        let l:srch_term = "--ignore-case \"" . l:new_term . "\""
       else
-        let l:the_term = "\"" . l:the_term . "\""
+        let l:srch_term = "\"" . l:new_term . "\""
       endif
 
       " HINT: Try: `:verbose set grepprg` and `:verbose gr` to see what happened.
-      execute "silent gr! " . l:options . " " . l:the_term . " " . l:locat
+      execute "silent gr! " . l:options . " " . l:srch_term . " " . l:locat
       "if s:using_ag == 1
       "  " SYNC: set grepprg=ag...
       "  set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow
