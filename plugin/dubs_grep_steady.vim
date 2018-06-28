@@ -381,6 +381,10 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
           \ . tolower(s:camelcase(l:the_term)) . "\\|"
           \ . tolower(s:snakecase(l:the_term)) . "\\|"
           \ . tolower(s:traincase(l:the_term))
+        " Add simple query to the history lists,
+        " and then the complicated one later.
+        call histadd("input", tolower(l:the_term))
+        call histadd("/", tolower(l:the_term))
       endif
 
       " 2018-06-27: Whoa, how did I not know about histadd??! This is **AWESOME**!!
