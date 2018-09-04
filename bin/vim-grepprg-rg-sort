@@ -52,21 +52,21 @@
 #                  | sort --debug -t: -k1,1 -k2,2n
 #
 rip_grep_sleep_repeat () {
-	/usr/local/bin/rg \
-		-A 0 \
-		-B 0 \
-		--hidden \
-		--follow \
-		--no-ignore-vcs \
-		--line-number \
-		--no-heading \
-		--with-filename \
-		"$@" \
-		| sort -t: -k1,1 -k2,2n
+  /usr/local/bin/rg \
+    -A 0 \
+    -B 0 \
+    --hidden \
+    --follow \
+    --no-ignore-vcs \
+    --line-number \
+    --no-heading \
+    --with-filename \
+    "$@" \
+    | sort -t: -k1,1 -k2,2n
 }
 
 main () {
-	rip_grep_sleep_repeat "$@"
+  rip_grep_sleep_repeat "$@"
 }
 
 main "$@"
