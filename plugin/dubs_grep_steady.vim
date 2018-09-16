@@ -607,13 +607,11 @@ endfunction
 " Hint: For locations searched frequently, avoid numbers '6' through '0'
 "       so you can type it out using just the left hand.
 
-" NOTE: If you want to map two or more directories to the
-"       same number, just use spaces comma dummy comma egee
-"         \ "/ccp/dev/cp/pyserver "
-"         \   . "/ccp/dev/cp/scripts "
-"         \   . "/ccp/dev/cp/services "
-"         \   . "/ccp/dev/cp/mapserver "
-"         \   . "/ccp/dev/cp/mediawiki ",
+" NOTE: If you want to map two or more directories to the same number,
+"       use spaces, e.g.,
+"         \ "/path/to/foo "
+"         \ . "/path/to/bar "
+"         \ . "/baz/bat ",
 
 " NOTE: The numbers are just placeholders. Replace them with
 "       project directories, leave them alone, or delete them.
