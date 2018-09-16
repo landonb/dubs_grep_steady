@@ -289,6 +289,8 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
     "call inputrestore()
     "echo "The term is" . l:the_term
     "let TBD = input("Hit any key to continue: ")
+    " Ensure the "Search in:" starts on new line.
+    echo "\n"
   endif
   " Check for <ESC> lest we dismiss a help
   " page (or something not in the buffer list)
