@@ -209,9 +209,13 @@ let s:simple_grep_last_i = 0
 "endif
 
 " Map <Plug> to an <SID> function
-map <silent> <unique> <script>
-  \ <Plug>DubsGrepSteady_GrepPrompt_Simple
-  \ :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
+function! s:Map_GrepPrompt_Simple()
+  map <silent> <unique> <script>
+    \ <Plug>DubsGrepSteady_GrepPrompt_Simple
+    \ :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
+endfunction
+
+call s:Map_GrepPrompt_Simple()
 
 " ***
 
@@ -461,107 +465,122 @@ endfunction
 " Search Mappings
 " ------------------------------------------------------
 
-" Generic Search: Prompt for Query and Path
-" ------------------------------------------------------
-" \g
+function! s:WireSearchMappings()
 
-"map <silent> <unique> <Leader>g <Plug>DubsGrepSteady_GrepPrompt_Simple
-noremap <silent> <Leader>g :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
-inoremap <silent> <Leader>g <C-O>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
-"cnoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
-" Can't do unique on onoremap 'cause it's already set?
-" onoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
-" Selected word
-"vnoremap <silent> <Leader>g :<C-U>call <SID>GrepPrompt_Auto_Ask_Location(<C-R>)<CR>
-"vnoremap <Leader>g :<C-U>echo "Hello ". @"
+  " Generic Search: Prompt for Query and Path
+  " ------------------------------------------------------
+  " \g
 
-" NOTE I'm not sure we need to store registers like this but we do
-"vnoremap <Leader>g :<C-U>
-"  \ let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-"  \ gvy
-"  \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 0)<CR>
-"  \ gV
-"  \ :call setreg('"', old_reg, old_regtype)<CR>
-" Better: (keeps stuff selected)
-vnoremap <silent> <Leader>g :<C-U>
-  \ <CR>gvy
-  \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 0)<CR>
+  "map <silent> <unique> <Leader>g <Plug>DubsGrepSteady_GrepPrompt_Simple
+  noremap <silent> <Leader>g :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
+  inoremap <silent> <Leader>g <C-O>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
+  "cnoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
+  " Can't do unique on onoremap 'cause it's already set?
+  " onoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
+  " Selected word
+  "vnoremap <silent> <Leader>g :<C-U>call <SID>GrepPrompt_Auto_Ask_Location(<C-R>)<CR>
+  "vnoremap <Leader>g :<C-U>echo "Hello ". @"
 
-"xnoremap <silent> <Leader>g <C-U>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-R>")<CR>
-"snoremap <silent> <Leader>g <C-U>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R>")<CR>
+  " NOTE I'm not sure we need to store registers like this but we do
+  "vnoremap <Leader>g :<C-U>
+  "  \ let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  "  \ gvy
+  "  \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 0)<CR>
+  "  \ gV
+  "  \ :call setreg('"', old_reg, old_regtype)<CR>
+  " Better: (keeps stuff selected)
+  vnoremap <silent> <Leader>g :<C-U>
+    \ <CR>gvy
+    \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 0)<CR>
 
-" 2015.06.11: Early birthday present: Case-sensitive, for
-"             when you want ag to recognize all-lowercase.
-noremap <silent> <Leader>G :call <SID>GrepPrompt_Simple("", 0, 1, 0)<CR>
-inoremap <silent> <Leader>G <C-O>:call <SID>GrepPrompt_Simple("", 0, 1, 0)<CR>
-vnoremap <silent> <Leader>G :<C-U>
-  \ <CR>gvy
-  \ :call <SID>GrepPrompt_Simple(@@, 0, 1, 0)<CR>
+  "xnoremap <silent> <Leader>g <C-U>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-R>")<CR>
+  "snoremap <silent> <Leader>g <C-U>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R>")<CR>
 
-" Limit search results to one per file, if you
-" just want an idea which files contain matches.
-noremap <silent> <Leader>C :call <SID>GrepPrompt_Simple("", 0, 0, 1)<CR>
-inoremap <silent> <Leader>C <C-O>:call <SID>GrepPrompt_Simple("", 0, 0, 1)<CR>
-vnoremap <silent> <Leader>C :<C-U>
-  \ <CR>gvy
-  \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 1)<CR>
+  " 2015.06.11: Early birthday present: Case-sensitive, for
+  "             when you want ag to recognize all-lowercase.
+  noremap <silent> <Leader>G :call <SID>GrepPrompt_Simple("", 0, 1, 0)<CR>
+  inoremap <silent> <Leader>G <C-O>:call <SID>GrepPrompt_Simple("", 0, 1, 0)<CR>
+  vnoremap <silent> <Leader>G :<C-U>
+    \ <CR>gvy
+    \ :call <SID>GrepPrompt_Simple(@@, 0, 1, 0)<CR>
 
-" Search for Word under Cursor
-" ------------------------------------------------------
-" F4s
+  " Limit search results to one per file, if you
+  " just want an idea which files contain matches.
+  noremap <silent> <Leader>C :call <SID>GrepPrompt_Simple("", 0, 0, 1)<CR>
+  inoremap <silent> <Leader>C <C-O>:call <SID>GrepPrompt_Simple("", 0, 0, 1)<CR>
+  vnoremap <silent> <Leader>C :<C-U>
+    \ <CR>gvy
+    \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 1)<CR>
 
-noremap <silent> <F4> :call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
-inoremap <silent> <F4> <C-O>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
-cnoremap <silent> <F4> <C-C>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
-onoremap <silent> <F4> <C-C>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
-" Selected word
-vnoremap <silent> <F4> :<C-U>
-  \ <CR>gvy
-  \ :call <SID>GrepPrompt_Auto_Prev_Location(@@)<CR>
+  " Search for Word under Cursor
+  " ------------------------------------------------------
+  " F4s
 
-" This time, prompt for location
-noremap <silent> <S-F4> :call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
-inoremap <silent> <S-F4> <C-O>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
-cnoremap <silent> <S-F4> <C-C>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
-onoremap <silent> <S-F4> <C-C>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
+  noremap <silent> <F4> :call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
+  inoremap <silent> <F4> <C-O>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
+  cnoremap <silent> <F4> <C-C>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
+  onoremap <silent> <F4> <C-C>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
+  " Selected word
+  vnoremap <silent> <F4> :<C-U>
+    \ <CR>gvy
+    \ :call <SID>GrepPrompt_Auto_Prev_Location(@@)<CR>
 
-" NOTE Cannot get <C-8> or <C-*> to work (both still call :nohlsearch)
-" NOTE <C-R><C-W> is Vim-speak for the word under the cursor
-" FIXME Move this to EditPlus.vim or something...
-noremap <silent> <C-F4> :call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
-inoremap <silent> <C-F4> <C-O>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
-cnoremap <silent> <C-F4> <C-C>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
-onoremap <silent> <C-F4> <C-C>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
+  " This time, prompt for location
+  noremap <silent> <S-F4> :call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
+  inoremap <silent> <S-F4> <C-O>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
+  cnoremap <silent> <S-F4> <C-C>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
+  onoremap <silent> <S-F4> <C-C>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
 
-function s:GrepPrompt_Term_Prev_Location(term)
-  call s:GrepPrompt_Simple("", s:simple_grep_last_i, 0, 0)
+  " NOTE Cannot get <C-8> or <C-*> to work (both still call :nohlsearch)
+
+  " NOTE <C-R><C-W> is Vim-speak for the word under the cursor
+  " FIXME Move this to EditPlus.vim or something...
+  noremap <silent> <C-F4> :call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
+  inoremap <silent> <C-F4> <C-O>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
+  cnoremap <silent> <C-F4> <C-C>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
+  onoremap <silent> <C-F4> <C-C>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
+
+  function s:GrepPrompt_Term_Prev_Location(term)
+    call s:GrepPrompt_Simple("", s:simple_grep_last_i, 0, 0)
+  endfunction
+
+  function s:GrepPrompt_Auto_Prev_Location(term)
+    if a:term != ""
+      call s:GrepPrompt_Simple(a:term, s:simple_grep_last_i, 0, 0)
+    endif
+  endfunction
+
+  function s:GrepPrompt_Auto_Ask_Location(term)
+    if a:term != ""
+      call s:GrepPrompt_Simple(a:term, 0, 0, 0)
+    endif
+  endfunction
+
+  " Reload projects file
+  " ------------------------------------------------------
+  noremap <silent> <Leader>P :call <SID>LoadUsersGrepProjects()<CR>
+  inoremap <silent> <Leader>P <C-O>:call <SID>LoadUsersGrepProjects()<CR>
 endfunction
 
-function s:GrepPrompt_Auto_Prev_Location(term)
-  if a:term != ""
-    call s:GrepPrompt_Simple(a:term, s:simple_grep_last_i, 0, 0)
-  endif
-endfunction
-
-function s:GrepPrompt_Auto_Ask_Location(term)
-  if a:term != ""
-    call s:GrepPrompt_Simple(a:term, 0, 0, 0)
-  endif
-endfunction
+call s:WireSearchMappings()
 
 " Toggle GrepCase
 " ------------------------------------------------------
 " I.e., search for exact work; or include case permutations,
 " e.g., search for FOO_BAR; or include fooBar, foo_bar, foo-bar.
 
-"unmap <silent> <unique> <Leader>c
-"map <silent> <unique> <Leader>c let g:DubsGrepSteady_GrepAllTheCases
-"  \ = !g:DubsGrepSteady_GrepAllTheCases<CR>
-"nnoremap <buffer> <silent> <LocalLeader>c :call <SID>Toggle_GrepAllTheCases()<CR>
-"
-"if !hasmapto('<SID>Toggle_GrepAllTheCases')
-map <silent> <unique> <Leader>c :call <SID>Toggle_GrepAllTheCases()<CR>
-"endif
+function! s:Map_Toggle_GrepAllTheCases()
+  "unmap <silent> <unique> <Leader>c
+  "map <silent> <unique> <Leader>c let g:DubsGrepSteady_GrepAllTheCases
+  "  \ = !g:DubsGrepSteady_GrepAllTheCases<CR>
+  "nnoremap <buffer> <silent> <LocalLeader>c :call <SID>Toggle_GrepAllTheCases()<CR>
+  "
+  "if !hasmapto('<SID>Toggle_GrepAllTheCases')
+  map <silent> <unique> <Leader>c :call <SID>Toggle_GrepAllTheCases()<CR>
+  "endif
+endfunction
+
+call s:Map_Toggle_GrepAllTheCases()
 
 let g:DubsGrepSteady_GrepAllTheCases = 0
 
@@ -600,109 +619,110 @@ endfunction
 "       you cannot use a comment to indicate the number mappings
 "       in the array definition.
 
-" FIXME: Make DRY. This fcn. was copied to dubs_file_finder
-"        and dubs_edit_juice.
-"
-" See if the user made a project search listing and use that.
-let s:d_projs = findfile('dubs_projects.vim',
-                       \ pathogen#split(&rtp)[0] . "/**")
-if s:d_projs != ''
-  " Turn into a full path. See :h filename-modifiers
-  let s:d_projs = fnamemodify(s:d_projs, ":p")
-else
-  " No file, but there should be a template we can copy.
-  let s:tmplate = findfile('dubs_projects.vim.template',
-                         \ pathogen#split(&rtp)[0] . "/**")
-  if s:tmplate != ''
-    let s:tmplate = fnamemodify(s:tmplate, ":p")
-    " See if dubs_all is there.
-    let s:dubcor = fnamemodify(
-      \ finddir('dubs_all', pathogen#split(&rtp)[0] . "/**"), ":p")
-    " Get the filename root, i.e., drop the ".template".
-    let s:d_projs = fnamemodify(s:tmplate, ":r")
-    " Make a copy of the template.
-    execute '!/bin/cp ' . s:tmplate . ' ' . s:d_projs
-    if isdirectory(s:dubcor)
-      let s:ln_projs = s:dubcor . '/' . fnamemodify(s:tmplate, ":t:r")
-      silent execute '!/bin/ln -s ' . s:d_projs . ' ' . s:ln_projs
-    endif
+function! s:LoadUsersGrepProjects()
+  " FIXME: Make DRY. This fcn. was copied to dubs_file_finder
+  "        and dubs_edit_juice.
+
+  " See if the user made a project search listing and use that.
+  let s:d_projs = findfile('dubs_projects.vim', pathogen#split(&rtp)[0] . "/**")
+  if s:d_projs != ''
+    " Turn into a full path. See :h filename-modifiers
+    let s:d_projs = fnamemodify(s:d_projs, ":p")
   else
-    echomsg 'Warning: Dubsacks could not find dubs_projects.vim.template'
+    " No file, but there should be a template we can copy.
+    let s:tmplate = findfile('dubs_projects.vim.template',
+                           \ pathogen#split(&rtp)[0] . "/**")
+    if s:tmplate != ''
+      let s:tmplate = fnamemodify(s:tmplate, ":p")
+      " See if dubs_all is there.
+      let s:dubcor = fnamemodify(
+        \ finddir('dubs_all', pathogen#split(&rtp)[0] . "/**"), ":p")
+      " Get the filename root, i.e., drop the ".template".
+      let s:d_projs = fnamemodify(s:tmplate, ":r")
+      " Make a copy of the template.
+      execute '!/bin/cp ' . s:tmplate . ' ' . s:d_projs
+      if isdirectory(s:dubcor)
+        let s:ln_projs = s:dubcor . '/' . fnamemodify(s:tmplate, ":t:r")
+        silent execute '!/bin/ln -s ' . s:d_projs . ' ' . s:ln_projs
+      endif
+    else
+      echomsg 'Warning: Dubsacks could not find dubs_projects.vim.template'
+    endif
   endif
-endif
-if s:d_projs != ''
-  execute 'source ' . s:d_projs
-else
-  echomsg 'Warning: Dubsacks could not find dubs_projects.vim'
-endif
+  if s:d_projs != ''
+    execute 'source ' . s:d_projs
+  else
+    echomsg 'Warning: Dubsacks could not find dubs_projects.vim'
+  endif
 
-" Obsolete. Has since been extracted and templatized... [see previous block]
-"
-" " If the user did not make a project search listing, we'll
-" " set it using the first default we find from the project-specific
-" " config files.
-" let files = glob("$HOME/.vim/plugin/dubsgrext_*.vim")
-" if files != ''
-"   let files_l = split(files, '\n')
-"   for file_n in files_l
-"     " MAYBE: Do we care that Vim will source these files a second time?
-"     "        No complaints so far...
-"     exec "source " . file_n
-"   endfor
-" endif
+  " Obsolete. Has since been extracted and templatized... [see previous block]
+  "
+  " " If the user did not make a project search listing, we'll
+  " " set it using the first default we find from the project-specific
+  " " config files.
+  " let files = glob("$HOME/.vim/plugin/dubsgrext_*.vim")
+  " if files != ''
+  "   let files_l = split(files, '\n')
+  "   for file_n in files_l
+  "     " MAYBE: Do we care that Vim will source these files a second time?
+  "     "        No complaints so far...
+  "     exec "source " . file_n
+  "   endfor
+  " endif
 
-" If all else fails, use a really generic project listing.
-if !exists('g:ds_simple_grep_locat_lookup')
+  " If all else fails, use a really generic project listing.
+  if !exists('g:ds_simple_grep_locat_lookup')
+    let g:ds_simple_grep_locat_lookup = [
+      \ "Search in:",
+      \ "[Enter 1 to Cancel]",
+      \ "path/to/my/project",
+      \ "another/project",
+      \ "4",
+      \ "5",
+      \ "6",
+      \ "7",
+      \ $HOME . "/.vim",
+      \ "`echo " . $HOME . "/.bashrc*`",
+      \ "10",
+      \ "11",
+      \ "12",
+      \ "13",
+      \ "14",
+      \ "15",
+      \ "16",
+      \ "17",
+      \ "18",
+      \ "19",
+      \ "20",
+      \ "21",
+      \ "22",
+      \ "23",
+      \ "24",
+      \ "25",
+      \ "26",
+      \ "27",
+      \ "28",
+      \ "29",
+      \ "30",
+      \ "31",
+      \ "32",
+      \ "33",
+      \ "34",
+      \ "35",
+      \ "36"
+      \]
 
-  let g:ds_simple_grep_locat_lookup = [
-    \ "Search in:",
-    \ "[Enter 1 to Cancel]",
-    \ "path/to/my/project",
-    \ "another/project",
-    \ "4",
-    \ "5",
-    \ "6",
-    \ "7",
-    \ $HOME . "/.vim",
-    \ "`echo " . $HOME . "/.bashrc*`",
-    \ "10",
-    \ "11",
-    \ "12",
-    \ "13",
-    \ "14",
-    \ "15",
-    \ "16",
-    \ "17",
-    \ "18",
-    \ "19",
-    \ "20",
-    \ "21",
-    \ "22",
-    \ "23",
-    \ "24",
-    \ "25",
-    \ "26",
-    \ "27",
-    \ "28",
-    \ "29",
-    \ "30",
-    \ "31",
-    \ "32",
-    \ "33",
-    \ "34",
-    \ "35",
-    \ "36"
-    \]
+    let g:ds_simple_grep_locat_lookup_len =
+      \ len(g:ds_simple_grep_locat_lookup)
 
-  let g:ds_simple_grep_locat_lookup_len =
-    \ len(g:ds_simple_grep_locat_lookup)
+    " A map of ds_simple_grep_locat_lookup indices to ag --options.
+    " E.g., let g:ds_simple_grep_ag_options_map = {
+    "         \ '13': '--skip-vcs-ignores' }
+    let g:ds_simple_grep_ag_options_map = {}
+  endif
+endfunction
 
-  " A map of ds_simple_grep_locat_lookup indices to ag --options.
-  " E.g., let g:ds_simple_grep_ag_options_map = {
-  "         \ '13': '--skip-vcs-ignores' }
-  let g:ds_simple_grep_ag_options_map = {}
-
-endif
+call s:LoadUsersGrepProjects()
 
 " ------------------------------------------------------
 " ------------------------------------------------------
