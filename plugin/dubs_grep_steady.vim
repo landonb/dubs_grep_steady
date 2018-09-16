@@ -447,7 +447,13 @@ function s:GrepPrompt_Simple_GetInputlistItem(idx, do_highlight)
   if a:do_highlight
     let listitem = "(*) "
   endif
-  let listitem .= a:idx . ". " . g:ds_simple_grep_locat_lookup[a:idx]
+
+  let l:num_digits = len(g:ds_simple_grep_locat_lookup_len)
+  " https://stackoverflow.com/questions/4964772/string-formatting-padding-in-vim
+  " POSTPADDING: let l:posit_cnt = printf('Line: %-*u ==>> %-*s ==>> FilePath %s', 8, linenum, 12, errmsg, path)
+  let l:posit_cnt = printf('%*u', l:num_digits, a:idx)
+
+  let listitem .= l:posit_cnt . ". " . g:ds_simple_grep_locat_lookup[a:idx]
   return listitem
 endfunction
 
