@@ -50,9 +50,19 @@
 #                 rg ... \
 #
 #                  | sort --debug -t: -k1,1 -k2,2n
-#
+
+rip_grep_executable () {
+  if [[ -x ${HOME}/.local/bin/rg ]]; then
+    echo ${HOME}/.local/bin/rg
+  elif [[ -x /usr/local/bin/rg ]]; then
+    echo /usr/local/bin/rg
+  else
+    echo echo
+  fi
+}
+
 rip_grep_sleep_repeat () {
-  /usr/local/bin/rg \
+  $(rip_grep_executable) \
     -A 0 \
     -B 0 \
     --hidden \
