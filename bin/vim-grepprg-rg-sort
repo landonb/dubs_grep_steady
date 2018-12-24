@@ -1,4 +1,4 @@
-# vim:tw=0:ts=2:sw=2:noet:norl:ft=bash:nospell
+# vim:tw=0:ts=2:sw=2:et:norl:ft=bash:nospell
 
 # For a discussion of the ``rg`` the options below, see:
 #
