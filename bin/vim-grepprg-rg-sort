@@ -61,6 +61,10 @@ rip_grep_executable () {
   fi
 }
 
+# [lb] 2019-01-06: BEWARE: I don't remember a findup feature, but there's one!
+#   --no-ignore-parent  # Walks up tree honoring .ignore files.
+# The only issue is that when files are ignored, and you want to track down the
+# .ignore file responsible, you need to remember to walk up from all search paths.
 rip_grep_sleep_repeat () {
   $(rip_grep_executable) \
     -A 0 \

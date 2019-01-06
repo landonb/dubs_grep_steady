@@ -346,6 +346,10 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
           let l:options = l:options . " --ignore-case"
         endif
       endif
+      " [lb]: Be aware of another option to ignore .ignore files up a
+      "   path's hierarchy -- --no-ignore-parent -- which only makes
+      "   tracking down why a file is being ignored a little harder,
+      "   but is not a behavior we should enable.
       " Limit matches flags.
       if s:using_ag == 1
         if a:limit_matches == 0
