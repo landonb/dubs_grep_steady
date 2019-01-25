@@ -1,6 +1,6 @@
 " ====================================================================
-" This file is part of Dubsacks.
-"  https://github.com/landonb/dubsacks_vim
+" This file is part of Dubs Vim.
+"  https://github.com/landonb/dubs-vim
 " ====================================================================
 " This file is sourced by dubs_grep_steady/plugin/dubs_grep_steady.vim
 " ====================================================================

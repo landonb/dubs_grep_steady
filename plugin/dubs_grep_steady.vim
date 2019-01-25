@@ -2,25 +2,25 @@
 " Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
 " Last Modified: 2017.11.12
 " Project Page: https://github.com/landonb/dubs_grep_steady
-" Summary: Dubsacks Text Search Commands
+" Summary: Dubs Vim Text Search Commands
 " License: GPLv3
 " -------------------------------------------------------------------
 " Copyright © 2009, 2015, 2017 Landon Bouma.
 "
-" This file is part of Dubsacks.
+" This file is part of Dubs Vim.
 "
-" Dubsacks is free software: you can redistribute it and/or
+" Dubs Vim is free software: you can redistribute it and/or
 " modify it under the terms of the GNU General Public License
 " as published by the Free Software Foundation, either version
 " 3 of the License, or (at your option) any later version.
 "
-" Dubsacks is distributed in the hope that it will be useful,
+" Dubs Vim is distributed in the hope that it will be useful,
 " but WITHOUT ANY WARRANTY; without even the implied warranty
 " of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
 " the GNU General Public License for more details.
 "
 " You should have received a copy of the GNU General Public License
-" along with Dubsacks. If not, see <http://www.gnu.org/licenses/>
+" along with Dubs Vim. If not, see <http://www.gnu.org/licenses/>
 " or write Free Software Foundation, Inc., 51 Franklin Street,
 "                     Fifth Floor, Boston, MA 02110-1301, USA.
 " ===================================================================
@@ -656,13 +656,13 @@ function! s:LoadUsersGrepProjects()
         silent execute '!/bin/ln -s ' . s:d_projs . ' ' . s:ln_projs
       endif
     else
-      echomsg 'Warning: Dubsacks could not find dubs_projects.vim.template'
+      echomsg 'Warning: Dubs Vim could not find dubs_projects.vim.template'
     endif
   endif
   if s:d_projs != ''
     execute 'source ' . s:d_projs
   else
-    echomsg 'Warning: Dubsacks could not find dubs_projects.vim'
+    echomsg 'Warning: Dubs Vim could not find dubs_projects.vim'
   endif
 
   " Obsolete. Has since been extracted and templatized... [see previous block]

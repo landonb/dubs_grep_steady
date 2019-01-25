@@ -1,5 +1,5 @@
-Dubsacks Vim — Grep Steady
-==========================
+Dubs Vim — Grep Steady
+======================
 
 About This Plugin
 -----------------
@@ -47,7 +47,7 @@ Plugin Setup
 ^^^^^^^^^^^^
 
 After installing this plugin and first running Vim,
-Dubsacks will copy the ``dubs_projects.vim.template``
+Dubs Vim will copy the ``dubs_projects.vim.template``
 file to ``dubs_grep_steady/dubs_projects.vim``.
 
 Find and open the file and follow the instructions therein.
