@@ -1,13 +1,16 @@
-Dubs Vim — Grep Steady
-======================
+##############################
+Dubs Vim |em_dash| Grep Steady
+##############################
+
+.. |em_dash| unicode:: 0x2014 .. em dash
 
 About This Plugin
------------------
+=================
 
 This plugin sets up a powerful text search utility.
 
 Installation
-------------
+============
 
 Standard Pathogen installation:
 
@@ -30,8 +33,8 @@ Online help:
    :Helptags
    :help dubs-grep-steady
 
-Prerequisities
-^^^^^^^^^^^^^^
+Prerequisites
+-------------
 
 This script uses an external grep utility, preferably
 `The Silver Searcher <http://geoff.greer.fm/ag/>`__
@@ -44,7 +47,7 @@ out the cruft.
 Run ``sudo apt-get install -y ag`` to install Silver Searcher.
 
 Plugin Setup
-^^^^^^^^^^^^
+------------
 
 After installing this plugin and first running Vim,
 Dubs Vim will copy the ``dubs_projects.vim.template``
@@ -61,7 +64,7 @@ often, setting up the ``dubs_projects.vim`` file can save you
 from repeating yourself anytime you search.
 
 Searching Files
----------------
+===============
 
 ===========================  ============================  ==============================================================================================
 Key Mapping                  Description                   Notes
@@ -95,10 +98,10 @@ Key Mapping                  Description                   Notes
 ===========================  ============================  ==============================================================================================
 
 Tips 'n Tricks
---------------
+==============
 
 Find Non-Ascii Characters
-^^^^^^^^^^^^^^^^^^^^^^^^^
+-------------------------
 
 To exclude ASCII values when searching, use the search query:
 
@@ -107,7 +110,7 @@ To exclude ASCII values when searching, use the search query:
     /[^\x00-\x7F]
 
 Find Whole Words
-^^^^^^^^^^^^^^^^
+----------------
 
 When using The Silver Searcher to search multiple documents,
 e.g., after typing ``\g``, use the boundary identifer, ``\b``.
