@@ -236,7 +236,15 @@ function! s:snakecase(word)
   let word = substitute(a:word,'::','/','g')
   let word = substitute(word,'\(\u\+\)\(\u\l\)','\1_\2','g')
   let word = substitute(word,'\(\l\|\d\)\(\u\)','\1_\2','g')
-  let word = substitute(word,'[.-]','_','g')
+  " This substitute is too naive, and converts escaped dots, e.g.,
+  "     let word = substitute(word,'[.-]','_','g')
+  " would convert a search on, say, `3\.7`, to `3\_7`,
+  " which confuses grepprg when |'d with the other case snippets.
+  " So use a negative look-behind to ensure no preceeding escape!
+  " - The syntax for look-behind -- \@<! -- comes after the thing
+  "   behind sought, which here is an escaped escape -- \\ -- so
+  "   the full look-behind is \\\@<!
+  let word = substitute(word,'\\\@<![.-]','_','g')
   let word = tolower(word)
   return word
 endfunction
