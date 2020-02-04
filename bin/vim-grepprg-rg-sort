@@ -1,5 +1,10 @@
 # vim:tw=0:ts=2:sw=2:et:norl:ft=bash:nospell
 
+# YOU: Set max columns nonzero to omit long lines, which can make (in this
+#      author's opinion) it more tedious to scan the quickfix results).
+#  DUBS_VIM_RG_MAX_COLS=0
+DUBS_VIM_RG_MAX_COLS=200
+
 # For a discussion of the ``rg`` the options below, see:
 #
 #   dubs_grep_steady/plugins/dubs_grep_steady.vim::SetGrepprgRg
@@ -75,6 +80,7 @@ rip_grep_sleep_repeat () {
     --line-number \
     --no-heading \
     --with-filename \
+    --max-columns ${DUBS_VIM_RG_MAX_COLS} \
     "$@" \
     | sort -t: -k1,1 -k2,2n
 }

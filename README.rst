@@ -143,3 +143,13 @@ constructs might be named the same except for casing,
 You can use ``\c`` to toggle between searching for exactly your search phrase,
 and searching on case mutations of the phrase (camelCase, snake_case, and train-case).
 
+Keeping Long Result Lines from the Quickfix
+-------------------------------------------
+
+Configure the ``DUBS_VIM_RG_MAX_COLS`` environment
+in ``bin/vim-grepprg-rg-sort`` to limit the length
+of search results when using ripgrep (``rg``).
+
+It defaults to 200, so that long results lines are kept out of the quickfix
+results, which this author finds makes scanning the results more difficult.
+
