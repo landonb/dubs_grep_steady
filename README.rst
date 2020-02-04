@@ -36,15 +36,24 @@ Online help:
 Prerequisites
 -------------
 
-This script uses an external grep utility, preferably
-`The Silver Searcher <http://geoff.greer.fm/ag/>`__
-(``/usr/bin/ag``) but alternatively
-falls back on ``egrep``.
-The former is a tad faster and it honors ``.agignore``
-and ``.gitignore`` files, which makes it easy to filter
-out the cruft.
+This script uses an external grep utility.
 
-Run ``sudo apt-get install -y ag`` to install Silver Searcher.
+The author prefers
+`ripgrep <https://github.com/BurntSushi/ripgrep>`__
+(``rg``),
+but you can also use
+`The Silver Searcher <http://geoff.greer.fm/ag/>`__
+(``ag``),
+or, alternatively, if neither of those is installed,
+the plugin falls back on ``egrep``.
+
+Why ripgrep? It's blazing fast
+and does a good job honoring ``.ignore`` files.
+
+You can download and install ripgrep from the list of
+`ripgrep releases <https://github.com/BurntSushi/ripgrep/releases>`__
+(just add its binary to your ``$PATH``, or symlink it from a directory
+already on your user's path).
 
 Plugin Setup
 ------------
