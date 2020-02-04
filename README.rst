@@ -49,14 +49,21 @@ Run ``sudo apt-get install -y ag`` to install Silver Searcher.
 Plugin Setup
 ------------
 
-After installing this plugin and first running Vim,
-Dubs Vim will copy the ``dubs_projects.vim.template``
-file to ``dubs_grep_steady/dubs_projects.vim``.
+You can search like normal, e.g.,::
 
-Find and open the file and follow the instructions therein.
-Basically, add your project paths to the file, and when you
-search, you'll be asked to choose one of the project paths
-you defined as the base of the search.
+  :grep "search-phrase" "path/to/search"
+
+And you can also wire frequently-searched locations,
+to make searching frequently-accessed projects quicker.
+
+- After installing this plugin and first running Vim,
+  Dubs Vim will copy the ``dubs_projects.vim.template``
+  file to ``dubs_grep_steady/dubs_projects.vim``.
+
+- Find and open the file and follow the instructions therein.
+  Basically, add your project paths to the file, and when you
+  search, you'll be asked to choose one of the project paths
+  you defined as the base of the search.
 
 You can still search any arbitrary directory when grepping,
 but if you find yourself searching the same project folders
