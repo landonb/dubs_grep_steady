@@ -102,6 +102,10 @@ Key Mapping                  Description                   Notes
                              Location Prompt               Caveat: You'll probably find yourself using ``\g`` more often than this command.
 ---------------------------  ----------------------------  ----------------------------------------------------------------------------------------------
 ``:gr! "<regex>" "<dir>"``   Search in Any Location        To search locations that are not in the project list, use the raw grep command.
+---------------------------  ----------------------------  ----------------------------------------------------------------------------------------------
+``\c``                       Toggle Alternative Casing     When enabled, searches alternative casings, e.g., a search for a camelCase
+                                                           word, such as ``fooBar``, would also includes results for that word in train-case,
+                                                           ``foo-bar``, as well as snake_case, ``foo_bar``.
 ===========================  ============================  ==============================================================================================
 
 Tips 'n Tricks
@@ -130,4 +134,12 @@ use the boundary identifiers, ``\<`` and ``\>.``
 
 For example, ``\<thing\>`` finds uses of the whole word, 'thing'.
 
+Find Alternative Casings
+------------------------
+
+You might find yourself working on codebases where similar
+constructs might be named the same except for casing,
+
+You can use ``\c`` to toggle between searching for exactly your search phrase,
+and searching on case mutations of the phrase (camelCase, snake_case, and train-case).
 
