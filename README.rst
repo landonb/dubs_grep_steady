@@ -12,25 +12,46 @@ This plugin sets up a powerful text search utility.
 Installation
 ============
 
-Standard Pathogen installation:
+Installation is easy using the packages feature (see ``:help packages``).
+
+To install the package so that it will automatically load on Vim startup,
+use a ``start`` directory, e.g.,
 
 .. code-block:: bash
 
-   cd ~/.vim/bundle/
-   git clone https://github.com/landonb/dubs_grep_steady.git
+    mkdir -p ~/.vim/pack/landonb/start
+    cd ~/.vim/pack/landonb/start
 
-Or, Standard submodule installation:
+If you want to test the package first, make it optional instead
+(see ``:help pack-add``):
 
 .. code-block:: bash
 
-   cd ~/.vim/bundle/
-   git submodule add https://github.com/landonb/dubs_grep_steady.git
+    mkdir -p ~/.vim/pack/landonb/opt
+    cd ~/.vim/pack/landonb/opt
 
-Online help:
+Clone the project to the desired path:
+
+.. code-block:: bash
+
+    git clone https://github.com/landonb/dubs_grep_steady.git
+
+If you installed to the optional path, tell Vim to load the package:
+
+.. code-block:: vim
+
+   :packadd! dubs_grep_steady
+
+Just once, tell Vim to build the online help:
 
 .. code-block:: vim
 
    :Helptags
+
+Then whenever you want to reference the help from Vim, run:
+
+.. code-block:: vim
+
    :help dubs-grep-steady
 
 Prerequisites
