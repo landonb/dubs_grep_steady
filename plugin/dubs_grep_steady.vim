@@ -84,7 +84,7 @@ function! s:SetGrepprgRg()
   " Use a wrapper I made that pipes to sort, because Vim don't pipe.
   " FIXME/2018-05-06: (lb): Support non-standard/non-Pathogen paths.
   "   Or let user override.
-  let l:ripgrep_shim = $HOME . '/.vim/bundle/dubs_grep_steady/bin/vim-grepprg-rg-sort'
+  let l:ripgrep_shim = $HOME . '/.vim/pack/landonb/start/dubs_grep_steady/bin/vim-grepprg-rg-sort'
   if executable(l:ripgrep_shim)
     execute 'set grepprg=' . l:ripgrep_shim
   else
