@@ -652,17 +652,10 @@ function! s:LoadUsersGrepProjects()
                            \ pathogen#split(&rtp)[0] . "/**")
     if s:tmplate != ''
       let s:tmplate = fnamemodify(s:tmplate, ":p")
-      " See if dubs_all is there.
-      let s:dubcor = fnamemodify(
-        \ finddir('dubs_all', pathogen#split(&rtp)[0] . "/**"), ":p")
       " Get the filename root, i.e., drop the ".template".
       let s:d_projs = fnamemodify(s:tmplate, ":r")
       " Make a copy of the template.
       execute '!/bin/cp ' . s:tmplate . ' ' . s:d_projs
-      if isdirectory(s:dubcor)
-        let s:ln_projs = s:dubcor . '/' . fnamemodify(s:tmplate, ":t:r")
-        silent execute '!/bin/ln -s ' . s:d_projs . ' ' . s:ln_projs
-      endif
     else
       echomsg 'Warning: Dubs Vim could not find dubs_projects.vim.template'
     endif
