@@ -337,9 +337,17 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
       let l:locat = g:ds_simple_grep_locat_lookup[l:new_i]
       let l:options = ''
       if s:using_rg == 1
-        let l:options = get(g:ds_simple_grep_rg_options_map, l:new_i, '')
+        if !exists("g:ds_simple_grep_rg_options_map")
+          let l:options = ''
+        else
+          let l:options = get(g:ds_simple_grep_rg_options_map, l:new_i, '')
+        endif
       elseif s:using_ag == 1
-        let l:options = get(g:ds_simple_grep_ag_options_map, l:new_i, '')
+        if !exists("g:ds_simple_grep_ag_options_map")
+          let l:options = ''
+        else
+          let l:options = get(g:ds_simple_grep_ag_options_map, l:new_i, '')
+        endif
       endif
       " Case (in)sensitive flags.
       if a:case_sensitive == 1
