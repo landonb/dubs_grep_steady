@@ -62,28 +62,36 @@ let g:plugin_dubs_grep_steady = 1
 let s:using_ag = -1
 let s:using_rg = -1
 
+" (lb) Some history:
+"
+" - 2017-09-13: I switched from `ag` to `rg`.
+"   - 2020-09-22: An old note said that `ag` indentifies reST files as
+"     binary (though I bet there's a way to fix that); but really I
+"     like `ag` better because it's noticeably faster on larger projects.
+"   - The API differences are: `ag -U` → `rg --no-ignore-vcs`;
+"     and if not in a tty, ripgrep doesn't spit out line numbers
+"     (so specify --line-number).
+"
+" - 2018-05-06: I enabled sorted search results.
+"   - This produces deterministic results, i.e.,
+"     now when you repeat the same search, the quickfix window
+"     not only shows the same results, but in the same order.
+"   - Note that using Rip Grep's sort affects speed. Says Rip Grep:
+"       'Sort ... disables ... parallelism and runs ... in a single thread.'
+"   - Note that `rg --sort-files` sorts the results, but not alphabetically.
+"       set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\
+"         \ --line-number\ --no-heading\ --with-filename\ --sort-files
+"   - To sort alphabetically, we'll instead use the system `sort` command.
+"     - But note that Vim doesn't pipe, so we use an external script.
+"
+" - MAYBE/2018-05-06: (lb): Let the user override/specify a different script path.
+"   - 2020-09-22: Though maybe this doesn't matter as much in Vim 8.x now that
+"                 most users are probably following convention and installing
+"                 to the ~/.vim/pack path.
+
 function! s:SetGrepprgRg()
   let s:using_ag = 0
   let s:using_rg = 1
-  " 2017-09-13: Switching to `rg` b/c `ag` seeing a reST file as binary.
-  " See comments for ag; the differences are: -U is --no-ignore-vcs,
-  " and if not in a tty, ripgrep doesn't spit out line numbers.
-  "
-  " FIXME/2018-05-06: (lb): I finally want sorted, deterministic results!
-  "   So what's faster? `rg --sort-files`, or `| sort` ?
-  " The problem with sort is speed... so maybe I should set it just for
-  "   certain projects?
-  " Says Rip Grep:
-  "    Sort results by file path. Note that this currently disables all
-  "    parallelism and runs search in a single thread.
-  " 2018-05-06: Hrmm. rg --sort-files results are always in the same order,
-  "   but they're not alphabetical!
-  "
-  "set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename\ --sort-files
-  "
-  " Use a wrapper I made that pipes to sort, because Vim don't pipe.
-  " FIXME/2018-05-06: (lb): Support non-standard/non-Pathogen paths.
-  "   Or let user override.
   let l:ripgrep_shim = $HOME . '/.vim/pack/landonb/start/dubs_grep_steady/bin/vim-grepprg-rg-sort'
   if executable(l:ripgrep_shim)
     execute 'set grepprg=' . l:ripgrep_shim
