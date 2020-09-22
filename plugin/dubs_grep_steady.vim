@@ -590,11 +590,6 @@ function! s:WireSearchMappings()
       call s:GrepPrompt_Simple(a:term, 0, 0, 0)
     endif
   endfunction
-
-  " Reload projects file
-  " ------------------------------------------------------
-  noremap <silent> <Leader>P :call <SID>LoadUsersGrepProjects()<CR>
-  inoremap <silent> <Leader>P <C-O>:call <SID>LoadUsersGrepProjects()<CR>
 endfunction
 
 call s:WireSearchMappings()
@@ -765,6 +760,14 @@ function! s:LoadUsersGrepProjects()
 endfunction
 
 call s:LoadUsersGrepProjects()
+
+" 2020-09-22: (lb): I had the reload function mapped to <Leader>P,
+" but I've never called it, and then I assigned <Leader>P to another
+" command that I actually do call. So let's just expose this as a
+" long command name.
+" noremap <silent> <Leader>P :call <SID>LoadUsersGrepProjects()<CR>
+" inoremap <silent> <Leader>P <C-O>:call <SID>LoadUsersGrepProjects()<CR>
+command! -nargs=0 GrepSteadyReload :call <SID>LoadUsersGrepProjects()
 
 " ------------------------------------------------------
 " ------------------------------------------------------
