@@ -9,7 +9,7 @@
 
 " *********************************************************************** "
 
-" HINT: Run :GrepSteadyReload after modifying this list.
+" HINT: Run :GrepSteadyReload after modifying this list (or restart Vim).
 
 let g:ds_simple_grep_locat_lookup = [
   \ "Search in:",
