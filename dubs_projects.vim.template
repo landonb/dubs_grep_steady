@@ -1,32 +1,17 @@
 " ====================================================================
-" This file is part of Dubs Vim.
-"  https://github.com/landonb/dubs-vim
+" Summary: This is a user-customizable file loaded by Dubs Grep Steady.
+" Project: https://github.com/landonb/dubs_grep_steady
+" Helpful: Run :h dubs-grep-steady
+"          Also some hints below.
+" vim:tw=0:ts=2:sw=2:et:norl
 " ====================================================================
-" This file is sourced by dubs_grep_steady/plugin/dubs_grep_steady.vim
-" ====================================================================
-" This script customizes the grep project lookup table.
+" YOU: Modify the list below to customize the grep project paths prompt.
 
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-" Default Search Directory Choices
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-" This is the list of directories you see after starting a search
-" using the <Leader>g or <F4> commands. See :h dubs-grep-steady
-
-" This list isn't intelligent like the :b command or Command-T lists.
-" You'll see the list of projects you can search, and then you enter
-" a number.
-"
-" CUSTOMIZE THE LIST.
-"
-" Add your own paths and reorder this list however you'd like.
-" Note: the numbers that are already in the list are just there
-" as placeholders; they indicate the number associated with that
-" list entry. If this list is too tall for your Vim window, you'll
-" have to hit Space to scroll it.
+" *********************************************************************** "
 
 let g:ds_simple_grep_locat_lookup = [
   \ "Search in:",
+  \
   \ "[Enter 1 to Cancel]",
   \ "path/to/my/project",
   \ "another/project",
@@ -35,7 +20,8 @@ let g:ds_simple_grep_locat_lookup = [
   \ "6",
   \ "7",
   \ "8",
-  \ $HOME . "/.vim "
+  \ ""
+  \   . $HOME . "/.vim "
   \   . "`echo " . $HOME . "/.bashrc*` ",
   \ "10",
   \ "11",
@@ -66,11 +52,60 @@ let g:ds_simple_grep_locat_lookup = [
   \ "36"
   \]
 
-let g:ds_simple_grep_locat_lookup_len =
-  \ len(g:ds_simple_grep_locat_lookup)
+" *********************************************************************** "
+
+" Above is the list of directories you'll see when performing a search
+" using the <Leader>g or <F4> commands.
+"
+"   See :h dubs-grep-steady
+
+" TO CUSTOMIZE THE LIST:
+"
+" Add your own paths and reorder the list however you'd like.
+"
+" Note: The numbers already in the list above are just there
+" as placeholders; they indicate the number associated with that
+" list entry that you'd type to choose that project to search.
+"
+" Note: If the list is too tall for your Vim window, you'll have
+" to hit Space to scroll it. So you'll probably want to limit the
+" number of projects to around ~40 so you can avoid scrolling if
+" your Gvim window is reasonably sized (not too short).
+"
+" Hint: You can specify multiple paths in one entry by separating
+" paths with a space, e.g.,
+"
+"   \ ""
+"   \   . $HOME . "/.waddle "
+"   \   . $HOME . "/.homefries "
+"   \   . $HOME . "/.vim ",
+"
+" Hint: You can run embedded commands to help build the list, e.g.,
+"
+"   \ "`echo " . $HOME . "/.homefries/.bashrc-bin/bash*`",
+
+" *********************************************************************** "
+
+" You can also specify optional rg/ag flags for specific projects.
+"
+" (But you can probably ignore these options if you're okay with how
+" dubs_grep_steady configures the `grepprg` command by default; step
+" inside dubs_grep_steady/plugin/dubs_grep_steady.vim and search for
+" `grepprg=ag ...` and `grepprg=rg ...` to see how it's done.)
 
 " A map of ds_simple_grep_locat_lookup indices to ag --options.
-" E.g., let g:ds_simple_grep_ag_options_map = {
-"         \ '13': '--skip-vcs-ignores' }
+" E.g.,
+"   let g:ds_simple_grep_ag_options_map = {
+"     \ "22": "--skip-vcs-ignores"
+"     \ }
 let g:ds_simple_grep_ag_options_map = {}
+
+" A map of ds_simple_grep_locat_lookup indices to rg --options.
+" E.g.,
+"   let g:ds_simple_grep_rg_options_map = {
+"     \ "22": "--no-ignore-vcs"
+"     \ }
+let g:ds_simple_grep_rg_options_map = {}
+
+" *********************************************************************** "
 
