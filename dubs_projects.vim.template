@@ -7,8 +7,6 @@
 " ====================================================================
 " YOU: Modify the list below to customize the grep project paths prompt.
 
-" *********************************************************************** "
-
 " HINT: Run :GrepSteadyReload after modifying this list (or restart Vim).
 
 let g:ds_simple_grep_locat_lookup = [
