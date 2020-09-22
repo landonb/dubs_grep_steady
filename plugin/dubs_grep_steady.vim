@@ -85,16 +85,19 @@ let s:using_rg = -1
 "         \ --line-number\ --no-heading\ --with-filename\ --sort-files
 "   - To sort alphabetically, we'll instead use the system `sort` command.
 "     - But note that Vim doesn't pipe, so we use an external script.
-"
-" - MAYBE/2018-05-06: (lb): Let the user override/specify a different script path.
-"   - 2020-09-22: Though maybe this doesn't matter as much in Vim 8.x now that
-"                 most users are probably following convention and installing
-"                 to the ~/.vim/pack path.
 
 function! s:SetGrepprgRg()
   let s:using_ag = 0
   let s:using_rg = 1
+
+  " The user can use a global to override/specify a different script path.
+  " - But this probably doesn't matter as much in Vim 8.x now that most users
+  "   are probably following convention and installing to the ~/.vim/pack path.
   let l:ripgrep_shim = $HOME . '/.vim/pack/landonb/start/dubs_grep_steady/bin/vim-grepprg-rg-sort'
+  if exists("g:DUBS_GREP_STEADY_GREPPRG_SCRIPT")
+    let l:ripgrep_shim = g:DUBS_GREP_STEADY_GREPPRG_SCRIPT
+  endif
+
   if executable(l:ripgrep_shim)
     execute 'set grepprg=' . l:ripgrep_shim
   else
