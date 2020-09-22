@@ -108,18 +108,16 @@ endfunction
 function! s:SetGrepprgAg()
   let s:using_ag = 1
   let s:using_rg = 0
-  " *nix w/ The Silver Searcher
-  " -A --after [LINES]      Print lines before match (Default: 2).
-  " -B --before [LINES]     Print lines after match (Default: 2).
-  " -S --smart-case         Match case insensitively unless
-  "                         PATTERN contains uppercase characters.
-  " -f --follow             Follow symlinks.
-  " SYNC: set grepprg=ag...
-  "set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow
-  " 2017-04-29: Ignore .gitignore files??
+
+  " The Silver Searcher options:
+  "   -A --after [LINES]      Print lines before match (Default: 2).
+  "   -B --before [LINES]     Print lines after match (Default: 2).
+  "   -S --smart-case         Match case insensitively unless
+  "                           PATTERN contains uppercase characters.
+  "   -f --follow             Follow symlinks.
+  "   -U --skip-vcs-ignores   Ignore VCS ignore files
+  "                           (.gitignore, .hgignore; still obey .ignore)
   set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
-  " Same, and more anal:
-  "set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ $*
 endfunction
 
 function! s:SetGrepprgGrep()
@@ -382,12 +380,10 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
       if s:using_ag == 1
         if a:limit_matches == 0
           " SYNC: set grepprg=ag...
-          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow
-          " 2017-04-29: Ignore .gitignore files??
           set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
         else
           " The Silver Search says "ERR: Too many matches" for each file
-          " after printing one line, but the err come randomly from a thread
+          " after printing one line, but the errs come randomly from a thread
           " on stderr, and those messages and the search results end up being
           " interleaved. Since we can't easily pipe between two executables
           " using grepprg, and since Vim ends our grepprg with 2>&1, we have
@@ -453,13 +449,8 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
 
       " HINT: Try: `:verbose set grepprg` and `:verbose gr` to see what happened.
       execute "silent gr! " . l:options . " " . l:srch_term . " " . l:locat
-      "if s:using_ag == 1
-      "  " SYNC: set grepprg=ag...
-      "  set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow
-      "endif
       let s:simple_grep_last_i = l:new_i
       :QFix!(0)
-      ":QFix(1, 1)
     endif
   endif
   call inputrestore()
@@ -576,7 +567,6 @@ function! s:WireSearchMappings()
   " NOTE Cannot get <C-8> or <C-*> to work (both still call :nohlsearch)
 
   " NOTE <C-R><C-W> is Vim-speak for the word under the cursor
-  " FIXME Move this to EditPlus.vim or something...
   noremap <silent> <C-F4> :call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
   inoremap <silent> <C-F4> <C-O>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
   cnoremap <silent> <C-F4> <C-C>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
