@@ -9,6 +9,8 @@
 
 " *********************************************************************** "
 
+" HINT: Run :GrepSteadyReload after modifying this list.
+
 let g:ds_simple_grep_locat_lookup = [
   \ "Search in:",
   \
