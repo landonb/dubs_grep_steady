@@ -25,6 +25,8 @@
 "                     Fifth Floor, Boston, MA 02110-1301, USA.
 " ===================================================================
 
+" MAYBE/2020-09-22: Replace `pathogen#split` calls to remove Pathogen dependency.
+
 " ------------------------------------------
 " About:
 
@@ -148,8 +150,7 @@ function! s:SetGrepprgGrep()
     " Windows w/ egrep
     set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"$USERPROFILE/vimfiles/grep-exclude\"
   else
-    let s:exclf = findfile('grep-exclude',
-                           \ pathogen#split(&rtp)[0] . "/**")
+    let s:exclf = findfile('grep-exclude', pathogen#split(&rtp)[0] . "/**")
     if s:exclf != ''
       " Turn into a full path. See :h filename-modifiers
       let s:exclf = fnamemodify(s:exclf, ":p")
@@ -666,8 +667,8 @@ function! s:LoadUsersGrepProjects()
     let s:d_projs = fnamemodify(s:d_projs, ":p")
   else
     " No file, but there should be a template we can copy.
-    let s:tmplate = findfile('dubs_projects.vim.template',
-                           \ pathogen#split(&rtp)[0] . "/**")
+    let s:tmplate =
+      \ findfile('dubs_projects.vim.template', pathogen#split(&rtp)[0] . "/**")
     if s:tmplate != ''
       let s:tmplate = fnamemodify(s:tmplate, ":p")
       " Get the filename root, i.e., drop the ".template".
