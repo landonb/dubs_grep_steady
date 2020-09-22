@@ -76,6 +76,11 @@ You can download and install ripgrep from the list of
 (just add its binary to your ``$PATH``, or symlink it from a directory
 already on your user's path).
 
+This plugin also requires
+`Pathogen <https://github.com/tpope/vim-pathogen>`__
+(but just for the simple ``pathogen#split`` command;
+you're not expected to manage this plugin with Pathogen).
+
 Plugin Setup
 ------------
 
