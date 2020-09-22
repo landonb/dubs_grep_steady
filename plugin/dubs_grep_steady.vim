@@ -27,6 +27,9 @@
 " MAYBE/2020-09-22: Replace `pathogen#split` calls to remove Pathogen dependency.
 " (Could probably just copy `pathogen#split` into this plugin.)
 
+" FIXME/2020-09-22: Do not do any mappings herein (e.g., <Leader>g).
+" Instead, make `GrepSteady*` commands, and have user wire their own maps.
+
 " ------------------------------------------
 " About:
 
