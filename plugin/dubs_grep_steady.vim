@@ -642,12 +642,73 @@ endfunction
 "         \ "/path/to/foo "
 "         \ . "/path/to/bar "
 "         \ . "/baz/bat ",
+"       or, better yet, to align the paths, start with empty string, e.g.,
+"         \ ""
+"         \ . "/path/to/foo "
+"         \ . "/path/to/bar "
+"         \ . "/baz/bat ",
 
 " NOTE: The numbers are just placeholders. Replace them with
 "       project directories, leave them alone, or delete them.
 "       However, because of the line continuation backslash,
-"       you cannot use a comment to indicate the number mappings
-"       in the array definition.
+"       you cannot use comments to indicate the number mappings
+"       in the array definition (so if you fill the whole array
+"       with paths, you won't easily be able to tell what paths
+"       are at which index).
+
+function! s:LoadDefaultGrepProjectsLookup()
+  let g:ds_simple_grep_locat_lookup = [
+    \ "Search in:",
+    \ "[Enter 1 to Cancel]",
+    \ "path/to/my/project",
+    \ "another/project",
+    \ "4",
+    \ "5",
+    \ "6",
+    \ "7",
+    \ $HOME . "/.vim",
+    \ "`echo " . $HOME . "/.bashrc*`",
+    \ "10",
+    \ "11",
+    \ "12",
+    \ "13",
+    \ "14",
+    \ "15",
+    \ "16",
+    \ "17",
+    \ "18",
+    \ "19",
+    \ "20",
+    \ "21",
+    \ "22",
+    \ "23",
+    \ "24",
+    \ "25",
+    \ "26",
+    \ "27",
+    \ "28",
+    \ "29",
+    \ "30",
+    \ "31",
+    \ "32",
+    \ "33",
+    \ "34",
+    \ "35",
+    \ "36"
+    \]
+
+  let g:ds_simple_grep_locat_lookup_len =
+    \ len(g:ds_simple_grep_locat_lookup)
+
+  " A map rg --options for specific ds_simple_grep_locat_lookup entries.
+  " E.g., let g:ds_simple_grep_ag_options_map = {
+  "         \ '13': '--skip-vcs-ignores'
+  "         \ }
+  let g:ds_simple_grep_rg_options_map = {}
+
+  " A similar map, but for ag --options.
+  let g:ds_simple_grep_ag_options_map = {}
+endfunction
 
 function! s:LoadUsersGrepProjects()
   " FIXME: Make DRY. This fcn. was copied to dubs_file_finder
@@ -695,53 +756,7 @@ function! s:LoadUsersGrepProjects()
 
   " If all else fails, use a really generic project listing.
   if !exists('g:ds_simple_grep_locat_lookup')
-    let g:ds_simple_grep_locat_lookup = [
-      \ "Search in:",
-      \ "[Enter 1 to Cancel]",
-      \ "path/to/my/project",
-      \ "another/project",
-      \ "4",
-      \ "5",
-      \ "6",
-      \ "7",
-      \ $HOME . "/.vim",
-      \ "`echo " . $HOME . "/.bashrc*`",
-      \ "10",
-      \ "11",
-      \ "12",
-      \ "13",
-      \ "14",
-      \ "15",
-      \ "16",
-      \ "17",
-      \ "18",
-      \ "19",
-      \ "20",
-      \ "21",
-      \ "22",
-      \ "23",
-      \ "24",
-      \ "25",
-      \ "26",
-      \ "27",
-      \ "28",
-      \ "29",
-      \ "30",
-      \ "31",
-      \ "32",
-      \ "33",
-      \ "34",
-      \ "35",
-      \ "36"
-      \]
-
-    let g:ds_simple_grep_locat_lookup_len =
-      \ len(g:ds_simple_grep_locat_lookup)
-
-    " A map of ds_simple_grep_locat_lookup indices to ag --options.
-    " E.g., let g:ds_simple_grep_ag_options_map = {
-    "         \ '13': '--skip-vcs-ignores' }
-    let g:ds_simple_grep_ag_options_map = {}
+    call s:LoadDefaultGrepProjectsLookup()
   endif
 endfunction
 
