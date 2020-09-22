@@ -697,17 +697,17 @@ function! s:LoadDefaultGrepProjectsLookup()
     \ "36"
     \]
 
+  let g:ds_simple_grep_rg_options_map = {}
+  let g:ds_simple_grep_ag_options_map = {}
+endfunction
+
+function! s:EnsureGrepProjectsLookupSetup()
   let g:ds_simple_grep_locat_lookup_len =
     \ len(g:ds_simple_grep_locat_lookup)
 
-  " A map rg --options for specific ds_simple_grep_locat_lookup entries.
-  " E.g., let g:ds_simple_grep_ag_options_map = {
-  "         \ '13': '--skip-vcs-ignores'
-  "         \ }
-  let g:ds_simple_grep_rg_options_map = {}
-
-  " A similar map, but for ag --options.
-  let g:ds_simple_grep_ag_options_map = {}
+  " It's okay if these maps are left undefined.
+  "   let g:ds_simple_grep_rg_options_map = {}
+  "   let g:ds_simple_grep_ag_options_map = {}
 endfunction
 
 function! s:LoadUsersGrepProjects()
@@ -758,6 +758,7 @@ function! s:LoadUsersGrepProjects()
   if !exists('g:ds_simple_grep_locat_lookup')
     call s:LoadDefaultGrepProjectsLookup()
   endif
+  call s:EnsureGrepProjectsLookupSetup()
 endfunction
 
 call s:LoadUsersGrepProjects()
