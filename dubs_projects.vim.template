@@ -76,8 +76,8 @@ let g:ds_simple_grep_locat_lookup = [
 " paths with a space, e.g.,
 "
 "   \ ""
-"   \   . $HOME . "/.waddle "
 "   \   . $HOME . "/.homefries "
+"   \   . $HOME . "/.waffle "
 "   \   . $HOME . "/.vim ",
 "
 " Hint: You can run embedded commands to help build the list, e.g.,
