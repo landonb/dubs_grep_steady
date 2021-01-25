@@ -411,8 +411,8 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
 
       " 2018-03-29: Crude implementation of caseless-grep.
       let l:new_term = l:the_term
-      if g:DubsGrepSteady_GrepAllTheCases
-        " Search on 3 casings: Camel, Snake, and Train.
+      if a:case_sensitive == 0 && g:DubsGrepSteady_GrepAllTheCases
+        " Search on 3 casings: Camel, Snake, and Train. Only for \g, not \G.
         " NOTE: Converting to snakecase downcases it.
         let l:new_term = ''
           \ . tolower(s:camelcase(l:the_term)) . "\\|"
@@ -442,8 +442,8 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
       "       e.g., the equivalent word history boundary in / is "\<word\>".
 
       " 2018-03-29: Crude implementation of caseless-grep.
-      if g:DubsGrepSteady_GrepAllTheCases
-        " Search on 3 casings: Camel, Snake, and Train.
+      if a:case_sensitive == 0 && g:DubsGrepSteady_GrepAllTheCases
+        " Search on 3 casings: Camel, Snake, and Train. Only for \g, not \G.
         " NOTE: Converting to Snake_Case downcases it.
         let l:srch_term = "--ignore-case \"" . l:new_term . "\""
       else
