@@ -600,14 +600,47 @@ call s:WireSearchMappings()
 " e.g., search for FOO_BAR; or include fooBar, foo_bar, foo-bar.
 
 function! s:Map_Toggle_GrepAllTheCases()
-  "unmap <silent> <unique> <Leader>c
-  "map <silent> <unique> <Leader>c let g:DubsGrepSteady_GrepAllTheCases
-  "  \ = !g:DubsGrepSteady_GrepAllTheCases<CR>
-  "nnoremap <buffer> <silent> <LocalLeader>c :call <SID>Toggle_GrepAllTheCases()<CR>
+
+  " FIXME/2021-01-25: Add <Plug> indirection and use hasmapto like NERDCommenter,
+  "                   so users/other plugins can override or opt-out of these maps.
+  "                   - See also setup-nerd-commenter.vim for map reset and setup.
+
+  " 2021-01-25: (lb): I've added NERD Commenter, which starts all its two-character
+  " combo maps using <leader>c. So a single-character <leader>c map won't complete
+  " immediately (like it used to). But I rarely change the grep casing.
+  " You can also use \G to bypass the magic camel|snake|train case searching, albeit
+  " \G is --case-sensitive; while \g uses --smart-case, unless GrepAllTheCases=1 in
+  " which case it searches on the various camel|snake|train casings.
   "
-  "if !hasmapto('<SID>Toggle_GrepAllTheCases')
-  map <silent> <unique> <Leader>c :call <SID>Toggle_GrepAllTheCases()<CR>
-  "endif
+  " Ref:
+  "    \g w/ GrepAllTheCases=0 uses rg --smart-case
+  "    \g w/ GrepAllTheCases=1 sets rg --ignore-case
+  "                             and searches camel|snake|train variations
+  "    \G always uses rg --case-sensitive
+  "
+  " Demo: Try searching each of the following terms three times:
+  " - Once with \cg and using \g, then with \cg off and using \g,
+  "   and finally using \G.
+  "          findmeplease
+  "          FINDmePLEASE
+  "          findMePlease
+  "          find_me_please
+  "          find-me-please
+  "          FIND_ME_PLEASE
+  "
+  " SYNC_ME: The Waffle Batter Opinionated Vim Environment's
+  "          ManageMapNERDCommenter sets a bunch of maps that start with
+  "          <leader>c so we'll avoid conflicting with any of those.
+  "
+  " Use 'cg' to toggle extravagant casing, mnemonic: 'change grep'.
+  nmap <silent> <unique> <Leader>cg :call <SID>Toggle_GrepAllTheCases()<CR>
+  imap <silent> <unique> <Leader>cg <C-o>:call <SID>Toggle_GrepAllTheCases()<CR>
+  "
+  " (lb): I'm leaving \c for historic reasons, but now there's a lag before it trips.
+  " - LATER/2021-01-25: Eventually-MAYBE I'll find I only use \cg and I'll remove \c.
+  nmap <silent> <unique> <Leader>c :call <SID>Toggle_GrepAllTheCases()<CR>
+  imap <silent> <unique> <Leader>c <C-o>:call <SID>Toggle_GrepAllTheCases()<CR>
+
 endfunction
 
 call s:Map_Toggle_GrepAllTheCases()
