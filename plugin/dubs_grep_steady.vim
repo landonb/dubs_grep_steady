@@ -410,6 +410,20 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
       endif
 
       " 2018-03-29: Crude implementation of caseless-grep.
+      " - 2021-01-31: Updated to only add simple query to the history lists,
+      "   and not the complicated query.
+      "   - For a while, this had been calling histadd() on both l:the_term
+      "     (the simple query) and also on l:new_term (the complicated
+      "     `camel|snake|train` query). Besides the fact that I never used the
+      "     complicated query from history, if you did, you'd end up with the
+      "     complicated query having the 3 casings regex applied again, e.g.,
+      "     this would be searched on and what you'd see this in history:
+      "       `camel|snake|train|camel|snake|train|camel|snake|train`
+      "   - We could check if pipe character in the term, e.g.,
+      "       stridx(l:the_term, '|') == -1
+      "     but we also don't need the complicated query in history,
+      "     as this function will just run again and reformulate it
+      "     when you choose the simple query term from the history.
       let l:new_term = l:the_term
       if a:case_sensitive == 0 && g:DubsGrepSteady_GrepAllTheCases
         " Search on 3 casings: Camel, Snake, and Train. Only for \g, not \G.
@@ -418,28 +432,27 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
           \ . tolower(s:camelcase(l:the_term)) . "\\|"
           \ . tolower(s:snakecase(l:the_term)) . "\\|"
           \ . tolower(s:traincase(l:the_term))
-        " Add simple query to the history lists,
-        " and then the complicated one later.
+
         call histadd("input", tolower(l:the_term))
         call histadd("/", tolower(l:the_term))
+      else
+        " 2018-06-27: Whoa, how did I not know about histadd??! This is **AWESOME**!!
+        "  Add the search term to the _input_ history. E.g., if user is on a word and
+        "  presses [F4] to grep word-under-cursor, add that word to the input history,
+        "  such that if the user later does a `\g` to initiate an interactive search,
+        "  then that term is available in the input history list. SO OBVI!
+        " NOTE: Use lower case, because --smart-case.
+        " NOTE: This is similar to dubs_edit_juice's InstallHighlightOnEnter(),
+        "       except that function bounds the terms with \b\b or \<\> word boundaries.
+        call histadd("input", tolower(l:new_term))
+        " Hrmmmm. We could do cross-history maintenance, too, so that the term is also
+        " available in the `/` buffer search history list. AHAHAHAHA, I feel sorry for
+        " my former, past selves having had to live without this killer feature!
+        call histadd("/", tolower(l:new_term))
+        " NOTE: If user greps for words matches, e.g., "\bword\b", the / history
+        "       pattern won't work because of the difference in the word delimiters,
+        "       e.g., the equivalent word history boundary in / is "\<word\>".
       endif
-
-      " 2018-06-27: Whoa, how did I not know about histadd??! This is **AWESOME**!!
-      "  Add the search term to the _input_ history. E.g., if user is on a work and
-      "  presses [F4] to grep word-under-cursor, add that word to the input history,
-      "  such that if the user later does a `\g` to initiate an interactive search,
-      "  then that term is available in the input history list. SO OBVI!
-      " NOTE: Use lower case, because --smart-case.
-      " NOTE: This is similar to dubs_edit_juice's InstallHighlightOnEnter(),
-      "       except that function bounds the terms with \b\b or \<\> word boundaries.
-      call histadd("input", tolower(l:new_term))
-      " Hrmmmm. We could do cross-history maintenance, too, so that the term is also
-      " available in the `/` buffer search history list. AHAHAHAHA, I feel sorry for
-      " my former, past selves having had to live without this killer feature!
-      call histadd("/", tolower(l:new_term))
-      " NOTE: If user greps for words matches, e.g., "\bword\b", the / history
-      "       pattern won't work because of the difference in the word delimiters,
-      "       e.g., the equivalent word history boundary in / is "\<word\>".
 
       " 2018-03-29: Crude implementation of caseless-grep.
       if a:case_sensitive == 0 && g:DubsGrepSteady_GrepAllTheCases
