@@ -807,12 +807,9 @@ endfunction
 
 call s:LoadUsersGrepProjects()
 
-" 2020-09-22: (lb): I had the reload function mapped to <Leader>P,
-" but I've never called it, and then I assigned <Leader>P to another
-" command that I actually do call. So let's just expose this as a
-" long command name.
-" noremap <silent> <Leader>P :call <SID>LoadUsersGrepProjects()<CR>
-" inoremap <silent> <Leader>P <C-O>:call <SID>LoadUsersGrepProjects()<CR>
+" Use \dp (or call :GrepSteadyReload) to reload the `dubs_projects.vim` file.
+noremap <silent> <Leader>dp :call <SID>LoadUsersGrepProjects()<CR>
+inoremap <silent> <Leader>dp <C-O>:call <SID>LoadUsersGrepProjects()<CR>
 command! -nargs=0 GrepSteadyReload :call <SID>LoadUsersGrepProjects()
 
 " ------------------------------------------------------
