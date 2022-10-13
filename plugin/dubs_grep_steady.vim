@@ -641,7 +641,7 @@ function! s:Map_Toggle_GrepAllTheCases()
   "          find-me-please
   "          FIND_ME_PLEASE
   "
-  " SYNC_ME: The Waffle Batter Opinionated Vim Environment's
+  " SYNC_ME: The DepoXy Ambers Opinionated Vim Environment's
   "          ManageMapNERDCommenter sets a bunch of maps that start with
   "          <leader>c so we'll avoid conflicting with any of those.
   "
