@@ -62,7 +62,7 @@ rip_grep_executable () {
   elif [[ -x /usr/local/bin/rg ]]; then
     echo /usr/local/bin/rg
   else
-    echo echo
+    echo "echo ERROR: Cound not find RipGrep! -- CXREF: rip_grep_executable"
   fi
 }
 
