@@ -104,6 +104,7 @@ function! s:SetGrepprgRg()
   if executable(l:ripgrep_shim)
     execute 'set grepprg=' . l:ripgrep_shim
   else
+    " SYNC: set grepprg=rg
     set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename
   endif
 endfunction
@@ -120,6 +121,7 @@ function! s:SetGrepprgAg()
   "   -f --follow             Follow symlinks.
   "   -U --skip-vcs-ignores   Ignore VCS ignore files
   "                           (.gitignore, .hgignore; still obey .ignore)
+  " SYNC: set grepprg=ag
   set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
 endfunction
 
@@ -149,18 +151,22 @@ function! s:SetGrepprgGrep()
   "          files based on a more complete path?
   if filereadable($HOME . "/.vim/grep-exclude")
     " *nix w/ egrep
+    " SYNC: set grepprg=egrep
     set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"$HOME/.vim/grep-exclude\"
   elseif filereadable($USERPROFILE . "/vimfiles/grep-exclude")
     " Windows w/ egrep
+    " SYNC: set grepprg=egrep
     set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"$USERPROFILE/vimfiles/grep-exclude\"
   else
     let s:exclf = findfile('grep-exclude', pathogen#split(&rtp)[0] . "/**")
     if s:exclf != ''
       " Turn into a full path. See :h filename-modifiers
       let s:exclf = fnamemodify(s:exclf, ":p")
+      " SYNC: set grepprg=egrep
       execute 'set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"'.s:exclf.'\"'
     else
       "echomsg 'Warning: Dubs could find grep-exclude file'
+      " SYNC: set grepprg=egrep
       set grepprg=egrep\ -n\ -R\ -i
     endif
   endif
@@ -382,7 +388,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
       " Limit matches flags.
       if s:using_ag == 1
         if a:limit_matches == 0
-          " SYNC: set grepprg=ag...
+          " SYNC: set grepprg=ag
           set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
         else
           " The Silver Search says "ERR: Too many matches" for each file
@@ -400,6 +406,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
           "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ $*\ \\|\ ag\ ".*"
           "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"\ 2\>\/dev\/null
           " so just punting: [2018-01-12: And I cannot remember the issue anymore]:
+          " SYNC: set grepprg=ag
           set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"
         endif
       else
