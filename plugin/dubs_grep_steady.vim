@@ -472,8 +472,10 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
         let l:srch_term = "\"" . l:new_term . "\""
       endif
 
+      exec "cd " . l:locat
       " HINT: Try: `:verbose set grepprg` and `:verbose gr` to see what happened.
       execute "silent gr! " . l:options . " " . l:srch_term . " " . l:locat
+      cd -
       let s:simple_grep_last_i = l:new_i
       :QFix!(0)
     endif
