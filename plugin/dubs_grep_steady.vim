@@ -433,8 +433,8 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
           \ . tolower(s:snakecase(l:the_term)) . "\\|"
           \ . tolower(s:traincase(l:the_term))
 
-        call histadd("input", tolower(l:the_term))
-        call histadd("/", tolower(l:the_term))
+        call histadd("input", l:new_term)
+        call histadd("/", l:new_term)
       else
         " 2018-06-27: Whoa, how did I not know about histadd??! This is **AWESOME**!!
         "  Add the search term to the _input_ history. E.g., if user is on a word and
@@ -453,6 +453,8 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
         "       pattern won't work because of the difference in the word delimiters,
         "       e.g., the equivalent word history boundary in / is "\<word\>".
       endif
+      " Ensure actual search is MRU.
+      call histadd("/", l:the_term)
 
       " 2018-03-29: Crude implementation of caseless-grep.
       if a:case_sensitive == 0 && g:DubsGrepSteady_GrepAllTheCases
