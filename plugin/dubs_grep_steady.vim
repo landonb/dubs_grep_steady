@@ -460,7 +460,8 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
         "       pattern won't work because of the difference in the word delimiters,
         "       e.g., the equivalent word history boundary in / is "\<word\>".
       endif
-      " Ensure actual search is MRU.
+      " Ensure user's raw search term is MRU by adding last.
+      call histadd("input", l:the_term)
       call histadd("search", l:the_term)
 
       " 2018-03-29: Crude implementation of caseless-grep.
