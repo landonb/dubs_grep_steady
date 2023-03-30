@@ -83,6 +83,7 @@ rip_grep_sleep_repeat () {
     --no-heading \
     --with-filename \
     --max-columns ${DUBS_VIM_RG_MAX_COLS} \
+    --glob '!.git/' \
     "$@" \
     | sort -t: -k1,1 -k2,2n
 }
