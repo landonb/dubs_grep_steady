@@ -56,16 +56,22 @@ DUBS_VIM_RG_MAX_COLS=200
 #
 #                  | sort --debug -t: -k1,1 -k2,2n
 
+# Resolve path to `rg`, so that we don't inadvertently call user's `rg`
+# alias (e.g., user aliases `rg` to `tag`, for interactive CLI results).
 rip_grep_executable () {
-  if [ -x "${HOME}/.local/bin/rg" ]; then
-    echo "${HOME}/.local/bin/rg"
-  elif [ -x "/opt/homebrew/bin/rg" ]; then
-    echo "/opt/homebrew/bin/rg"
-  elif [ -x "/usr/local/bin/rg" ]; then
-    echo "/usr/local/bin/rg"
-  else
-    echo "echo ERROR: Cound not find RipGrep! -- CXREF: rip_grep_executable"
-  fi
+  type -P rg
+}
+
+must_verify_rip_grep () {
+  rip_grep_executable > /dev/null \
+    && return
+
+  echo "\
+ERROR: Cound not find RipGrep!
+- CXREF: Check rip_grep_executable:
+    $0"
+
+  exit 1
 }
 
 # [lb] 2019-01-06: BEWARE: I don't remember a findup feature, but there's one!
@@ -89,6 +95,8 @@ rip_grep_sleep_repeat () {
 }
 
 main () {
+  must_verify_rip_grep
+
   rip_grep_sleep_repeat "$@"
 }
 
