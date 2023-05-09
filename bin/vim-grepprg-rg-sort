@@ -74,6 +74,17 @@ ERROR: Cound not find RipGrep!
   exit 1
 }
 
+expand_paths () {
+  awk -F: '
+    {
+      "realpath \"" $1 "\"" | getline abs_path;
+      printf "%s:", abs_path;
+      for (col = 2; col < NF; col++) printf "%s:", $col;
+      print $NF
+    }
+  '
+}
+
 # [lb] 2019-01-06: BEWARE: I don't remember a findup feature, but there's one!
 #   --no-ignore-parent  # Walks up tree honoring .ignore files.
 # The only issue is that when files are ignored, and you want to track down the
@@ -91,6 +102,7 @@ rip_grep_sleep_repeat () {
     --max-columns ${DUBS_VIM_RG_MAX_COLS} \
     --glob '!.git/' \
     "$@" \
+    | expand_paths \
     | sort -t: -k1,1 -k2,2n
 }
 
