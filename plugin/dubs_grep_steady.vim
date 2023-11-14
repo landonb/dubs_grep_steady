@@ -475,7 +475,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
         let l:srch_term = "\"" . l:new_term . "\""
       endif
 
-      exec "cd " . l:locat
+      exec "cd " . split(l:locat)[0]
       " HINT: Try: `:verbose set grepprg` and `:verbose gr` to see what happened.
       execute "silent gr! " . l:options . " " . l:srch_term . " " . l:locat
       cd -
