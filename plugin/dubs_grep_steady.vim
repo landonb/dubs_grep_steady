@@ -665,8 +665,11 @@ function! s:Map_Toggle_GrepAllTheCases()
   "
   " (lb): I'm leaving \c for historic reasons, but now there's a lag before it trips.
   " - LATER/2021-01-25: Eventually-MAYBE I'll find I only use \cg and I'll remove \c.
-  nmap <silent> <unique> <Leader>c :call <SID>Toggle_GrepAllTheCases()<CR>
-  imap <silent> <unique> <Leader>c <C-o>:call <SID>Toggle_GrepAllTheCases()<CR>
+  " - ISOFF/2024-04-27: There are other <Leader>c commands, e.g., from NerdCommenter,
+  "   so silly to have this be wired. E.g., \c<Tab> or \c<Any-Char-that-doesn't-match-
+  "   another-mapping> will trigger this.
+  "  nmap <silent> <unique> <Leader>c :call <SID>Toggle_GrepAllTheCases()<CR>
+  "  imap <silent> <unique> <Leader>c <C-o>:call <SID>Toggle_GrepAllTheCases()<CR>
 
 endfunction
 
