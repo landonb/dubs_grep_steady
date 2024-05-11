@@ -772,9 +772,6 @@ function! s:EnsureGrepProjectsLookupSetup()
 endfunction
 
 function! s:LoadUsersGrepProjects()
-  " FIXME: Make DRY. This fcn. was copied to dubs_file_finder
-  "        and dubs_edit_juice.
-
   " See if the user made a project search listing and use that.
   let s:d_projs = findfile('dubs_projects.vim', pathogen#split(&rtp)[0] . "/**")
   if s:d_projs != ''
