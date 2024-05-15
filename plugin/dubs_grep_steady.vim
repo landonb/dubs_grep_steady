@@ -785,8 +785,13 @@ function! s:LoadUsersGrepProjects()
       let s:tmplate = fnamemodify(s:tmplate, ":p")
       " Get the filename root, i.e., drop the ".template".
       let s:d_projs = fnamemodify(s:tmplate, ":r")
-      " Make a copy of the template.
-      execute '!/bin/cp ' . s:tmplate . ' ' . s:d_projs
+      if getftype(s:d_projs) != ''
+        echomsg 'Warning: Cannot expand template: Target exists (broken symlink?): ' . s:d_projs
+        let s:d_projs = ''
+      else
+        " Make a copy of the template.
+        execute '!/bin/cp ' . s:tmplate . ' ' . s:d_projs
+      endif
     else
       echomsg 'Warning: Dubs Vim could not find dubs_projects.vim.template'
     endif
