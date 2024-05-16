@@ -771,7 +771,7 @@ function! s:EnsureGrepProjectsLookupSetup()
   "   let g:ds_simple_grep_ag_options_map = {}
 endfunction
 
-function! s:LoadUsersGrepProjects()
+function! s:LoadUsersGrepProjects(echo_on_success)
   " See if the user made a project search listing and use that.
   let s:d_projs = findfile('dubs_projects.vim', pathogen#split(&rtp)[0] . "/**")
   if s:d_projs != ''
@@ -822,14 +822,18 @@ function! s:LoadUsersGrepProjects()
     call s:LoadDefaultGrepProjectsLookup()
   endif
   call s:EnsureGrepProjectsLookupSetup()
+
+  if a:echo_on_success
+    echomsg 'Reloaded grep-steady lookup!'
+  endif
 endfunction
 
-call s:LoadUsersGrepProjects()
+call s:LoadUsersGrepProjects(0)
 
 " Use \dp (or call :GrepSteadyReload) to reload the `dubs_projects.vim` file.
-noremap <silent> <Leader>dp :call <SID>LoadUsersGrepProjects()<CR>
-inoremap <silent> <Leader>dp <C-O>:call <SID>LoadUsersGrepProjects()<CR>
-command! -nargs=0 GrepSteadyReload :call <SID>LoadUsersGrepProjects()
+noremap <silent> <Leader>dp :call <SID>LoadUsersGrepProjects(1)<CR>
+inoremap <silent> <Leader>dp <C-O>:call <SID>LoadUsersGrepProjects(1)<CR>
+command! -nargs=0 GrepSteadyReload :call <SID>LoadUsersGrepProjects(1)
 
 " ------------------------------------------------------
 " ------------------------------------------------------
