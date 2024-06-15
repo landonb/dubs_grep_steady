@@ -71,8 +71,8 @@ from repeating yourself anytime you search.
 <F4>			Quick Project Search using selected text or word under
 			cursor and using search location from previous search.
 
-				*<Ctrl-F4>* *<C-F4>*
-<Ctrl-F4>		Start Project search using search location from
+				*<Alt-F4>* *<A-F4>* *<M-F4>*
+<Alt-F4>		Start Project search using search location from
 			previous search. Prompts you for search term.
 
 ==============================================================================

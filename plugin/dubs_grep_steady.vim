@@ -610,10 +610,26 @@ function! s:WireSearchMappings() abort
     \ <CR>gvy
     \ :call <SID>GrepPrompt_Auto_Ask_Location(@@)<CR>
 
-  " NOTE Cannot get <C-8> or <C-*> to work (both still call :nohlsearch)
-
-  nnoremap <silent> <C-F4> :call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
-  inoremap <silent> <C-F4> <C-O>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
+  " Ask for search term but use previous location.
+  "
+  " - DUNNO/2024-12-27: This was <C-F4>, which works in Linux, but
+  "   MacVim does not seem to honor <Ctrl-Fn> or <Ctrl-{number}>.
+  "   - At least not in author's experience, but could be something else
+  "     (though doesn't work with `gvim --noplugin` with mswin.vim loaded
+  "     either).
+  "   - You'll still see the map wired, though, e.g. :nmap <C-F4> prints:
+  "       nv <C-F4> * <C-W>c
+  "   - Note that mswin.vim maps Close window to <C-F4>, which works in
+  "     Linux (now that this binding is moved to <M-F4>), but it doesn't
+  "     do anything in MacVim. 
+  "     - CXREF:
+  "       /Applications/MacVim.app/Contents/Resources/vim/runtime/mswin.vim
+  "   - UTEST: Try these to check your environment:
+  "       nnoremap <C-F4> :echo 'foo'<CR>
+  "       nnoremap <M-F4> :echo 'foo'<CR>
+  "       nnoremap <C-4> :echo 'foo'<CR>
+  nnoremap <silent> <M-F4> :call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
+  inoremap <silent> <M-F4> <C-O>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
 
   function s:GrepPrompt_Term_Prev_Location(term)
     call s:GrepPrompt_Simple("", s:simple_grep_last_i, 0, 0)

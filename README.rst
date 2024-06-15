@@ -88,7 +88,7 @@ Key Mapping                  Description                   Notes
                                                            search but uses the last-searched location (or prompts you for the location
                                                            if you haven't done a project search yet since you started Vim).
 ---------------------------  ----------------------------  ----------------------------------------------------------------------------------------------
-``<Ctrl-F4>``                Search New without            Asks you for the search term and then searches the last-searched project location.
+``<Alt-F4>``                 Search New without            Asks you for the search term and then searches the last-searched project location.
                              Location Prompt               Caveat: You'll probably find yourself using ``\g`` more often than this command.
 ---------------------------  ----------------------------  ----------------------------------------------------------------------------------------------
 ``:gr! "<regex>" "<dir>"``   Search in Any Location        To search locations that are not in the project list, use the raw grep command.
