@@ -579,6 +579,9 @@ function! s:WireSearchMappings()
   " ------------------------------------------------------
   " F4s
 
+  " NOTE <C-R><C-W> is Vim-speak for the word under the cursor
+  " REFER: <C-R><C-W> — :help c_CTRL-R_CTRL-W
+
   noremap <silent> <F4> :call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
   inoremap <silent> <F4> <C-O>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
   cnoremap <silent> <F4> <C-C>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
@@ -596,7 +599,6 @@ function! s:WireSearchMappings()
 
   " NOTE Cannot get <C-8> or <C-*> to work (both still call :nohlsearch)
 
-  " NOTE <C-R><C-W> is Vim-speak for the word under the cursor
   noremap <silent> <C-F4> :call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
   inoremap <silent> <C-F4> <C-O>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
   cnoremap <silent> <C-F4> <C-C>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
