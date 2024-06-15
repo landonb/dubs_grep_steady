@@ -95,6 +95,7 @@ rip_grep_sleep_repeat () {
     --with-filename \
     --max-columns ${DUBS_VIM_RG_MAX_COLS} \
     --glob '!.git/' \
+    --glob '!.tox/' \
     "$@" \
     | expand_paths \
     | sort -t: -k1,1 -k2,2n
