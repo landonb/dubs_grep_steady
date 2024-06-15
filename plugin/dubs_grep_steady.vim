@@ -596,6 +596,10 @@ function! s:WireSearchMappings()
   inoremap <silent> <S-F4> <C-O>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
   cnoremap <silent> <S-F4> <C-C>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
   onoremap <silent> <S-F4> <C-C>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
+  " Selected word
+  vnoremap <silent> <S-F4> :<C-U>
+    \ <CR>gvy
+    \ :call <SID>GrepPrompt_Auto_Ask_Location(@@)<CR>
 
   " NOTE Cannot get <C-8> or <C-*> to work (both still call :nohlsearch)
 
