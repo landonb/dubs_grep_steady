@@ -83,6 +83,10 @@ expand_paths () {
 #   --no-ignore-parent  # Walks up tree honoring .ignore files.
 # The only issue is that when files are ignored, and you want to track down the
 # .ignore file responsible, you need to remember to walk up from all search paths.
+# USYNC: Similar rg --glob's:
+#   ~/.vim/pack/landonb/start/dubs_file_finder/plugin/dubs_file_finder.vim
+#   ~/.vim/pack/landonb/start/dubs_grep_steady/bin/vim-grepprg-rg-sort
+#   ~/.kit/sh/home-fries/lib/alias/alias_rg_tag.sh
 rip_grep_sleep_repeat () {
   $(rip_grep_executable) \
     -A 0 \
@@ -96,6 +100,7 @@ rip_grep_sleep_repeat () {
     --max-columns ${DUBS_VIM_RG_MAX_COLS} \
     --glob '!.git/' \
     --glob '!.tox/' \
+    --glob '!*.xpm' \
     "$@" \
     | expand_paths \
     | sort -t: -k1,1 -k2,2n
