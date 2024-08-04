@@ -438,6 +438,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
         " Search on 3 casings: Camel, Snake, and Train. Only for \g, not \G.
         " NOTE: Converting to snakecase downcases it.
         let l:new_term = ''
+          \ . tolower(l:the_term) . "\\|"
           \ . tolower(s:camelcase(l:the_term)) . "\\|"
           \ . tolower(s:snakecase(l:the_term)) . "\\|"
           \ . tolower(s:traincase(l:the_term))
