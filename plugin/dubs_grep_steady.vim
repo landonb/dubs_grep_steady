@@ -1,6 +1,6 @@
 " File: dubs_grep_steady.vim
 " Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
-" Project Page: https://github.com/landonb/dubs_grep_steady
+" Project Page: https://github.com/landonb/dubs_grep_steady#🧐
 " Summary: Dubs Vim Text Search Commands
 " License: GPLv3
 " -------------------------------------------------------------------

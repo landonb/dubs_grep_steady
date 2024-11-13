@@ -15,7 +15,7 @@ SEARCHING AND REPLACING TEXT		*dubs-grep-steady*
 
 This plugin sets up a powerful text search utility.
 
-Project page: https://github.com/landonb/dubs_grep_steady
+Project page: https://github.com/landonb/dubs_grep_steady#🧐
 
 ==============================================================================
 2. Prerequisites			*dubs-grepst-prerequisites*
