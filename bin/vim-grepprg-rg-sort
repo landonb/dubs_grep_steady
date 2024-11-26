@@ -84,7 +84,8 @@ expand_paths () {
 # The only issue is that when files are ignored, and you want to track down the
 # .ignore file responsible, you need to remember to walk up from all search paths.
 # SAVVY: Testing shows `rg` skip graphics formats: *.jpg, *.png, *.xcf
-# USYNC: Similar rg --glob's:
+# USYNC: Similar rg --glob's (found locally at these paths within DepoXy environ):
+#   ~/.depoxy/ambers/core/fzf-setup.sh
 #   ~/.depoxy/ambers/home/.projlns/infuse-projlns-core.sh
 #   ~/.kit/sh/home-fries/lib/alias/alias_rg_tag.sh
 #   ~/.vim/pack/landonb/start/dubs_file_finder/plugin/dubs_file_finder.vim
