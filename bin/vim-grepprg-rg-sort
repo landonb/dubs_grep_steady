@@ -121,6 +121,8 @@ rip_grep_sleep_repeat () {
   fglobs+=(".viminfo")
   fglobs+=("*.xpm")
   fglobs+=("*.zip")
+  # Vim :Helptags tags files
+  fglobs+=("doc/tags")
 
   local dir_globs=""
   local dglob
