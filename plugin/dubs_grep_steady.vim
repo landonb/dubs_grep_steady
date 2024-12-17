@@ -12,7 +12,7 @@
 " FIXME/2020-09-22: Do not do any mappings herein (e.g., <Leader>g).
 " Instead, make `GrepSteady*` commands, and have user wire their own maps.
 
-" ------------------------------------------
+" -------------------------------------------------------------------
 " About:
 
 " This script sets up a powerful text search utility.
@@ -21,6 +21,8 @@ if exists("g:plugin_dubs_grep_steady") || &cp
   finish
 endif
 let g:plugin_dubs_grep_steady = 1
+
+" -------------------------------------------------------------------
 
 " ------------------------------------------------------
 " Choose the Best Search Utility
@@ -194,6 +196,8 @@ endfunction
 " FIXME/2018-05-06: (lb): Should probably function-ize everything
 " and make a main().
 call s:SetGrepprg()
+
+" -------------------------------------------------------------------
 
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " Setup Search Features
@@ -507,6 +511,8 @@ endfunction
 "        Currently, you can search a folder and then search
 "        the quickfix window by file extension.
 
+" -------------------------------------------------------------------
+
 " ------------------------------------------------------
 " Search Mappings
 " ------------------------------------------------------
@@ -610,6 +616,8 @@ endfunction
 
 call s:WireSearchMappings()
 
+" -------------------------------------------------------------------
+
 " Toggle GrepCase
 " ------------------------------------------------------
 " I.e., search for exact work; or include case permutations,
@@ -674,6 +682,8 @@ function! s:Toggle_GrepAllTheCases()
     echomsg 'Grep match-all-the-cases'
   endif
 endfunction
+
+" -------------------------------------------------------------------
 
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " Default Search Directory Choices
@@ -817,6 +827,8 @@ function! s:LoadUsersGrepProjects(echo_on_success)
   endif
 endfunction
 
+" -------------------------------------------------------------------
+
 call s:LoadUsersGrepProjects(0)
 
 " Use \dp (or call :GrepSteadyReload) to reload the `dubs_projects.vim` file.
@@ -824,7 +836,4 @@ noremap <silent> <Leader>dp :call <SID>LoadUsersGrepProjects(1)<CR>
 inoremap <silent> <Leader>dp <C-O>:call <SID>LoadUsersGrepProjects(1)<CR>
 command! -nargs=0 GrepSteadyReload :call <SID>LoadUsersGrepProjects(1)
 
-" ------------------------------------------------------
-" ------------------------------------------------------
-" ------------------------------------------------------
 
