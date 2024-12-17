@@ -1,28 +1,10 @@
-" File: dubs_grep_steady.vim
-" Author: Landon Bouma (landonb &#x40; retrosoft &#x2E; com)
-" Project Page: https://github.com/landonb/dubs_grep_steady#🧐
-" Summary: Dubs Vim Text Search Commands
+" Author: Landon Bouma <https://tallybark.com/>
+" Project: https://github.com/landonb/dubs_grep_steady#🧐
 " License: GPLv3
+"   Copyright © 2009, 2015, 2017, 2020, 2024 Landon Bouma.
+" Summary: Dubs Vim Text Search Commands
+
 " -------------------------------------------------------------------
-" Copyright © 2009, 2015, 2017, 2020 Landon Bouma.
-"
-" This file is part of Dubs Vim.
-"
-" Dubs Vim is free software: you can redistribute it and/or
-" modify it under the terms of the GNU General Public License
-" as published by the Free Software Foundation, either version
-" 3 of the License, or (at your option) any later version.
-"
-" Dubs Vim is distributed in the hope that it will be useful,
-" but WITHOUT ANY WARRANTY; without even the implied warranty
-" of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See
-" the GNU General Public License for more details.
-"
-" You should have received a copy of the GNU General Public License
-" along with Dubs Vim. If not, see <http://www.gnu.org/licenses/>
-" or write Free Software Foundation, Inc., 51 Franklin Street,
-"                     Fifth Floor, Boston, MA 02110-1301, USA.
-" ===================================================================
 
 " MAYBE/2020-09-22: Replace `pathogen#split` calls to remove Pathogen dependency.
 " (Could probably just copy `pathogen#split` into this plugin.)
