@@ -845,8 +845,9 @@ endfunction
 call s:LoadUsersGrepProjects(0)
 
 " Use \dp (or call :GrepSteadyReload) to reload the `dubs_projects.vim` file.
-noremap <silent> <Leader>dp :call <SID>LoadUsersGrepProjects(1)<CR>
-inoremap <silent> <Leader>dp <C-O>:call <SID>LoadUsersGrepProjects(1)<CR>
+nnoremap <silent> <Plug>(DGS_LoadUsersGrepProjects) :<C-u>call <SID>LoadUsersGrepProjects(1)<CR>
+noremap <silent> <unique> <Leader>dp <Plug>(DGS_LoadUsersGrepProjects)
+inoremap <silent> <unique> <Leader>dp <C-O><Plug>(DGS_LoadUsersGrepProjects)
 command! -nargs=0 GrepSteadyReload :call <SID>LoadUsersGrepProjects(1)
 
 nnoremap <silent> <Plug>(DGS_OpenUsersGrepProjects) :<C-u>call <SID>OpenUsersGrepProjects()<CR>
