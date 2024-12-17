@@ -770,12 +770,12 @@ function! s:EnsureGrepProjectsLookupSetup()
   "   let g:ds_simple_grep_ag_options_map = {}
 endfunction
 
-function! s:LoadUsersGrepProjects(echo_on_success)
+function! s:FindUsersGrepProjects()
   " See if the user made a project search listing and use that.
-  let s:d_projs = findfile('dubs_projects.vim', pathogen#split(&rtp)[0] . "/**")
-  if s:d_projs != ''
+  let l:user_projs = findfile('dubs_projects.vim', pathogen#split(&rtp)[0] . "/**")
+  if l:user_projs != ''
     " Turn into a full path. See :h filename-modifiers
-    let s:d_projs = fnamemodify(s:d_projs, ":p")
+    let l:user_projs = fnamemodify(l:user_projs, ":p")
   else
     " No file, but there should be a template we can copy.
     let s:tmplate =
@@ -783,18 +783,25 @@ function! s:LoadUsersGrepProjects(echo_on_success)
     if s:tmplate != ''
       let s:tmplate = fnamemodify(s:tmplate, ":p")
       " Get the filename root, i.e., drop the ".template".
-      let s:d_projs = fnamemodify(s:tmplate, ":r")
-      if getftype(s:d_projs) != ''
-        echomsg 'Warning: Cannot expand template: Target exists (broken symlink?): ' . s:d_projs
-        let s:d_projs = ''
+      let l:user_projs = fnamemodify(s:tmplate, ":r")
+      if getftype(l:user_projs) != ''
+        echomsg 'Warning: Cannot expand template: Target exists (broken symlink?): ' . l:user_projs
+        let l:user_projs = ''
       else
         " Make a copy of the template.
-        execute '!/bin/cp ' . s:tmplate . ' ' . s:d_projs
+        execute '!/bin/cp ' . s:tmplate . ' ' . l:user_projs
       endif
     else
       echomsg 'Warning: Dubs Vim could not find dubs_projects.vim.template'
     endif
   endif
+
+  return l:user_projs
+endfunction
+
+function! s:LoadUsersGrepProjects(echo_on_success)
+  let s:d_projs = s:FindUsersGrepProjects()
+
   if s:d_projs != ''
     execute 'source ' . s:d_projs
   else
@@ -827,6 +834,12 @@ function! s:LoadUsersGrepProjects(echo_on_success)
   endif
 endfunction
 
+function! s:OpenUsersGrepProjects() abort
+  let s:d_projs = s:FindUsersGrepProjects()
+
+  exe 'edit ' .. s:d_projs
+endfunction
+
 " -------------------------------------------------------------------
 
 call s:LoadUsersGrepProjects(0)
@@ -836,4 +849,8 @@ noremap <silent> <Leader>dp :call <SID>LoadUsersGrepProjects(1)<CR>
 inoremap <silent> <Leader>dp <C-O>:call <SID>LoadUsersGrepProjects(1)<CR>
 command! -nargs=0 GrepSteadyReload :call <SID>LoadUsersGrepProjects(1)
 
+nnoremap <silent> <Plug>(DGS_OpenUsersGrepProjects) :<C-u>call <SID>OpenUsersGrepProjects()<CR>
+noremap <silent> <unique> <Leader>dP <Plug>(DGS_OpenUsersGrepProjects)
+inoremap <silent> <unique> <Leader>dP <C-O><Plug>(DGS_OpenUsersGrepProjects)
+command! -nargs=0 GrepSteadyEdit :call <SID>OpenUsersGrepProjects()
 
