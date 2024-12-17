@@ -101,6 +101,36 @@ Key Mapping                  Description                   Notes
 Tips 'n Tricks
 ==============
 
+Choose a Default Search Path
+----------------------------
+
+After you first start Vim and run your first grep-steady search
+using ``<F4>``, you will be prompted for the search location.
+
+To avoid the prompt, specify the default search index (from
+your ``dubs_projects.vim`` file), e.g., given the following
+projects file:
+
+.. code-block::
+
+  let g:ds_simple_grep_locat_lookup = [
+    \ "Search in:",
+    \
+    \ "[Enter 1 to Cancel]",
+    \ "2",
+    \ "/path/to/foo",
+    \ "/path/to/bar",
+    \ "5",
+    \]
+
+If you want the default search path to be ``/path/to/foo``,
+which is at index ``3``, you can define a global variable,
+e.g.:
+
+.. code-block::
+
+  let g:ds_simple_grep_default_list_i = 3
+
 Find Non-Ascii Characters
 -------------------------
 

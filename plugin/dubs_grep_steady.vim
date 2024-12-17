@@ -804,6 +804,10 @@ function! s:LoadUsersGrepProjects(echo_on_success)
 
   if s:d_projs != ''
     execute 'source ' . s:d_projs
+
+    if g:ds_simple_grep_default_list_i
+      let s:simple_grep_last_i = g:ds_simple_grep_default_list_i
+    endif
   else
     echomsg 'Warning: Dubs Vim could not find dubs_projects.vim'
   endif
