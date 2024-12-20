@@ -227,8 +227,8 @@ call s:Map_GrepPrompt_Simple()
 " ***
 
 " STOLEN! From vim-abolish. Shameless!!
-" FIXME/2018-06-27/DRY: Make a util plugin for this!
-"   These are duplicated in: vim-aboilsh; dubs_grep_steady; dubs_edit_juice
+" - MAYBE/2018-06-27: DRY this: Make a shared #autoload plugin?
+" USYNC: Not DRY: Found in: vim-abolish, dubs_grep_steady, and vim-blinky-search.
 
 function! s:camelcase(word)
   let word = substitute(a:word, '-', '_', 'g')
