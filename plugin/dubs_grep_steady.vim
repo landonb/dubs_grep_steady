@@ -84,7 +84,7 @@ let s:using_rg = -1
 "   - To sort alphabetically, we'll instead use the system `sort` command.
 "     - But note that Vim doesn't pipe, so we use an external script.
 
-function! s:SetGrepprgRg()
+function! s:SetGrepprgRg() abort
   let s:using_ag = 0
   let s:using_rg = 1
 
@@ -106,7 +106,7 @@ function! s:SetGrepprgRg()
   endif
 endfunction
 
-function! s:SetGrepprgAg()
+function! s:SetGrepprgAg() abort
   let s:using_ag = 1
   let s:using_rg = 0
 
@@ -122,7 +122,7 @@ function! s:SetGrepprgAg()
   set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
 endfunction
 
-function! s:SetGrepprgGrep()
+function! s:SetGrepprgGrep() abort
   let s:using_ag = 0
   let s:using_rg = 0
   " Grep options:
@@ -194,7 +194,7 @@ endfunction
 " DISCOVER: Can you show search results in a window's location list?
 "           Would you want to?
 
-function! s:SetGrepprg()
+function! s:SetGrepprg() abort
   if executable("rg")
     call s:SetGrepprgRg()
   elseif executable("ag")
@@ -241,7 +241,7 @@ call s:Map_GrepPrompt_Simple()
 " - MAYBE/2018-06-27: DRY this: Make a shared #autoload plugin?
 " USYNC: Not DRY: Found in: vim-abolish, dubs_grep_steady, and vim-blinky-search.
 
-function! s:camelcase(word)
+function! s:camelcase(word) abort
   let word = substitute(a:word, '-', '_', 'g')
   if word !~# '_' && word =~# '\l'
     return substitute(word,'^.','\l&','')
@@ -250,7 +250,7 @@ function! s:camelcase(word)
   endif
 endfunction
 
-function! s:snakecase(word)
+function! s:snakecase(word) abort
   let word = substitute(a:word,'::','/','g')
   let word = substitute(word,'\(\u\+\)\(\u\l\)','\1_\2','g')
   let word = substitute(word,'\(\l\|\d\)\(\u\)','\1_\2','g')
@@ -268,11 +268,11 @@ function! s:snakecase(word)
 endfunction
 
 " A/k/a kebab-case | spinal-case | Train-Case | Lisp-case | dash-case
-function! s:traincase(word)
+function! s:traincase(word) abort
   return substitute(s:snakecase(a:word),'_','-','g')
 endfunction
 
-function! s:uppercase(word)
+function! s:uppercase(word) abort
   return toupper(s:snakecase(a:word))
 endfunction
 
@@ -305,7 +305,7 @@ endfunction
 " use :cold to jump back in the quickfix history). I don't think we can add to
 " the histories, and I can't think of a good solution (we could call input()
 " with a default value, but that's probably annoying).
-function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
+function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) abort
   call inputsave()
   let l:the_term = a:term
   if a:term == ""
@@ -484,7 +484,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches)
   call inputrestore()
 endfunction
 
-function s:GrepPrompt_Simple_GetInputlist(i_highlight)
+function s:GrepPrompt_Simple_GetInputlist(i_highlight) abort
   let ilist = [g:ds_simple_grep_locat_lookup[0]]
   for i in range(1, g:ds_simple_grep_locat_lookup_len - 1)
     let ilist = add(ilist, s:GrepPrompt_Simple_GetInputlistItem(
@@ -493,7 +493,7 @@ function s:GrepPrompt_Simple_GetInputlist(i_highlight)
   return ilist
 endfunction
 
-function s:GrepPrompt_Simple_GetInputlistItem(idx, do_highlight)
+function s:GrepPrompt_Simple_GetInputlistItem(idx, do_highlight) abort
   let l:listitem = "    "
   if a:do_highlight
     let l:listitem = "(*) "
@@ -528,7 +528,7 @@ endfunction
 " Search Mappings
 " ------------------------------------------------------
 
-function! s:WireSearchMappings()
+function! s:WireSearchMappings() abort
 
   " Generic Search: Prompt for Query and Path
   " ------------------------------------------------------
@@ -634,7 +634,7 @@ call s:WireSearchMappings()
 " I.e., search for exact work; or include case permutations,
 " e.g., search for FOO_BAR; or include fooBar, foo_bar, foo-bar.
 
-function! s:Map_Toggle_GrepAllTheCases()
+function! s:Map_Toggle_GrepAllTheCases() abort
 
   " FIXME/2021-01-25: Add <Plug> indirection and use hasmapto like NERDCommenter,
   "                   so users/other plugins can override or opt-out of these maps.
@@ -685,7 +685,7 @@ call s:Map_Toggle_GrepAllTheCases()
 
 let g:DubsGrepSteady_GrepAllTheCases = 0
 
-function! s:Toggle_GrepAllTheCases()
+function! s:Toggle_GrepAllTheCases() abort
   let g:DubsGrepSteady_GrepAllTheCases = !g:DubsGrepSteady_GrepAllTheCases
   if (g:DubsGrepSteady_GrepAllTheCases == 0)
     echomsg 'Grep back to normal'
@@ -727,7 +727,7 @@ endfunction
 "       with paths, you won't easily be able to tell what paths
 "       are at which index).
 
-function! s:LoadDefaultGrepProjectsLookup()
+function! s:LoadDefaultGrepProjectsLookup() abort
   let g:ds_simple_grep_locat_lookup = [
     \ "Search in:",
     \ "[Enter 1 to Cancel]",
@@ -772,7 +772,7 @@ function! s:LoadDefaultGrepProjectsLookup()
   let g:ds_simple_grep_ag_options_map = {}
 endfunction
 
-function! s:EnsureGrepProjectsLookupSetup()
+function! s:EnsureGrepProjectsLookupSetup() abort
   let g:ds_simple_grep_locat_lookup_len =
     \ len(g:ds_simple_grep_locat_lookup)
 
@@ -781,7 +781,7 @@ function! s:EnsureGrepProjectsLookupSetup()
   "   let g:ds_simple_grep_ag_options_map = {}
 endfunction
 
-function! s:FindUsersGrepProjects()
+function! s:FindUsersGrepProjects() abort
   " See if the user made a project search listing and use that.
   let l:user_projs = findfile('dubs_projects.vim', pathogen#split(&rtp)[0] . "/**")
   if l:user_projs != ''
@@ -810,7 +810,7 @@ function! s:FindUsersGrepProjects()
   return l:user_projs
 endfunction
 
-function! s:LoadUsersGrepProjects(echo_on_success)
+function! s:LoadUsersGrepProjects(echo_on_success) abort
   let s:d_projs = s:FindUsersGrepProjects()
 
   if s:d_projs != ''
