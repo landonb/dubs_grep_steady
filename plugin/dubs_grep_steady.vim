@@ -227,10 +227,12 @@ let s:simple_grep_last_i = 0
 "endif
 
 " Map <Plug> to an <SID> function
-function! s:Map_GrepPrompt_Simple()
-  map <silent> <unique> <script>
-    \ <Plug>DubsGrepSteady_GrepPrompt_Simple
-    \ :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
+function! s:Map_GrepPrompt_Simple() abort
+  if mapcheck('<Plug>DubsGrepSteady_GrepPrompt_Simple') == ''
+    noremap <silent> <unique> <script>
+      \ <Plug>DubsGrepSteady_GrepPrompt_Simple
+      \ :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
+  endif
 endfunction
 
 call s:Map_GrepPrompt_Simple()
@@ -646,54 +648,70 @@ call s:WireSearchMappings()
 " I.e., search for exact work; or include case permutations,
 " e.g., search for FOO_BAR; or include fooBar, foo_bar, foo-bar.
 
-function! s:Map_Toggle_GrepAllTheCases() abort
+" function! s:Map_Toggle_GrepAllTheCases() abort
+"
+"   " FIXME/2021-01-25: Add <Plug> indirection and use hasmapto like NERDCommenter,
+"   "                   so users/other plugins can override or opt-out of these maps.
+"   "                   - See also setup-nerd-commenter.vim for map reset and setup.
+"
+"   " 2021-01-25: (lb): I've added NERD Commenter, which starts all its two-character
+"   " combo maps using <leader>c. So a single-character <leader>c map won't complete
+"   " immediately (like it used to). But I rarely change the grep casing.
+"   " You can also use \G to bypass the magic camel|snake|train case searching, albeit
+"   " \G is --case-sensitive; while \g uses --smart-case, unless GrepAllTheCases=1 in
+"   " which case it searches on the various camel|snake|train casings.
+"   "
+"   " Ref:
+"   "    \g w/ GrepAllTheCases=0 uses rg --smart-case
+"   "    \g w/ GrepAllTheCases=1 sets rg --ignore-case
+"   "                             and searches camel|snake|train variations
+"   "    \G always uses rg --case-sensitive
+"   "
+"   " Demo: Try searching each of the following terms three times:
+"   " - Once with \cg and using \g, then with \cg off and using \g,
+"   "   and finally using \G.
+"   "          findmeplease
+"   "          FINDmePLEASE
+"   "          findMePlease
+"   "          find_me_please
+"   "          find-me-please
+"   "          FIND_ME_PLEASE
+"   "
+"   " SYNC_ME: The DepoXy Ambers Opinionated Vim Environment's
+"   "          ManageMapNERDCommenter sets a bunch of maps that start with
+"   "          <leader>c so we'll avoid conflicting with any of those.
+"   "
+"   " Use 'cg' to toggle extravagant casing, mnemonic: 'change grep'.
+" "
+" " if mapcheck('<Leader>cg', 'n') == ""
+" "   nmap <silent> <expr> <Leader>cg <SID>Toggle_GrepAllTheCases()
+" "   imap <silent> <expr> <Leader>cg <SID>Toggle_GrepAllTheCases()
+" " endif
+"
+"   " (lb): I'm leaving \c for historic reasons, but now there's a lag before it trips.
+"   " - LATER/2021-01-25: Eventually-MAYBE I'll find I only use \cg and I'll remove \c.
+"   " - ISOFF/2024-04-27: There are other <Leader>c commands, e.g., from NerdCommenter,
+"   "   so silly to have this be wired. E.g., \c<Tab> or \c<Any-Char-that-doesn't-match-
+"   "   another-mapping> will trigger this.
+"   "  nmap <silent> <unique> <Leader>c :call <SID>Toggle_GrepAllTheCases()<CR>
+"   "  imap <silent> <unique> <Leader>c <C-o>:call <SID>Toggle_GrepAllTheCases()<CR>
+"
+" endfunction
+"
+" call s:Map_Toggle_GrepAllTheCases()
 
-  " FIXME/2021-01-25: Add <Plug> indirection and use hasmapto like NERDCommenter,
-  "                   so users/other plugins can override or opt-out of these maps.
-  "                   - See also setup-nerd-commenter.vim for map reset and setup.
+function! s:CreateMaps__ToggleMulticase(key_sequence = '<Leader>dg') abort
+  nnoremap <silent> <expr> <script> <Plug>(grep-steady-toggle-multicase)
+    \ <SID>Toggle_GrepAllTheCases()
 
-  " 2021-01-25: (lb): I've added NERD Commenter, which starts all its two-character
-  " combo maps using <leader>c. So a single-character <leader>c map won't complete
-  " immediately (like it used to). But I rarely change the grep casing.
-  " You can also use \G to bypass the magic camel|snake|train case searching, albeit
-  " \G is --case-sensitive; while \g uses --smart-case, unless GrepAllTheCases=1 in
-  " which case it searches on the various camel|snake|train casings.
-  "
-  " Ref:
-  "    \g w/ GrepAllTheCases=0 uses rg --smart-case
-  "    \g w/ GrepAllTheCases=1 sets rg --ignore-case
-  "                             and searches camel|snake|train variations
-  "    \G always uses rg --case-sensitive
-  "
-  " Demo: Try searching each of the following terms three times:
-  " - Once with \cg and using \g, then with \cg off and using \g,
-  "   and finally using \G.
-  "          findmeplease
-  "          FINDmePLEASE
-  "          findMePlease
-  "          find_me_please
-  "          find-me-please
-  "          FIND_ME_PLEASE
-  "
-  " SYNC_ME: The DepoXy Ambers Opinionated Vim Environment's
-  "          ManageMapNERDCommenter sets a bunch of maps that start with
-  "          <leader>c so we'll avoid conflicting with any of those.
-  "
-  " Use 'cg' to toggle extravagant casing, mnemonic: 'change grep'.
-  nmap <silent> <unique> <Leader>cg :call <SID>Toggle_GrepAllTheCases()<CR>
-  imap <silent> <unique> <Leader>cg <C-o>:call <SID>Toggle_GrepAllTheCases()<CR>
-  "
-  " (lb): I'm leaving \c for historic reasons, but now there's a lag before it trips.
-  " - LATER/2021-01-25: Eventually-MAYBE I'll find I only use \cg and I'll remove \c.
-  " - ISOFF/2024-04-27: There are other <Leader>c commands, e.g., from NerdCommenter,
-  "   so silly to have this be wired. E.g., \c<Tab> or \c<Any-Char-that-doesn't-match-
-  "   another-mapping> will trigger this.
-  "  nmap <silent> <unique> <Leader>c :call <SID>Toggle_GrepAllTheCases()<CR>
-  "  imap <silent> <unique> <Leader>c <C-o>:call <SID>Toggle_GrepAllTheCases()<CR>
+  execute 'nnoremap <silent> ' .. a:key_sequence .. ' <Plug>(grep-steady-toggle-multicase)'
 
+  execute 'nnoremap <silent> ' .. a:key_sequence .. ' <Plug>(grep-steady-toggle-multicase)'
 endfunction
 
-call s:Map_Toggle_GrepAllTheCases()
+call s:CreateMaps__ToggleMulticase('<Leader>dg')
+
+" ***
 
 let g:DubsGrepSteady_GrepAllTheCases = 0
 
