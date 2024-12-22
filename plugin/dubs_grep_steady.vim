@@ -415,6 +415,18 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) a
         endif
       endif
 
+      " Enable multiline if there's a newline escape sequence in the query.
+      " - Note we use single quotes because query shouldn't contain actual
+      "   newline, just the literal representation.
+      " - User must double-escape literal newline, which we sub-out so we
+      "   don't confuse our check.
+      " - Note that to match a single backslash \, user must input four \\\\
+      "   of them, because the input() prompt will resolve \\ → \ and \\ → \,
+      "   and then grep prompt resolves \\ → \ (at least that's what I think).
+      if s:using_rg && stridx(substitute(l:the_term, '\\\\n', '', 'g'), '\n') >= 0
+        let l:options = l:options . " --multiline"
+      endif
+
       " 2018-03-29: Crude implementation of caseless-grep.
       " - 2021-01-31: Updated to only add simple query to the history lists,
       "   and not the complicated query.
