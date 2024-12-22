@@ -17,10 +17,21 @@
 
 " This script sets up a powerful text search utility.
 
-if exists("g:plugin_dubs_grep_steady") || &cp
+" -------------------------------------------------------------------
+
+" GUARD: Press <F9> to reload this plugin (or :source it).
+" - Via: https://github.com/embrace-vim/vim-source-reloader#↩️
+
+if expand("%:p") ==# expand("<sfile>:p")
+  unlet g:loaded_dubs_grep_steady_plugin
+endif
+
+if exists("g:loaded_dubs_grep_steady_plugin") || &cp
+
   finish
 endif
-let g:plugin_dubs_grep_steady = 1
+
+let g:loaded_dubs_grep_steady_plugin = 1
 
 " -------------------------------------------------------------------
 
