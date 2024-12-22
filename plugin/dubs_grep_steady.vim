@@ -890,13 +890,21 @@ endfunction
 call s:LoadUsersGrepProjects(0)
 
 " Use \dp (or call :GrepSteadyReload) to reload the `dubs_projects.vim` file.
-nnoremap <silent> <Plug>(DGS_LoadUsersGrepProjects) :<C-u>call <SID>LoadUsersGrepProjects(1)<CR>
-noremap <silent> <unique> <Leader>dp <Plug>(DGS_LoadUsersGrepProjects)
-inoremap <silent> <unique> <Leader>dp <C-O><Plug>(DGS_LoadUsersGrepProjects)
+if mapcheck('<Plug>(DGS_LoadUsersGrepProjects)') == ''
+  nnoremap <silent> <Plug>(DGS_LoadUsersGrepProjects) :<C-u>call <SID>LoadUsersGrepProjects(1)<CR>
+endif
+if mapcheck('<Leader>dp', 'n') == ''
+  noremap <silent> <unique> <Leader>dp <Plug>(DGS_LoadUsersGrepProjects)
+  inoremap <silent> <unique> <Leader>dp <C-O><Plug>(DGS_LoadUsersGrepProjects)
+endif
 command! -nargs=0 GrepSteadyReload :call <SID>LoadUsersGrepProjects(1)
 
-nnoremap <silent> <Plug>(DGS_OpenUsersGrepProjects) :<C-u>call <SID>OpenUsersGrepProjects()<CR>
-noremap <silent> <unique> <Leader>dP <Plug>(DGS_OpenUsersGrepProjects)
-inoremap <silent> <unique> <Leader>dP <C-O><Plug>(DGS_OpenUsersGrepProjects)
+if mapcheck('<Plug>(DGS_OpenUsersGrepProjects)') == ''
+  nnoremap <silent> <Plug>(DGS_OpenUsersGrepProjects) :<C-u>call <SID>OpenUsersGrepProjects()<CR>
+endif
+if mapcheck('<Leader>dP', 'n') == ''
+  noremap <silent> <unique> <Leader>dP <Plug>(DGS_OpenUsersGrepProjects)
+  inoremap <silent> <unique> <Leader>dP <C-O><Plug>(DGS_OpenUsersGrepProjects)
+endif
 command! -nargs=0 GrepSteadyEdit :call <SID>OpenUsersGrepProjects()
 
