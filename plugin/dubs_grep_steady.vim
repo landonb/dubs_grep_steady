@@ -22,11 +22,11 @@
 " GUARD: Press <F9> to reload this plugin (or :source it).
 " - Via: https://github.com/embrace-vim/vim-source-reloader#↩️
 
-if expand("%:p") ==# expand("<sfile>:p")
-  unlet g:loaded_dubs_grep_steady_plugin
+if expand('%:p') ==# expand('<sfile>:p')
+  unlet! g:loaded_dubs_grep_steady_plugin
 endif
 
-if exists("g:loaded_dubs_grep_steady_plugin") || &cp
+if exists('g:loaded_dubs_grep_steady_plugin') || &cp
 
   finish
 endif
