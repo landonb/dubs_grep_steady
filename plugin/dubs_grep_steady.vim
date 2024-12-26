@@ -549,9 +549,8 @@ function! s:WireSearchMappings() abort
   " \g
 
   "map <silent> <unique> <Leader>g <Plug>DubsGrepSteady_GrepPrompt_Simple
-  noremap <silent> <Leader>g :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
+  nnoremap <silent> <Leader>g :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
   inoremap <silent> <Leader>g <C-O>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
-  "cnoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
   " Can't do unique on onoremap 'cause it's already set?
   " onoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
   " Selected word
@@ -596,20 +595,16 @@ function! s:WireSearchMappings() abort
   " NOTE <C-R><C-W> is Vim-speak for the word under the cursor
   " REFER: <C-R><C-W> — :help c_CTRL-R_CTRL-W
 
-  noremap <silent> <F4> :call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
+  nnoremap <silent> <F4> :call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
   inoremap <silent> <F4> <C-O>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
-  cnoremap <silent> <F4> <C-C>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
-  onoremap <silent> <F4> <C-C>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
   " Selected word
   vnoremap <silent> <F4> :<C-U>
     \ <CR>gvy
     \ :call <SID>GrepPrompt_Auto_Prev_Location(@@)<CR>
 
   " This time, prompt for location
-  noremap <silent> <S-F4> :call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
+  nnoremap <silent> <S-F4> :call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
   inoremap <silent> <S-F4> <C-O>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
-  cnoremap <silent> <S-F4> <C-C>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
-  onoremap <silent> <S-F4> <C-C>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
   " Selected word
   vnoremap <silent> <S-F4> :<C-U>
     \ <CR>gvy
@@ -617,10 +612,8 @@ function! s:WireSearchMappings() abort
 
   " NOTE Cannot get <C-8> or <C-*> to work (both still call :nohlsearch)
 
-  noremap <silent> <C-F4> :call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
+  nnoremap <silent> <C-F4> :call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
   inoremap <silent> <C-F4> <C-O>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
-  cnoremap <silent> <C-F4> <C-C>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
-  onoremap <silent> <C-F4> <C-C>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
 
   function s:GrepPrompt_Term_Prev_Location(term)
     call s:GrepPrompt_Simple("", s:simple_grep_last_i, 0, 0)
