@@ -71,7 +71,7 @@ ERROR: Cound not find RipGrep!
 expand_paths () {
   awk -F: '
     {
-      "realpath \"" $1 "\"" | getline abs_path;
+      "realpath -- \""$1"\"" | getline abs_path;
       printf "%s:", abs_path;
       for (col = 2; col < NF; col++) printf "%s:", $col;
       print $NF
