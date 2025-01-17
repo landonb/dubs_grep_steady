@@ -1,4 +1,7 @@
 # vim:tw=0:ts=2:sw=2:et:norl:ft=bash:nospell
+# Author: Landon Bouma <https://tallybark.com/>
+# Project: https://github.com/landonb/dubs_grep_steady#🧐
+# License: GPLv3 | Copyright © Landon Bouma.
 
 # YOU: Set max columns nonzero to omit long lines, which can make (in this
 #      author's opinion) it more tedious to scan the quickfix results).
