@@ -718,9 +718,9 @@ let g:DubsGrepSteady_GrepAllTheCases = 0
 function! s:Toggle_GrepAllTheCases() abort
   let g:DubsGrepSteady_GrepAllTheCases = !g:DubsGrepSteady_GrepAllTheCases
   if (g:DubsGrepSteady_GrepAllTheCases == 0)
-    echomsg 'Grep back to normal'
+    echom 'Grep back to normal'
   else
-    echomsg 'Grep match-all-the-cases'
+    echom 'Grep match-all-the-cases'
   endif
 endfunction
 
@@ -826,14 +826,14 @@ function! s:FindUsersGrepProjects() abort
       " Get the filename root, i.e., drop the ".template".
       let l:user_projs = fnamemodify(s:tmplate, ":r")
       if getftype(l:user_projs) != ''
-        echomsg 'Warning: Cannot expand template: Target exists (broken symlink?): ' . l:user_projs
+        echom 'Warning: Cannot expand template: Target exists (broken symlink?): ' . l:user_projs
         let l:user_projs = ''
       else
         " Make a copy of the template.
         execute '!/bin/cp ' . s:tmplate . ' ' . l:user_projs
       endif
     else
-      echomsg 'Warning: Dubs Vim could not find dubs_projects.vim.template'
+      echom 'Warning: Dubs Vim could not find dubs_projects.vim.template'
     endif
   endif
 
@@ -850,7 +850,7 @@ function! s:LoadUsersGrepProjects(echo_on_success) abort
       let s:simple_grep_last_i = g:ds_simple_grep_default_list_i
     endif
   else
-    echomsg 'Warning: Dubs Vim could not find dubs_projects.vim'
+    echom 'Warning: Dubs Vim could not find dubs_projects.vim'
   endif
 
   " Obsolete. Has since been extracted and templatized... [see previous block]
@@ -875,7 +875,7 @@ function! s:LoadUsersGrepProjects(echo_on_success) abort
   call s:EnsureGrepProjectsLookupSetup()
 
   if a:echo_on_success
-    echomsg 'Reloaded grep-steady lookup!'
+    echom 'Reloaded grep-steady lookup!'
   endif
 endfunction
 
