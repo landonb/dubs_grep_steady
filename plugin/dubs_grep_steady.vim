@@ -815,17 +815,17 @@ let s:user_projs_name = 'dubs_projects.vim'
 let s:projs_template = 'dubs_projects.vim.template'
 function! s:FindUsersGrepProjects() abort
   " See if the user made a project search listing and use that.
-  let l:user_projs = findfile(s:user_projs_name, pathogen#split(&rtp)[0] . "/**")
+  let l:user_projs = findfile(s:user_projs_name, pathogen#split(&rtp)[0] . '/**')
   if l:user_projs != ''
     " Turn into a full path. See :h filename-modifiers
-    let l:user_projs = fnamemodify(l:user_projs, ":p")
+    let l:user_projs = fnamemodify(l:user_projs, ':p')
   else
     " No file, but there should be a template we can copy.
-    let l:tmplate = findfile(s:projs_template, pathogen#split(&rtp)[0] . "/**")
+    let l:tmplate = findfile(s:projs_template, pathogen#split(&rtp)[0] . '/**')
     if l:tmplate != ''
-      let l:tmplate = fnamemodify(l:tmplate, ":p")
-      " Get the filename root, i.e., drop the ".template".
-      let l:user_projs = fnamemodify(l:tmplate, ":r")
+      let l:tmplate = fnamemodify(l:tmplate, ':p')
+      " Get the filename root, i.e., drop the '.template'.
+      let l:user_projs = fnamemodify(l:tmplate, ":r')
       if getftype(l:user_projs) != ''
         echom 'Warning: Cannot expand template: Target exists (broken symlink?): ' . l:user_projs
         let l:user_projs = ''
