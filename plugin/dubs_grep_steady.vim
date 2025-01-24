@@ -88,12 +88,11 @@ function! s:SetGrepprgRg() abort
   let s:using_ag = 0
   let s:using_rg = 1
 
-  " The user can use a global to override/specify a different script path.
-  " - But this probably doesn't matter as much in Vim 8.x now that most users
-  "   are probably following convention and installing to the ~/.vim/pack path.
+  " Use the path to this script to find the grep script.
   " - CXREF:
-  "     ~/.vim/pack/landonb/start/dubs_grep_steady/bin/vim-grepprg-rg-sort
-  let l:ripgrep_shim = $HOME . '/.vim/pack/landonb/start/dubs_grep_steady/bin/vim-grepprg-rg-sort'
+  "   ~/.vim/plugs/landonb/start/dubs_grep_steady/bin/vim-grepprg-rg-sort
+  let l:ripgrep_shim = expand('<script>:h:h') .. '/bin/vim-grepprg-rg-sort'
+
   if exists("g:DUBS_GREP_STEADY_GREPPRG_SCRIPT")
     let l:ripgrep_shim = g:DUBS_GREP_STEADY_GREPPRG_SCRIPT
   endif
