@@ -821,11 +821,11 @@ function! s:FindUsersGrepProjects() abort
     let l:user_projs = fnamemodify(l:user_projs, ":p")
   else
     " No file, but there should be a template we can copy.
-    let s:tmplate = findfile(s:projs_template, pathogen#split(&rtp)[0] . "/**")
-    if s:tmplate != ''
-      let s:tmplate = fnamemodify(s:tmplate, ":p")
+    let l:tmplate = findfile(s:projs_template, pathogen#split(&rtp)[0] . "/**")
+    if l:tmplate != ''
+      let l:tmplate = fnamemodify(l:tmplate, ":p")
       " Get the filename root, i.e., drop the ".template".
-      let l:user_projs = fnamemodify(s:tmplate, ":r")
+      let l:user_projs = fnamemodify(l:tmplate, ":r")
       if getftype(l:user_projs) != ''
         echom 'Warning: Cannot expand template: Target exists (broken symlink?): ' . l:user_projs
         let l:user_projs = ''
