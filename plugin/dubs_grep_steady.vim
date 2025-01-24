@@ -833,7 +833,11 @@ function! s:FindUsersGrepProjects() abort
         execute '!/bin/cp ' . s:tmplate . ' ' . l:user_projs
       endif
     else
-      echom 'Warning: Dubs Vim could not find dubs_projects.vim.template'
+      " This is more of a GAFFE, i.e., more likely it's our error than users's.
+      " - I.e., if this script is running, the project root should be on &rtp,
+      "   and the template should be within the project directory (and we should
+      "   have found it).
+      echom 'ERROR: dubs_grep_steady: Could not find template: ' .. s:projs_template
     endif
   endif
 
