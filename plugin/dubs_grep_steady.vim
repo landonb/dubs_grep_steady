@@ -811,9 +811,10 @@ function! s:EnsureGrepProjectsLookupSetup() abort
   "   let g:ds_simple_grep_ag_options_map = {}
 endfunction
 
+let s:user_projs_name = 'dubs_projects.vim'
 function! s:FindUsersGrepProjects() abort
   " See if the user made a project search listing and use that.
-  let l:user_projs = findfile('dubs_projects.vim', pathogen#split(&rtp)[0] . "/**")
+  let l:user_projs = findfile(s:user_projs_name, pathogen#split(&rtp)[0] . "/**")
   if l:user_projs != ''
     " Turn into a full path. See :h filename-modifiers
     let l:user_projs = fnamemodify(l:user_projs, ":p")
