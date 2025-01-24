@@ -812,6 +812,7 @@ function! s:EnsureGrepProjectsLookupSetup() abort
 endfunction
 
 let s:user_projs_name = 'dubs_projects.vim'
+let s:projs_template = 'dubs_projects.vim.template'
 function! s:FindUsersGrepProjects() abort
   " See if the user made a project search listing and use that.
   let l:user_projs = findfile(s:user_projs_name, pathogen#split(&rtp)[0] . "/**")
@@ -820,8 +821,7 @@ function! s:FindUsersGrepProjects() abort
     let l:user_projs = fnamemodify(l:user_projs, ":p")
   else
     " No file, but there should be a template we can copy.
-    let s:tmplate =
-      \ findfile('dubs_projects.vim.template', pathogen#split(&rtp)[0] . "/**")
+    let s:tmplate = findfile(s:projs_template, pathogen#split(&rtp)[0] . "/**")
     if s:tmplate != ''
       let s:tmplate = fnamemodify(s:tmplate, ":p")
       " Get the filename root, i.e., drop the ".template".
