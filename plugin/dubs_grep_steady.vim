@@ -137,33 +137,25 @@ function! s:SetGrepprgGrep() abort
   "                 files from the search
   " Example Vim Grep command:
   "  :grep "Sentence fragment" "C:\my\project\path"
-  " NOTE: The --exclude-from file (grep-exclude) can only specifies file
-  "         to ignore.
-  "       To ignore directories by name (but not path), use --exclude-dir.
-  " DEVS: If you want to exclude directories, add said switch, e.g.,
+  " REFER: --exclude-from file (grep-exclude) only specifies files to ignore.
+  " - Use --exclude-dir to ignore directories by name (but not path), e.g.,
   "         set grepprg=egrep\ --exclude-dir=\"build\"\ ...
-  " EXPLAIN: Doesn't it seem odd that egrep let's you specify basenames
-  "          to ignore using a file, but directories to ignore must be
-  "          specified on the command line, and there's no way to exclude
-  "          files based on a more complete path?
+  " DUNNO: egrep let's you specify basenames to ignore using a file, but
+  "        directories to ignore must be specified on the command line, and
+  "        there's no way to exclude files based on a more complete path?
   if filereadable($HOME . "/.vim/grep-exclude")
     " *nix w/ egrep
-    " SYNC: set grepprg=egrep
     set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"$HOME/.vim/grep-exclude\"
   elseif filereadable($USERPROFILE . "/vimfiles/grep-exclude")
     " Windows w/ egrep
-    " SYNC: set grepprg=egrep
     set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"$USERPROFILE/vimfiles/grep-exclude\"
   else
     let s:exclf = findfile('grep-exclude', pathogen#split(&rtp)[0] . "/**")
     if s:exclf != ''
       " Turn into a full path. See :h filename-modifiers
       let s:exclf = fnamemodify(s:exclf, ":p")
-      " SYNC: set grepprg=egrep
       execute 'set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"'.s:exclf.'\"'
     else
-      "echomsg 'Warning: Dubs could find grep-exclude file'
-      " SYNC: set grepprg=egrep
       set grepprg=egrep\ -n\ -R\ -i
     endif
   endif
