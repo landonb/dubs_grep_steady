@@ -831,7 +831,7 @@ function! s:FindUsersGrepProjects() abort
         let l:user_projs = ''
       else
         " Make a copy of the template.
-        execute '!/bin/cp ' . s:tmplate . ' ' . l:user_projs
+        execute '!command cp ' . l:tmplate . ' ' . l:user_projs
       endif
     else
       " This is more of a GAFFE, i.e., more likely it's our error than users's.
