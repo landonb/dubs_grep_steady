@@ -813,33 +813,140 @@ endfunction
 
 let s:user_projs_name = 'dubs_projects.vim'
 let s:projs_template = 'dubs_projects.vim.template'
+
 function! s:FindUsersGrepProjects() abort
-  " See if the user made a project search listing and use that.
-  let l:user_projs = findfile(s:user_projs_name, pathogen#split(&rtp)[0] . '/**')
-  if l:user_projs != ''
-    " Turn into a full path. See :h filename-modifiers
-    let l:user_projs = fnamemodify(l:user_projs, ':p')
+  " Look for user's projects file.
+  let l:files = s:FindFile(s:user_projs_name)
+  call s:AlertIfMultipleUsersGrepProjectsFiles(l:files, 'file')
+
+  if !empty(l:files)
+    let l:user_projs = l:files[0]
   else
     " No file, but there should be a template we can copy.
-    let l:tmplate = findfile(s:projs_template, pathogen#split(&rtp)[0] . '/**')
-    if l:tmplate != ''
-      let l:tmplate = fnamemodify(l:tmplate, ':p')
-      " Get the filename root, i.e., drop the '.template'.
-      let l:user_projs = fnamemodify(l:tmplate, ":r')
-      if getftype(l:user_projs) != ''
-        echom 'Warning: Cannot expand template: Target exists (broken symlink?): ' . l:user_projs
-        let l:user_projs = ''
-      else
-        " Make a copy of the template.
-        execute '!command cp ' . l:tmplate . ' ' . l:user_projs
-      endif
-    else
-      " This is more of a GAFFE, i.e., more likely it's our error than users's.
-      " - I.e., if this script is running, the project root should be on &rtp,
-      "   and the template should be within the project directory (and we should
-      "   have found it).
-      echom 'ERROR: dubs_grep_steady: Could not find template: ' .. s:projs_template
+    let l:tmplate = ''
+
+    let l:files = s:FindFile(s:projs_template)
+    call s:AlertIfMultipleUsersGrepProjectsFiles(l:files, 'template')
+
+    if !empty(l:files)
+      let l:tmplate = l:files[0]
     endif
+
+    let l:user_projs = s:DeployUsersGrepProjectsTemplate(l:tmplate)
+  endif
+
+  return l:user_projs
+endfunction
+
+" COPYD/2025-02-02: FindFile et al shared between two plugins:
+"   ~/.kit/nvim/landonb/start/dubs_grep_steady/plugin/dubs_grep_steady.vim
+"   ~/.kit/nvim/landonb/start/dubs_project_tray/plugin/dubs_project_tray.vim
+
+function! s:FindFile(fname) abort
+  if has('nvim')
+    let l:files = s:FindFileAnywhereOnRuntimepath_Nvim(a:fname)
+  else
+    let l:files = s:FindFileInProjectOrRuntimeRoot_Vim(a:fname)
+    " ALTLY: [FTREQ: Or better yet: Add ~/.config path option]:
+    "   let l:files = s:FindFileAnywhereOnRuntimepath_Vim(a:fname)
+  endif
+
+  return l:files
+endfunction
+
+function! s:FindFileAnywhereOnRuntimepath_Nvim(fname) abort
+  let l:all = 1
+
+  let l:files = nvim_get_runtime_file(a:fname, l:all)
+
+  return l:files
+endfunction
+
+" SAVVY: Assumes split(&rtp)[0] is ~/.vim, which is generally the case.
+" - ASIDE: In Neovim, root path on &rtp is ~/.config/nvim.
+function! s:FindFileInProjectOrRuntimeRoot_Vim(fname) abort
+  let l:fpath = findfile(a:fname, pathogen#split(&rtp)[0] . '/**')
+
+  if l:fpath == ''
+    let l:proj_root = expand('<script>:h:h')
+
+    let l:fpath = findfile(a:fname, l:proj_root . '/**')
+  endif
+
+  let l:user_projs = []
+
+  if l:fpath != ''
+    " Turn into a full path. See :h filename-modifiers
+    let l:user_projs = [fnamemodify(l:fpath, ':p')]
+  endif
+
+  return l:user_projs
+endfunction
+
+" SAVVY: Alternative to previous fcn, though may take longer.
+" - 2025-02-02: Notes from years ago suggest checking every
+"   directory takes a while (think someone with 100 plugins
+"   and no dubs_projects.vim file therein), but when tested
+"   just now, it ran fine (though only checked ~10 paths).
+function! s:FindFileAnywhereOnRuntimepath_Vim(fname) abort
+  let l:fpath = ""
+
+  for l:rtp_dir in pathogen#split(&rtp)
+    let l:try_file = l:rtp_dir . '/' . a:fname
+
+    if filereadable(l:try_file)
+      let l:fpath = l:try_file
+
+      break
+    endif
+  endfor
+
+  let l:user_projs = []
+
+  if l:fpath != ''
+    " Turn into a full path. See :h filename-modifiers
+    let l:user_projs = [fnamemodify(l:fpath, ':p')]
+  endif
+
+  return l:user_projs
+endfunction
+
+" ***
+
+function! s:AlertIfMultipleUsersGrepProjectsFiles(matches, what) abort
+  if len(a:matches) <= 1
+
+    return
+  endif
+  
+  echom 'ALERT: dubs_grep_steady: Found more than one user projects ' .. a:what .. ':'
+  for l:path in a:matches
+    echom '  ' .. l:path
+  endfor
+endfunction
+
+function! s:DeployUsersGrepProjectsTemplate(tmplate) abort
+  let l:user_projs = ''
+
+  if a:tmplate != ''
+    " Get the full path (:p), and drop the '.template'
+    " extension, aka get the filename root (:r).
+    let l:user_projs = fnamemodify(a:tmplate, ':p:r')
+
+    if getftype(l:user_projs) != ''
+      echom 'Warning: Cannot expand template: Target exists (broken symlink?): ' . l:user_projs
+
+      let l:user_projs = ''
+    else
+      " Make a copy of the template.
+      execute '!command cp ' . a:tmplate . ' ' . l:user_projs
+    endif
+  else
+    " This is more of a GAFFE, i.e., more likely it's our error than users's.
+    " - I.e., if this script is running, the project root should be on &rtp,
+    "   and the template should be within the project directory (and we should
+    "   have found it).
+    echom 'ERROR: dubs_grep_steady: Could not find template: ' .. s:projs_template
   endif
 
   return l:user_projs
