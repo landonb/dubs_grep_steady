@@ -166,6 +166,49 @@ rip_grep_sleep_repeat () {
     file_globs="${file_globs}${fglob}"
   done
 
+  # REFER: See also `rg --vimgrep`, which is same as:
+  #   rg -A 0 -B 0 --line-number --column --no-heading --with-filename
+  # - Though from `man rg`: "With this option, a line with more than one
+  #   match will be printed in its entirety more than once. For that reason,
+  #   the total amount of output as a result of this flag can be quadratic
+  #   in the size of the input." And: "One alternative to avoiding exorbitant
+  #   memory usage is to force ripgrep into single threaded mode with the
+  #   -j/--threads flag. Note though that this will not impact the total
+  #   size of the output, just the heap memory that ripgrep will use."
+  #   - Which makes it sound scary.
+  #   - Also, why would you want more than one line per matching line?
+  #     - Do some Vim users want separate quickfix results for each
+  #       column match for the same line?? I guess maybe, because
+  #       that's the default in Neovim.
+  #     - By default, Neovim quickfix does not recognize the `rg`
+  #       output unless we include --column numbers (and Neovim's
+  #       default grepprg is `rg --vimgrep -uu`).
+  #     - But author finds column number distracting, and useless
+  #       at best, e.g., compare with column:
+  #         /path/to/some/file.foo|121 col 20| bar baz bat quuz
+  #         /path/to/some/file.foo|144 col 13|   wizzle wuzzle
+  #       against without column:
+  #         /path/to/some/file.foo|121| bar baz bat quuz
+  #         /path/to/some/file.foo|144|   wizzle wuzzle
+  #       and I'd say the latter results are quicker to read,
+  #       and that the column number doesn't add much value
+  #       (at least not for author's workflow).
+  #     - All that said, consider changing Neovim |grepformat|,
+  #       rather than adding `rg --column` to the results (also
+  #       you'd have to either change the |grepformat| in Vim, or
+  #       you'd need to programatically add --column here or not).
+  #       - E.g., you could check $VIM environ basename 'vim' or 'nvim':
+  #         - MacVim (GUI or vim) $VIM:
+  #             /Applications/MacVim.app/Contents/Resources/vim
+  #         - NeoVim (Neovide or nvim) $VIM:
+  #             /opt/homebrew/Cellar/neovim/0.10.3/share/nvim
+  #         And if 'nvim', add '--column'.
+  # - REFER: Default grepformat values:
+  #     " Vim --noplugin: `echo &grepformat`:
+  #     set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
+  #     " Neovim --noplugin: `echo &grepformat`:
+  #     %f:%l:%c:%m
+
   $(rip_grep_executable) \
     -A 0 \
     -B 0 \
