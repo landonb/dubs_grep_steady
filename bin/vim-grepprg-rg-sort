@@ -200,7 +200,7 @@ rip_grep_sleep_repeat () {
   #       - E.g., you could check $VIM environ basename 'vim' or 'nvim':
   #         - MacVim (GUI or vim) $VIM:
   #             /Applications/MacVim.app/Contents/Resources/vim
-  #         - NeoVim (Neovide or nvim) $VIM:
+  #         - Neovim (Neovide or nvim) $VIM:
   #             /opt/homebrew/Cellar/neovim/0.10.3/share/nvim
   #         And if 'nvim', add '--column'.
   # - REFER: Default grepformat values:
