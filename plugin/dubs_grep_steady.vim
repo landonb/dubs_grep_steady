@@ -811,6 +811,12 @@ function! s:EnsureGrepProjectsLookupSetup() abort
   "   let g:ds_simple_grep_ag_options_map = {}
 endfunction
 
+" ***
+
+" MAYBE/2025-01-24: Rather than search rtp's for file, have user specify path,
+"                   e.g., relocate everything to autoload# then have user call,
+"                   e.g., `call embrace#grep_stready#load(<path>)` from their
+"                   own plugin or plugin manager plugin specs.
 let s:user_projs_name = 'dubs_projects.vim'
 let s:projs_template = 'dubs_projects.vim.template'
 
