@@ -141,11 +141,9 @@ function! s:SetGrepprgGrep() abort
     " Windows w/ egrep
     set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"$USERPROFILE/vimfiles/grep-exclude\"
   else
-    let s:exclf = findfile('grep-exclude', pathogen#split(&rtp)[0] . "/**")
-    if s:exclf != ''
-      " Turn into a full path. See :h filename-modifiers
-      let s:exclf = fnamemodify(s:exclf, ":p")
-      execute 'set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"'.s:exclf.'\"'
+    let l:files = s:FindFile('grep-exclude')
+    if !empty(l:files)
+      execute 'set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"' . l:files[0] . '\"'
     else
       set grepprg=egrep\ -n\ -R\ -i
     endif
