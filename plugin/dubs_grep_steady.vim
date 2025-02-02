@@ -934,21 +934,21 @@ function! s:DeployUsersGrepProjectsTemplate(tmplate) abort
     let l:user_projs = fnamemodify(a:tmplate, ':p:r')
 
     if getftype(l:user_projs) != ''
-      echom 'ALERT: dubs_grep_steady: Cannot expand template: Target exists (broken symlink?): ' . l:user_projs
+      echom 'ALERT: dubs_grep_steady: Cannot expand grep projects template: Target exists (broken symlink?): ' . l:user_projs
 
       let l:user_projs = ''
     else
       " Make a copy of the template.
       execute '!command cp ' . a:tmplate . ' ' . l:user_projs
 
-      echom 'dubs_grep_steady: Created user file from template: ' . l:user_projs
+      echom 'dubs_grep_steady: Created user grep projects from template: ' . l:user_projs
     endif
   else
     " This is more of a GAFFE, i.e., more likely it's our error than users's.
     " - I.e., if this script is running, the project root should be on &rtp,
     "   and the template should be within the project directory (and we should
     "   have found it).
-    echom 'ALERT: dubs_grep_steady: Could not find template: ' .. s:projs_template
+    echom 'ALERT: dubs_grep_steady: Could not find grep projects template: ' .. s:projs_template
   endif
 
   return l:user_projs
