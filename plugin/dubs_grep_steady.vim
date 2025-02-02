@@ -90,7 +90,7 @@ function! s:SetGrepprgRg() abort
 
   " Use the path to this script to find the grep script.
   " - CXREF:
-  "   ~/.vim/plugs/landonb/start/dubs_grep_steady/bin/vim-grepprg-rg-sort
+  "   ~/.kit/nvim/landonb/start/dubs_grep_steady/bin/vim-grepprg-rg-sort
   let l:ripgrep_shim = expand('<script>:h:h') .. '/bin/vim-grepprg-rg-sort'
 
   if exists("g:DUBS_GREP_STEADY_GREPPRG_SCRIPT")
