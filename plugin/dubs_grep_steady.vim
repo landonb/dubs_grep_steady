@@ -5,14 +5,6 @@
 " Summary: Dubs Vim Text Search Commands
 
 " -------------------------------------------------------------------
-
-" MAYBE/2020-09-22: Replace `pathogen#split` calls to remove Pathogen dependency.
-" (Could probably just copy `pathogen#split` into this plugin.)
-
-" FIXME/2020-09-22: Do not do any mappings herein (e.g., <Leader>g).
-" Instead, make `GrepSteady*` commands, and have user wire their own maps.
-
-" -------------------------------------------------------------------
 " About:
 
 " This script sets up a powerful text search utility.
