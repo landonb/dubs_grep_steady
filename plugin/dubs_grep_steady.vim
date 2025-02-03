@@ -846,10 +846,12 @@ function! s:FindFile(fname) abort
 
   if has('nvim')
     let l:files = s:FindFileAnywhereOnRuntimepath_Nvim(a:fname)
+  elseif v:version < 900
+    " expand('<script>') is empty
+    let l:files = s:FindFileAnywhereOnRuntimepath_Vim(a:fname)
   else
+    " FTREQ: Or better yet: Add ~/.config path option.
     let l:files = s:FindFileInProjectOrRuntimeRoot_Vim(a:fname)
-    " ALTLY: [FTREQ: Or better yet: Add ~/.config path option]:
-    "   let l:files = s:FindFileAnywhereOnRuntimepath_Vim(a:fname)
   endif
 
   return l:files
@@ -866,12 +868,20 @@ endfunction
 " SAVVY: Assumes split(&rtp)[0] is ~/.vim, which is generally the case.
 " - ASIDE: In Neovim, root path on &rtp is ~/.config/nvim.
 function! s:FindFileInProjectOrRuntimeRoot_Vim(fname) abort
+  if pathogen#split(&rtp)[0] == ''
+    " Unreachable path.
+
+    return ''
+  endif
+
   let l:fpath = findfile(a:fname, pathogen#split(&rtp)[0] . '/**')
 
   if l:fpath == ''
     let l:proj_root = expand('<script>:h:h')
 
-    let l:fpath = findfile(a:fname, l:proj_root . '/**')
+    if l:proj_root != ''
+      let l:fpath = findfile(a:fname, l:proj_root . '/**')
+    endif
   endif
 
   let l:user_projs = []
