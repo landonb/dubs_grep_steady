@@ -839,6 +839,11 @@ endfunction
 "   ~/.kit/nvim/landonb/start/dubs_project_tray/plugin/dubs_project_tray.vim
 
 function! s:FindFile(fname) abort
+  if a:fname == ''
+
+    return []
+  endif
+
   if has('nvim')
     let l:files = s:FindFileAnywhereOnRuntimepath_Nvim(a:fname)
   else
