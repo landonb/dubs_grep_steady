@@ -748,7 +748,7 @@ endfunction
 
 " ***
 
-function! s:LoadUsersGrepProjects(echo_on_success) abort
+function! g:embrace#grep_steady#LoadUsersGrepProjects(echo_on_success) abort
   let s:d_projs = s:FindUsersGrepProjects()
 
   if s:d_projs != ''

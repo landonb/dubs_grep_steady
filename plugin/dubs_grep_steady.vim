@@ -191,18 +191,18 @@ call s:CreateMaps__ToggleMulticase('<Leader>dg')
 
 " -------------------------------------------------------------------
 
-call s:LoadUsersGrepProjects(0)
+call g:embrace#grep_steady#LoadUsersGrepProjects(0)
 
 " Use \dp (or call :GrepSteadyReload) to reload the `dubs_projects.vim` file.
 if mapcheck('<Plug>(DGS_LoadUsersGrepProjects)') == ''
-  nnoremap <silent> <Plug>(DGS_LoadUsersGrepProjects) :<C-u>call <SID>LoadUsersGrepProjects(1)<CR>
+  nnoremap <silent> <Plug>(DGS_LoadUsersGrepProjects) :<C-u>call g:embrace#grep_steady#LoadUsersGrepProjects(1)<CR>
 endif
 if mapcheck('<Leader>dp', 'n') == ''
   noremap <silent> <unique> <Leader>dp <Plug>(DGS_LoadUsersGrepProjects)
   inoremap <silent> <unique> <Leader>dp <C-O><Plug>(DGS_LoadUsersGrepProjects)
 endif
 
-command! -nargs=0 GrepSteadyReload :call <SID>LoadUsersGrepProjects(1)
+command! -nargs=0 GrepSteadyReload :call g:embrace#grep_steady#LoadUsersGrepProjects(1)
 
 if mapcheck('<Plug>(DGS_OpenUsersGrepProjects)') == ''
   nnoremap <silent> <Plug>(DGS_OpenUsersGrepProjects) :<C-u>call <SID>OpenUsersGrepProjects()<CR>
