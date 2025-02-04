@@ -787,7 +787,7 @@ function! g:embrace#grep_steady#LoadUsersGrepProjects(echo_on_success) abort
   endif
 endfunction
 
-function! s:OpenUsersGrepProjects() abort
+function! g:embrace#grep_steady#OpenUsersGrepProjects() abort
   let s:d_projs = s:FindUsersGrepProjects()
 
   exe 'edit ' .. s:d_projs

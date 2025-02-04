@@ -205,12 +205,12 @@ endif
 command! -nargs=0 GrepSteadyReload :call g:embrace#grep_steady#LoadUsersGrepProjects(1)
 
 if mapcheck('<Plug>(DGS_OpenUsersGrepProjects)') == ''
-  nnoremap <silent> <Plug>(DGS_OpenUsersGrepProjects) :<C-u>call <SID>OpenUsersGrepProjects()<CR>
+  nnoremap <silent> <Plug>(DGS_OpenUsersGrepProjects) :<C-u>call g:embrace#grep_steady#OpenUsersGrepProjects()<CR>
 endif
 if mapcheck('<Leader>dP', 'n') == ''
   noremap <silent> <unique> <Leader>dP <Plug>(DGS_OpenUsersGrepProjects)
   inoremap <silent> <unique> <Leader>dP <C-O><Plug>(DGS_OpenUsersGrepProjects)
 endif
 
-command! -nargs=0 GrepSteadyEdit :call <SID>OpenUsersGrepProjects()
+command! -nargs=0 GrepSteadyEdit :call g:embrace#grep_steady#OpenUsersGrepProjects()
 
