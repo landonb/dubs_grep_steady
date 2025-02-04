@@ -410,11 +410,15 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
 
       " HINT: Try: `:verbose set grepprg` and `:verbose gr` to see what happened.
       execute "silent gr! " . l:options . " " . l:srch_term . " " . l:locat
+
       cd -
+
       let s:simple_grep_last_i = l:new_i
+
       :QFix!(0)
     endif
   endif
+
   call inputrestore()
 endfunction
 
