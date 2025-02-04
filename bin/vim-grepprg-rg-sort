@@ -57,6 +57,11 @@ DUBS_VIM_RG_MAX_COLS=200
 #
 #               rg ... | sort --debug -t: -k1,1 -k2,2n
 
+# SAVVY/2022-11-17: Quickfix shows full paths, regardless of how
+# we print them. E.g., if we use a tilde prefix, such as this:
+#   rg ... | sed -E "s#^${HOME}(/|$)#~\1#"
+# You'll still see full paths in the quickfix buffer.
+
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #
 
 check_deps () {
