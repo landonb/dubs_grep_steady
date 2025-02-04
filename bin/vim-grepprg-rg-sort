@@ -81,15 +81,16 @@ DUBS_VIM_RG_MAX_COLS=200
 # Quickfix shows *full* paths
 # ===========================
 #
-# SAVVY/2022-11-17: Quickfix shows full paths, regardless of how
-# we print them. E.g., if we use a tilde prefix, such as this:
-#   rg ... | sed -E "s#^${HOME}(/|$)#~\1#"
-# You'll still see full paths in the quickfix buffer.
+# SAVVY: Quickfix shows full paths, regardless of how we print them.
+# - E.g., if we use a tilde prefix, such as this:
+#     rg ... | sed -E "s#^${HOME}(/|$)#~\1#"
+#   You'll still see full paths in the quickfix buffer.
 
 # Format results to match |grepformat|
 # ====================================
 #
-# REFER: See also `rg --vimgrep`, which is same as:
+# REFER: We craft our own `rg` command & options below, but there's
+# a similar built-in option, `rg --vimgrep`, which is the same as:
 #   rg -A 0 -B 0 --line-number --column --no-heading --with-filename
 # - Though from `man rg`: "With this option, a line with more than one
 #   match will be printed in its entirety more than once. For that reason,
@@ -106,29 +107,32 @@ DUBS_VIM_RG_MAX_COLS=200
 #     - By default, Neovim quickfix does not recognize the `rg`
 #       output unless we include --column numbers (and Neovim's
 #       default grepprg is `rg --vimgrep -uu`).
-#     - But author finds column number distracting, and useless
-#       at best, e.g., compare with column:
+#     - But author finds column numbers distracting, and useless
+#       at best, e.g., compare thie output with column numbers:
 #         /path/to/some/file.foo|121 col 20| bar baz bat quuz
 #         /path/to/some/file.foo|144 col 13|   wizzle wuzzle
-#       against without column:
+#       against the output without column numbers:
 #         /path/to/some/file.foo|121| bar baz bat quuz
 #         /path/to/some/file.foo|144|   wizzle wuzzle
-#       and I'd say the latter results are quicker to read,
-#       and that the column number doesn't add much value
-#       (at least not for author's workflow).
-#     - All that said, consider changing Neovim |grepformat|,
-#       rather than adding `rg --column` to the results (also
-#       you'd have to either change the |grepformat| in Vim, or
-#       you'd need to programatically add --column here or not).
-#       - E.g., you could check $VIM environ basename 'vim' or 'nvim':
-#         - MacVim (GUI or vim) $VIM:
-#             /Applications/MacVim.app/Contents/Resources/vim
-#         - Neovim (Neovide or nvim) $VIM:
-#             /opt/homebrew/Cellar/neovim/0.10.3/share/nvim
-#         And if 'nvim', add '--column'.
-# - REFER: Default grepformat values:
+#       and I'd say the latter results are quicker to read, and
+#       that the column numbers don't add much value (at least
+#       not for the author's workflow).
+# - Considering all that, whether or not to include the column is
+#   a matter of taste and also related to the domain in which you're
+#   working (perhaps it helps to see a quickfix line for every result).
+#   - In Vim, the opinion of its publisher was to exclude columns.
+#   - But in Neovim, the maintainers decided the opposite was desirable
+#     by default.
+#   - We'll not be opinionated herein but work with either format —
+#     we just need the Vim script to set an environ to tell us which
+#     format to use.
+#     - See: GREPSTEADY_INCLUDE_COLUMNS
+#
+# REFER: Default |grepformat| values:
+# - Vim:
 #     " Vim --noplugin: `echo &grepformat`:
 #     set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
+# - Neovim:
 #     " Neovim --noplugin: `echo &grepformat`:
 #     %f:%l:%c:%m
 
