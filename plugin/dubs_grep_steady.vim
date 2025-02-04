@@ -291,7 +291,7 @@ endfunction
 function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) abort
   call inputsave()
   let l:the_term = a:term
-  if a:term == ""
+  if l:the_term == ''
     " There's a newline in the buffer, so call inputsave
     "call inputsave()
     let l:the_term = input("Search for: ")
