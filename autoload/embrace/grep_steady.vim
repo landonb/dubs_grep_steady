@@ -57,7 +57,11 @@ function! s:SetGrepprgRg() abort
     execute 'set grepprg=' . l:ripgrep_shim
   else
     " SYNC: set grepprg=rg
-    set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename
+    if g:DubsGrepSteady_GrepIncludeColumnNumbers
+      set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename\ --column
+    else
+      set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename
+    endif
   endif
 endfunction
 
@@ -74,7 +78,11 @@ function! s:SetGrepprgAg() abort
   "   -U --skip-vcs-ignores   Ignore VCS ignore files
   "                           (.gitignore, .hgignore; still obey .ignore)
   " SYNC: set grepprg=ag
-  set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
+  if g:DubsGrepSteady_GrepIncludeColumnNumbers
+    set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U\ --column
+  else
+    set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
+  endif
 endfunction
 
 function! s:SetGrepprgGrep() abort
@@ -297,6 +305,13 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
         endif
       endif
 
+      if g:DubsGrepSteady_GrepIncludeColumnNumbers
+        if s:using_rg == 1 || s:using_ag == 1
+          let l:options = l:options . " --column"
+        endif
+      " else. no egrep option to include column numbers.
+      endif
+
       " [lb]: Be aware of another option to ignore .ignore files up a
       "   path's hierarchy -- --no-ignore-parent -- which only makes
       "   tracking down why a file is being ignored a little harder,
@@ -305,7 +320,11 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
       if s:using_ag == 1
         if a:limit_matches == 0
           " SYNC: set grepprg=ag
-          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
+          if g:DubsGrepSteady_GrepIncludeColumnNumbers
+            set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U\ --column
+          else
+            set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
+          endif
         else
           " The Silver Search says "ERR: Too many matches" for each file
           " after printing one line, but the errs come randomly from a thread
@@ -323,7 +342,11 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
           "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"\ 2\>\/dev\/null
           " so just punting: [2018-01-12: And I cannot remember the issue anymore]:
           " SYNC: set grepprg=ag
-          set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"
+          if g:DubsGrepSteady_GrepIncludeColumnNumbers
+            set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ --column\ "$*"
+          else
+            set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"
+          endif
         endif
       else
         " RipGrep and Grep both support --max-count.
@@ -480,7 +503,13 @@ endfunction
 function s:PrepareGrepformat() abort
   let s:old_grepformat = &grepformat
 
-  let &grepformat = '%f:%l:%m,%f:%l%m,%f  %l%m'
+  if g:DubsGrepSteady_GrepIncludeColumnNumbers
+    " Neovim default
+    let &grepformat = '%f:%l:%c:%m'
+  else
+    " Vim default
+    let &grepformat = '%f:%l:%m,%f:%l%m,%f  %l%m'
+  endif
 endfunction
 
 function s:ResetGrepformat() abort
@@ -522,6 +551,31 @@ function! g:embrace#grep_steady#Toggle_GrepAllTheCases() abort
   else
     echom 'Grep match-all-the-cases'
   endif
+endfunction
+
+" -------------------------------------------------------------------
+
+let g:DubsGrepSteady_GrepIncludeColumnNumbers = 0
+let $GREPSTEADY_INCLUDE_COLUMNS = 'false'
+
+function! g:embrace#grep_steady#Toggle_GrepIncludeColumnNumbers() abort
+  if !s:using_ag && !s:using_rg
+    echom 'Please install `rg` or `ag` to add column numbers to grep results'
+
+    return
+  endif
+
+  let g:DubsGrepSteady_GrepIncludeColumnNumbers = !g:DubsGrepSteady_GrepIncludeColumnNumbers
+
+  if !g:DubsGrepSteady_GrepIncludeColumnNumbers
+    let $GREPSTEADY_INCLUDE_COLUMNS = 'false'
+    echom 'Grep exclude column numbers'
+  else
+    let $GREPSTEADY_INCLUDE_COLUMNS = 'true'
+    echom 'Grep include column numbers'
+  endif
+
+  call s:SetGrepprg()
 endfunction
 
 " -------------------------------------------------------------------

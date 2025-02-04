@@ -169,6 +169,18 @@ call s:CreateMaps__ToggleMulticase('<Leader>dg')
 
 " -------------------------------------------------------------------
 
+function! s:CreateMaps__ToggleColumnNumbers(key_sequence = '<Leader>dg') abort
+  nnoremap <silent> <expr> <script> <Plug>(grep-steady-toggle-column-numbers)
+    \ g:embrace#grep_steady#Toggle_GrepIncludeColumnNumbers()
+
+  execute 'nnoremap <silent> ' .. a:key_sequence .. ' <Plug>(grep-steady-toggle-column-numbers)'
+  execute 'inoremap <silent> ' .. a:key_sequence .. ' <C-O><Plug>(grep-steady-toggle-column-numbers)'
+endfunction
+
+call s:CreateMaps__ToggleColumnNumbers('<Leader>dn')
+
+" -------------------------------------------------------------------
+
 call g:embrace#grep_steady#LoadUsersGrepProjects(0)
 
 " Use \dp (or call :GrepSteadyReload) to reload the `dubs_projects.vim` file.

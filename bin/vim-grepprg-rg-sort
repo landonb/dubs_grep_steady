@@ -206,6 +206,11 @@ expand_paths () {
 #   ~/.kit/nvim/landonb/start/dubs_grep_steady/bin/vim-grepprg-rg-sort
 #   ~/.kit/nvim/landonb/opt/dubs_file_finder/plugin/dubs_file_finder.vim
 rip_grep_sleep_repeat () {
+  local column_arg=""
+  if [ "${GREPSTEADY_INCLUDE_COLUMNS:-false}" = "true" ]; then
+    column_arg="--column"
+  fi
+
   local dglobs=()
   local fglobs=()
   # Common dev tool directories
@@ -260,6 +265,7 @@ rip_grep_sleep_repeat () {
     --follow \
     --no-ignore-vcs \
     --line-number \
+    ${column_arg} \
     --no-heading \
     --with-filename \
     --max-columns ${DUBS_VIM_RG_MAX_COLS} \
