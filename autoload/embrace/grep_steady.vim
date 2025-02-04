@@ -404,6 +404,9 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
         let l:srch_term = "\"" . l:new_term . "\""
       endif
 
+      " Save grepformat, then temporarily set to match the search output.
+      call s:PrepareGrepformat()
+
       " Change Vim's working directory to the root of the search directory,
       " so that Vim shows partial paths relative to that path.
       exec "cd " . split(l:locat)[0]
@@ -412,6 +415,8 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
       execute "silent gr! " . l:options . " " . l:srch_term . " " . l:locat
 
       cd -
+
+      call s:ResetGrepformat()
 
       let s:simple_grep_last_i = l:new_i
 
@@ -456,6 +461,32 @@ function s:GrepPrompt_Simple_GetInputlistItem(idx, do_highlight) abort
   let l:listitem .= l:posit_cnt . ". " . g:ds_simple_grep_locat_lookup[a:idx]
 
   return l:listitem
+endfunction
+
+" ***
+
+" REFER: Default grepformat values:
+"
+" - Note that Vim defaults to excluding column numbers:
+"
+"     " Vim --noplugin: `echo &grepformat`:
+"     set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
+"
+" - While Neovim defaults to including column numbers:
+"
+"     " Neovim --noplugin: `echo &grepformat`:
+"     %f:%l:%c:%m
+
+function s:PrepareGrepformat() abort
+  let s:old_grepformat = &grepformat
+
+  let &grepformat = '%f:%l:%m,%f:%l%m,%f  %l%m'
+endfunction
+
+function s:ResetGrepformat() abort
+  let &grepformat = s:old_grepformat
+
+  unlet s:old_grepformat
 endfunction
 
 " -------------------------------------------------------------------
