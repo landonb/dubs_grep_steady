@@ -3,10 +3,14 @@
 # Project: https://github.com/landonb/dubs_grep_steady#🧐
 # License: GPLv3 | Copyright © Landon Bouma.
 
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #
+
 # YOU: Set max columns nonzero to omit long lines, which can make (in this
 #      author's opinion) it more tedious to scan the quickfix results).
 #  DUBS_VIM_RG_MAX_COLS=0
 DUBS_VIM_RG_MAX_COLS=200
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #
 
 # For a discussion of the `rg` the options below, see:
 #
@@ -52,6 +56,8 @@ DUBS_VIM_RG_MAX_COLS=200
 #             - USAGE: For our use case, it'd be:
 #
 #               rg ... | sort --debug -t: -k1,1 -k2,2n
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #
 
 check_deps () {
   must_verify_rip_grep
@@ -106,6 +112,8 @@ expand_paths () {
     }
   '
 }
+
+# +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #
 
 # [lb] 2019-01-06: BEWARE: I don't remember a findup feature, but there's one!
 #   --no-ignore-parent  # Walks up tree honoring .ignore files.
