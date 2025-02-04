@@ -177,7 +177,7 @@ if mapcheck('<Plug>(grep-steady-load-user-projects)') == ''
   nnoremap <silent> <Plug>(grep-steady-load-user-projects) :<C-u>call g:embrace#grep_steady#LoadUsersGrepProjects(1)<CR>
 endif
 if mapcheck('<Leader>dp', 'n') == ''
-  noremap <silent> <unique> <Leader>dp <Plug>(grep-steady-load-user-projects)
+  nnoremap <silent> <unique> <Leader>dp <Plug>(grep-steady-load-user-projects)
   inoremap <silent> <unique> <Leader>dp <C-O><Plug>(grep-steady-load-user-projects)
 endif
 
@@ -187,7 +187,7 @@ if mapcheck('<Plug>(grep-steady-edit-user-projects)') == ''
   nnoremap <silent> <Plug>(grep-steady-edit-user-projects) :<C-u>call g:embrace#grep_steady#OpenUsersGrepProjects()<CR>
 endif
 if mapcheck('<Leader>dP', 'n') == ''
-  noremap <silent> <unique> <Leader>dP <Plug>(grep-steady-edit-user-projects)
+  nnoremap <silent> <unique> <Leader>dP <Plug>(grep-steady-edit-user-projects)
   inoremap <silent> <unique> <Leader>dP <C-O><Plug>(grep-steady-edit-user-projects)
 endif
 
