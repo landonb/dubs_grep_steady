@@ -466,19 +466,19 @@ endfunction
 " Search Mappings
 " ------------------------------------------------------
 
-function s:GrepPrompt_Term_Prev_Location(term)
-  call s:GrepPrompt_Simple("", s:simple_grep_last_i, 0, 0)
+function g:embrace#grep_steady#GrepPrompt_Term_Prev_Location(term)
+  call g:embrace#grep_steady#GrepPrompt_Simple("", s:simple_grep_last_i, 0, 0)
 endfunction
 
-function s:GrepPrompt_Auto_Prev_Location(term)
+function g:embrace#grep_steady#GrepPrompt_Auto_Prev_Location(term)
   if a:term != ""
-    call s:GrepPrompt_Simple(a:term, s:simple_grep_last_i, 0, 0)
+    call g:embrace#grep_steady#GrepPrompt_Simple(a:term, s:simple_grep_last_i, 0, 0)
   endif
 endfunction
 
-function s:GrepPrompt_Auto_Ask_Location(term)
+function g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location(term)
   if a:term != ""
-    call s:GrepPrompt_Simple(a:term, 0, 0, 0)
+    call g:embrace#grep_steady#GrepPrompt_Simple(a:term, 0, 0, 0)
   endif
 endfunction
 

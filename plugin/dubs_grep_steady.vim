@@ -75,7 +75,7 @@ function! s:WireSearchMappings() abort
   " Can't do unique on onoremap 'cause it's already set?
   " onoremap <silent> <unique> <Leader>g <C-C>:call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR>
   " Selected word
-  "vnoremap <silent> <Leader>g :<C-U>call <SID>GrepPrompt_Auto_Ask_Location(<C-R>)<CR>
+  "vnoremap <silent> <Leader>g :<C-U>call g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location(<C-R>)<CR>
   "vnoremap <Leader>g :<C-U>echo "Hello ". @"
 
   " NOTE I'm not sure we need to store registers like this but we do
@@ -90,8 +90,8 @@ function! s:WireSearchMappings() abort
     \ <CR>gvy
     \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 0)<CR>
 
-  "xnoremap <silent> <Leader>g <C-U>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-R>")<CR>
-  "snoremap <silent> <Leader>g <C-U>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R>")<CR>
+  "xnoremap <silent> <Leader>g <C-U>:call g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location("<C-R><C-R>")<CR>
+  "snoremap <silent> <Leader>g <C-U>:call g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location("<C-R>")<CR>
 
   " 2015.06.11: Early birthday present: Case-sensitive, for
   "             when you want ag to recognize all-lowercase.
@@ -116,20 +116,20 @@ function! s:WireSearchMappings() abort
   " NOTE <C-R><C-W> is Vim-speak for the word under the cursor
   " REFER: <C-R><C-W> — :help c_CTRL-R_CTRL-W
 
-  nnoremap <silent> <F4> :call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
-  inoremap <silent> <F4> <C-O>:call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
+  nnoremap <silent> <F4> :call g:embrace#grep_steady#GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
+  inoremap <silent> <F4> <C-O>:call g:embrace#grep_steady#GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
   " Selected word
   vnoremap <silent> <F4> :<C-U>
     \ <CR>gvy
-    \ :call <SID>GrepPrompt_Auto_Prev_Location(@@)<CR>
+    \ :call g:embrace#grep_steady#GrepPrompt_Auto_Prev_Location(@@)<CR>
 
   " This time, prompt for location
-  nnoremap <silent> <S-F4> :call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
-  inoremap <silent> <S-F4> <C-O>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
+  nnoremap <silent> <S-F4> :call g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
+  inoremap <silent> <S-F4> <C-O>:call g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location("<C-R><C-W>")<CR>
   " Selected word
   vnoremap <silent> <S-F4> :<C-U>
     \ <CR>gvy
-    \ :call <SID>GrepPrompt_Auto_Ask_Location(@@)<CR>
+    \ :call g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location(@@)<CR>
 
   " Ask for search term but use previous location.
   "
@@ -149,8 +149,8 @@ function! s:WireSearchMappings() abort
   "       nnoremap <C-F4> :echo 'foo'<CR>
   "       nnoremap <M-F4> :echo 'foo'<CR>
   "       nnoremap <C-4> :echo 'foo'<CR>
-  nnoremap <silent> <M-F4> :call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
-  inoremap <silent> <M-F4> <C-O>:call <SID>GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
+  nnoremap <silent> <M-F4> :call g:embrace#grep_steady#GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
+  inoremap <silent> <M-F4> <C-O>:call g:embrace#grep_steady#GrepPrompt_Term_Prev_Location("<C-R><C-W>")<CR>
 endfunction
 
 call s:WireSearchMappings()
