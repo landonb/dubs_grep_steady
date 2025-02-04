@@ -478,6 +478,8 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) a
         let l:srch_term = "\"" . l:new_term . "\""
       endif
 
+      " Change Vim's working directory to the root of the search directory,
+      " so that Vim shows partial paths relative to that path.
       exec "cd " . split(l:locat)[0]
 
       " HINT: Try: `:verbose set grepprg` and `:verbose gr` to see what happened.
