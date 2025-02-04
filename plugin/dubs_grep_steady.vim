@@ -649,60 +649,24 @@ call s:WireSearchMappings()
 
 " Toggle GrepCase
 " ------------------------------------------------------
-" I.e., search for exact work; or include case permutations,
-" e.g., search for FOO_BAR; or include fooBar, foo_bar, foo-bar.
-
-" function! s:Map_Toggle_GrepAllTheCases() abort
+" I.e., search for exact word; vs. include case permutations.
+" - E.g., search for FOO_BAR; vs. search for fooBar, foo_bar, and foo-bar.
+" 
+" When g:DubsGrepSteady_GrepAllTheCases = 0, uses `rg --smart-case`.
+" When g:DubsGrepSteady_GrepAllTheCases = 1, uses `rg --ignore-case`
+"   and searches camel|snake|train variations.
 "
-"   " FIXME/2021-01-25: Add <Plug> indirection and use hasmapto like NERDCommenter,
-"   "                   so users/other plugins can override or opt-out of these maps.
-"   "                   - See also setup-nerd-commenter.vim for map reset and setup.
+" TRYME: You can try searching on these terms to demo now
+" GrepAllTheCases behaves:
+"   findmeplease
+"   FINDmePLEASE
+"   findMePlease
+"   find_me_please
+"   find-me-please
+"   FIND_ME_PLEASE
 "
-"   " 2021-01-25: (lb): I've added NERD Commenter, which starts all its two-character
-"   " combo maps using <leader>c. So a single-character <leader>c map won't complete
-"   " immediately (like it used to). But I rarely change the grep casing.
-"   " You can also use \G to bypass the magic camel|snake|train case searching, albeit
-"   " \G is --case-sensitive; while \g uses --smart-case, unless GrepAllTheCases=1 in
-"   " which case it searches on the various camel|snake|train casings.
-"   "
-"   " Ref:
-"   "    \g w/ GrepAllTheCases=0 uses rg --smart-case
-"   "    \g w/ GrepAllTheCases=1 sets rg --ignore-case
-"   "                             and searches camel|snake|train variations
-"   "    \G always uses rg --case-sensitive
-"   "
-"   " Demo: Try searching each of the following terms three times:
-"   " - Once with \cg and using \g, then with \cg off and using \g,
-"   "   and finally using \G.
-"   "          findmeplease
-"   "          FINDmePLEASE
-"   "          findMePlease
-"   "          find_me_please
-"   "          find-me-please
-"   "          FIND_ME_PLEASE
-"   "
-"   " SYNC_ME: The DepoXy Ambers Opinionated Vim Environment's
-"   "          ManageMapNERDCommenter sets a bunch of maps that start with
-"   "          <leader>c so we'll avoid conflicting with any of those.
-"   "
-"   " Use 'cg' to toggle extravagant casing, mnemonic: 'change grep'.
-" "
-" " if mapcheck('<Leader>cg', 'n') == ""
-" "   nmap <silent> <expr> <Leader>cg <SID>Toggle_GrepAllTheCases()
-" "   imap <silent> <expr> <Leader>cg <SID>Toggle_GrepAllTheCases()
-" " endif
-"
-"   " (lb): I'm leaving \c for historic reasons, but now there's a lag before it trips.
-"   " - LATER/2021-01-25: Eventually-MAYBE I'll find I only use \cg and I'll remove \c.
-"   " - ISOFF/2024-04-27: There are other <Leader>c commands, e.g., from NerdCommenter,
-"   "   so silly to have this be wired. E.g., \c<Tab> or \c<Any-Char-that-doesn't-match-
-"   "   another-mapping> will trigger this.
-"   "  nmap <silent> <unique> <Leader>c :call <SID>Toggle_GrepAllTheCases()<CR>
-"   "  imap <silent> <unique> <Leader>c <C-o>:call <SID>Toggle_GrepAllTheCases()<CR>
-"
-" endfunction
-"
-" call s:Map_Toggle_GrepAllTheCases()
+" USAGE: Wire you own map sequence to toggle extravagant casing.
+" - The author uses \dg, mnemonic: toggle 'Dubs Grep' casing.
 
 function! s:CreateMaps__ToggleMulticase(key_sequence = '<Leader>dg') abort
   nnoremap <silent> <expr> <script> <Plug>(grep-steady-toggle-multicase)
