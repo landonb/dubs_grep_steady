@@ -290,7 +290,9 @@ endfunction
 " with a default value, but that's probably annoying).
 function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) abort
   call inputsave()
+
   let l:the_term = a:term
+
   if l:the_term == ''
     " There's a newline in the buffer, so call inputsave
     "call inputsave()
@@ -301,17 +303,20 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) a
     " Ensure the "Search in:" starts on new line.
     echo "\n"
   endif
+
   " Check for <ESC> lest we dismiss a help
   " page (or something not in the buffer list)
   if l:the_term != ""
     " Ask the user to enter/confirm the search location
     let l:new_i = a:locat_index
+
     if l:new_i == 0
       "call inputsave()
       let l:new_i = inputlist(s:GrepPrompt_Simple_GetInputlist(
         \ s:simple_grep_last_i))
       "call inputrestore()
     endif
+
     "echo "=== new_i: " . l:new_i
     "let TBD = input("Hit any key to continue: ")
     " If the user hits Enter or Escape, inputlist returns 0, which is also
@@ -334,6 +339,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) a
         "call inputrestore()
       endif
     endif
+
     if l:new_i > 1
       let l:locat = g:ds_simple_grep_locat_lookup[l:new_i]
       let l:options = ''
@@ -350,6 +356,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) a
           let l:options = get(g:ds_simple_grep_ag_options_map, l:new_i, '')
         endif
       endif
+
       " Case (in)sensitive flags.
       if a:case_sensitive == 1
         if s:using_rg == 1 || s:using_ag == 1
@@ -363,6 +370,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) a
           let l:options = l:options . " --ignore-case"
         endif
       endif
+
       " [lb]: Be aware of another option to ignore .ignore files up a
       "   path's hierarchy -- --no-ignore-parent -- which only makes
       "   tracking down why a file is being ignored a little harder,
@@ -426,6 +434,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) a
       "     as this function will just run again and reformulate it
       "     when you choose the simple query term from the history.
       let l:new_term = l:the_term
+
       if a:case_sensitive == 0 && g:DubsGrepSteady_GrepAllTheCases
         " Search on 3 casings: Camel, Snake, and Train. Only for \g, not \G.
         " NOTE: Converting to snakecase downcases it.
@@ -455,6 +464,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) a
         "       pattern won't work because of the difference in the word delimiters,
         "       e.g., the equivalent word history boundary in / is "\<word\>".
       endif
+
       " Ensure user's raw search term is MRU by adding last.
       call histadd("input", l:the_term)
       call histadd("search", l:the_term)
@@ -469,6 +479,7 @@ function s:GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) a
       endif
 
       exec "cd " . split(l:locat)[0]
+
       " HINT: Try: `:verbose set grepprg` and `:verbose gr` to see what happened.
       execute "silent gr! " . l:options . " " . l:srch_term . " " . l:locat
       cd -
@@ -481,10 +492,12 @@ endfunction
 
 function s:GrepPrompt_Simple_GetInputlist(i_highlight) abort
   let ilist = [g:ds_simple_grep_locat_lookup[0]]
+
   for i in range(1, g:ds_simple_grep_locat_lookup_len - 1)
     let ilist = add(ilist, s:GrepPrompt_Simple_GetInputlistItem(
       \ i, i == a:i_highlight))
   endfor
+
   return ilist
 endfunction
 
@@ -502,6 +515,7 @@ function s:GrepPrompt_Simple_GetInputlistItem(idx, do_highlight) abort
   let l:posit_cnt = printf('%*u', l:num_digits, a:idx)
 
   let l:listitem .= l:posit_cnt . ". " . g:ds_simple_grep_locat_lookup[a:idx]
+
   return l:listitem
 endfunction
 
@@ -1024,6 +1038,7 @@ if mapcheck('<Leader>dp', 'n') == ''
   noremap <silent> <unique> <Leader>dp <Plug>(DGS_LoadUsersGrepProjects)
   inoremap <silent> <unique> <Leader>dp <C-O><Plug>(DGS_LoadUsersGrepProjects)
 endif
+
 command! -nargs=0 GrepSteadyReload :call <SID>LoadUsersGrepProjects(1)
 
 if mapcheck('<Plug>(DGS_OpenUsersGrepProjects)') == ''
@@ -1033,5 +1048,6 @@ if mapcheck('<Leader>dP', 'n') == ''
   noremap <silent> <unique> <Leader>dP <Plug>(DGS_OpenUsersGrepProjects)
   inoremap <silent> <unique> <Leader>dP <C-O><Plug>(DGS_OpenUsersGrepProjects)
 endif
+
 command! -nargs=0 GrepSteadyEdit :call <SID>OpenUsersGrepProjects()
 
