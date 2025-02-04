@@ -5,11 +5,6 @@
 " Summary: Dubs Vim Text Search Commands
 
 " -------------------------------------------------------------------
-" About:
-
-" This script sets up a powerful text search utility.
-
-" -------------------------------------------------------------------
 
 " GUARD: Press <F9> to reload this plugin (or :source it).
 " - Via: https://github.com/embrace-vim/vim-source-reloader#↩️
@@ -31,25 +26,14 @@ let g:loaded_dubs_grep_steady_plugin = 1
 " Choose the Best Search Utility
 " ------------------------------------------------------
 
-" The author recommends The Silver Searcher.
-" If that's not installed, we'll use egrep.
-" On Windows, the default searcher is findstr,
-" so this code ensures we use Cygwin's grep.
-
-" The Silver Searcher vs. egrep
-" ------------------------------------------------------
-" egrep is classic and great. The silver searcher is newer and faster.
-" You probably won't notice much performance difference searching
-" smaller projects or searching on faster, modern machines. Also, silver
-" searcher doesn't recognize the regular expression /<blah/> to search
-" for exact word hits, so use \bword\b boundaries instead. But the silver
-" searcher lets you ignore files with a specific file path, whereas egrep
-" only lets you ignore files matching a specific name or file within a
-" specific parent directory.
-
-" See also another Ag plugin, https://github.com/rking/ag.vim.
-" And the Perl-encoded Ack, at http://beyondgrep.com,
-" and the list of other tools, http://betterthanack.com.
+" In order of preference, this script prefers to use ripgrep,
+" then The Silver Searcher, and then egrep.
+" - On large projects, you should notice that ripgrep is
+"   noticeably faster then ag, and that ag is faster than
+"   egrep.
+" - On Windows (which hasn't been verified in over 10
+"   years), the default searcher is findstr, so this code
+"   ensures we use Cygwin's grep.
 
 let s:using_ag = -1
 let s:using_rg = -1
@@ -57,18 +41,14 @@ let s:using_rg = -1
 " (lb) Some history:
 "
 " - 2017-09-13: I switched from `ag` to `rg`.
-"   - 2020-09-22: An old note said that `ag` indentifies reST files as
-"     binary (though I bet there's a way to fix that); but really I
-"     like `ag` better because it's noticeably faster on larger projects.
 "   - The API differences are: `ag -U` → `rg --no-ignore-vcs`;
 "     and if not in a tty, ripgrep doesn't spit out line numbers
 "     (so specify --line-number).
-"
 " - 2018-05-06: I enabled sorted search results.
 "   - This produces deterministic results, i.e.,
 "     now when you repeat the same search, the quickfix window
 "     not only shows the same results, but in the same order.
-"   - Note that using Rip Grep's sort affects speed. Says Rip Grep:
+"   - Note that using ripgrep's sort affects speed. Says ripgrep:
 "       'Sort ... disables ... parallelism and runs ... in a single thread.'
 "   - Note that `rg --sort-files` sorts the results, but not alphabetically.
 "       set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\
