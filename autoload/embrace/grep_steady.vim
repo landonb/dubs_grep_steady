@@ -88,6 +88,18 @@ endfunction
 function! s:SetGrepprgGrep() abort
   let s:using_ag = 0
   let s:using_rg = 0
+
+  let l:cmd = 'egrep'
+  let l:exclude_exclude = 0
+
+  if executable('ggrep')
+    " macOS Homebrew GNU grep
+    let l:cmd = 'ggrep'
+  elseif system('egrep --version | head -n 1 | grep -e "GNU grep"') == ''
+    " E.g., Apple BSD grep, has not --exclude-from
+    let l:exclude_exclude = 1
+  endif
+
   " Grep options:
   "  -n makes grep show line numbers
   "  -R recurses directories
@@ -106,20 +118,31 @@ function! s:SetGrepprgGrep() abort
   " DUNNO: egrep let's you specify basenames to ignore using a file, but
   "        directories to ignore must be specified on the command line, and
   "        there's no way to exclude files based on a more complete path?
-  if filereadable($HOME . "/.vim/grep-exclude")
-    " *nix w/ egrep
-    set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"$HOME/.vim/grep-exclude\"
-  elseif filereadable($USERPROFILE . "/vimfiles/grep-exclude")
-    " Windows w/ egrep
-    set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"$USERPROFILE/vimfiles/grep-exclude\"
-  else
-    let l:files = s:FindFile('grep-exclude')
-    if !empty(l:files)
-      execute 'set grepprg=egrep\ -n\ -R\ -i\ --exclude-from=\"' . l:files[0] . '\"'
-    else
-      set grepprg=egrep\ -n\ -R\ -i
+
+  let l:exclude_file = ''
+
+  if !l:exclude_exclude
+    let l:exclude_file = $HOME . '/.vim/grep-exclude'
+
+    if !filereadable(l:exclude_file)
+      " Check if Windows (Cygwin? This branch unverified since <2015)
+      let l:exclude_file = $USERPROFILE . '/vimfiles/grep-exclude'
+    endif
+
+    if !filereadable(l:exclude_file)
+      let l:files = s:FindFile('grep-exclude')
+      if !empty(l:files)
+        let l:exclude_file = l:files[0]
+      endif
     endif
   endif
+
+  let l:exclude_arg = ''
+  if !l:exclude_exclude && l:exclude_file != ''
+    let l:exclude_arg = '\ --exclude-from=\"' .. l:exclude_file .. '\"'
+  endif
+
+  execute 'set grepprg=' .. l:cmd .. '\ -n\ -R\ -i' .. l:exclude_arg
 endfunction
 
 " This is Vim's default grepformat. First to match wins.
