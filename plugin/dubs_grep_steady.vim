@@ -37,7 +37,7 @@ function! s:Map_GrepPrompt_Simple() abort
   if mapcheck('<Plug>DubsGrepSteady_GrepPrompt_Simple') == ''
     noremap <silent> <unique> <script>
       \ <Plug>DubsGrepSteady_GrepPrompt_Simple
-      \ :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
+      \ :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
   endif
 endfunction
 
@@ -70,10 +70,10 @@ function! s:WireSearchMappings() abort
   " \g
 
   "map <silent> <unique> <Leader>g <Plug>DubsGrepSteady_GrepPrompt_Simple
-  nnoremap <silent> <Leader>g :call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
-  inoremap <silent> <Leader>g <C-O>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
+  nnoremap <silent> <Leader>g :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR>
+  inoremap <silent> <Leader>g <C-O>:call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR>
   " Can't do unique on onoremap 'cause it's already set?
-  " onoremap <silent> <unique> <Leader>g <C-C>:call <SID>GrepPrompt_Simple("", 0, 0, 0)<CR>
+  " onoremap <silent> <unique> <Leader>g <C-C>:call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR>
   " Selected word
   "vnoremap <silent> <Leader>g :<C-U>call <SID>GrepPrompt_Auto_Ask_Location(<C-R>)<CR>
   "vnoremap <Leader>g :<C-U>echo "Hello ". @"
@@ -82,32 +82,32 @@ function! s:WireSearchMappings() abort
   "vnoremap <Leader>g :<C-U>
   "  \ let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
   "  \ gvy
-  "  \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 0)<CR>
+  "  \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 0)<CR>
   "  \ gV
   "  \ :call setreg('"', old_reg, old_regtype)<CR>
   " Better: (keeps stuff selected)
   vnoremap <silent> <Leader>g :<C-U>
     \ <CR>gvy
-    \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 0)<CR>
+    \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 0)<CR>
 
   "xnoremap <silent> <Leader>g <C-U>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R><C-R>")<CR>
   "snoremap <silent> <Leader>g <C-U>:call <SID>GrepPrompt_Auto_Ask_Location("<C-R>")<CR>
 
   " 2015.06.11: Early birthday present: Case-sensitive, for
   "             when you want ag to recognize all-lowercase.
-  noremap <silent> <Leader>G :call <SID>GrepPrompt_Simple("", 0, 1, 0)<CR>
-  inoremap <silent> <Leader>G <C-O>:call <SID>GrepPrompt_Simple("", 0, 1, 0)<CR>
+  noremap <silent> <Leader>G :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 1, 0)<CR>
+  inoremap <silent> <Leader>G <C-O>:call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 1, 0)<CR>
   vnoremap <silent> <Leader>G :<C-U>
     \ <CR>gvy
-    \ :call <SID>GrepPrompt_Simple(@@, 0, 1, 0)<CR>
+    \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 1, 0)<CR>
 
   " Limit search results to one per file, if you
   " just want an idea which files contain matches.
-  noremap <silent> <Leader>C :call <SID>GrepPrompt_Simple("", 0, 0, 1)<CR>
-  inoremap <silent> <Leader>C <C-O>:call <SID>GrepPrompt_Simple("", 0, 0, 1)<CR>
+  noremap <silent> <Leader>C :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 1)<CR>
+  inoremap <silent> <Leader>C <C-O>:call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 1)<CR>
   vnoremap <silent> <Leader>C :<C-U>
     \ <CR>gvy
-    \ :call <SID>GrepPrompt_Simple(@@, 0, 0, 1)<CR>
+    \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 1)<CR>
 
   " Search for Word under Cursor
   " ------------------------------------------------------
