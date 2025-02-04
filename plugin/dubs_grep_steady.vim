@@ -180,7 +180,7 @@ call s:WireSearchMappings()
 
 function! s:CreateMaps__ToggleMulticase(key_sequence = '<Leader>dg') abort
   nnoremap <silent> <expr> <script> <Plug>(grep-steady-toggle-multicase)
-    \ <SID>Toggle_GrepAllTheCases()
+    \ g:embrace#grep_steady#Toggle_GrepAllTheCases()
 
   execute 'nnoremap <silent> ' .. a:key_sequence .. ' <Plug>(grep-steady-toggle-multicase)'
 

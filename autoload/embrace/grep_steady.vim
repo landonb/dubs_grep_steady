@@ -486,7 +486,7 @@ endfunction
 
 let g:DubsGrepSteady_GrepAllTheCases = 0
 
-function! s:Toggle_GrepAllTheCases() abort
+function! g:embrace#grep_steady#Toggle_GrepAllTheCases() abort
   let g:DubsGrepSteady_GrepAllTheCases = !g:DubsGrepSteady_GrepAllTheCases
   if (g:DubsGrepSteady_GrepAllTheCases == 0)
     echom 'Grep back to normal'
