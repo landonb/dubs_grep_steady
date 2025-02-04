@@ -12,10 +12,16 @@ DUBS_VIM_RG_MAX_COLS=200
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #
 
+# `rg` options used below
+# =======================
+#
 # For a discussion of the `rg` the options below, see:
 #
 #   dubs_grep_steady/plugins/dubs_grep_steady.vim::SetGrepprgRg
 
+# `sort` options used below
+# =========================
+#
 # For a discussion of the `sort` options, let me explain!
 #
 # - The RipGrep results are of the form: /path/to/file:linenumber:matching text
@@ -57,6 +63,9 @@ DUBS_VIM_RG_MAX_COLS=200
 #
 #               rg ... | sort --debug -t: -k1,1 -k2,2n
 
+# Quickfix shows *full* paths
+# ===========================
+#
 # SAVVY/2022-11-17: Quickfix shows full paths, regardless of how
 # we print them. E.g., if we use a tilde prefix, such as this:
 #   rg ... | sed -E "s#^${HOME}(/|$)#~\1#"
