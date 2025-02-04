@@ -62,6 +62,21 @@ DUBS_VIM_RG_MAX_COLS=200
 #             - USAGE: For our use case, it'd be:
 #
 #               rg ... | sort --debug -t: -k1,1 -k2,2n
+#
+# Why we sort
+# ===========
+#
+# Note that we sort results — which precludes loading results asychronously
+# — so that quickfix results are *repeatable*.
+#
+# - Use case: Suppose you need to audit every use of some term. So you search
+#   the term and start going through the quickfix results. Let's suppose you
+#   get halfway through but then need to search something else. After you
+#   finish the distraction, you can search the first term again and you know
+#   you can resume auditing where you left off, because the quickfix results
+#   are in the same order. (I'm sure there's a way to save quickfix results
+#   so you can return to the same results again in the future, but this
+#   approach works without needing to cache quickfix lists.)
 
 # Quickfix shows *full* paths
 # ===========================
