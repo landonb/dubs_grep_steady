@@ -162,8 +162,7 @@ function! s:CreateMaps__ToggleMulticase(key_sequence = '<Leader>dg') abort
     \ g:embrace#grep_steady#Toggle_GrepAllTheCases()
 
   execute 'nnoremap <silent> ' .. a:key_sequence .. ' <Plug>(grep-steady-toggle-multicase)'
-
-  execute 'nnoremap <silent> ' .. a:key_sequence .. ' <Plug>(grep-steady-toggle-multicase)'
+  execute 'inoremap <silent> ' .. a:key_sequence .. ' <C-O><Plug>(grep-steady-toggle-multicase)'
 endfunction
 
 call s:CreateMaps__ToggleMulticase('<Leader>dg')
