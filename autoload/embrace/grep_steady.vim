@@ -415,7 +415,14 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
 
       let s:simple_grep_last_i = l:new_i
 
-      :QFix!(0)
+      if exists(':QFix')
+        " CXREF: https://github.com/landonb/dubs_quickfix_wrap#🌯
+        :QFix!(0)
+      else
+        " ALTLY: We could let user specify default height, e.g.:
+        "  execute "botright copen " . g:grep_steady_qf_height
+        botright copen
+      endif
     endif
   endif
 
