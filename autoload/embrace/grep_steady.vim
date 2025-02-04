@@ -149,8 +149,6 @@ function! s:SetGrepprg() abort
   endif
 endfunction
 
-" FIXME/2018-05-06: (lb): Should probably function-ize everything
-" and make a main().
 call s:SetGrepprg()
 
 " -------------------------------------------------------------------
@@ -202,19 +200,6 @@ endfunction
 
 let s:simple_grep_last_i = 0
 
-" And finally thunk to the script fcn.
-""function <SID>GrepPrompt_Simple()
-""  call s:GrepPrompt_Simple()
-""endfunction
-
-" Let the user map their own command to the
-" toggle function by making it a <Plug>.
-"   1. Make the <Plug>
-""map <silent> <unique> <script>
-""  \ <Plug>DubsGrepSteady_GrepPrompt_Simple
-""  \ :call <SID>GrepPrompt_Simple()<CR>
-"   2. Thunk the <Plug>
-"
 " GrepPrompt_Simple: term is the term to search, or
 "                      "" if we should ask the user
 "                    locat_index is the location index

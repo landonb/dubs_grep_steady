@@ -26,13 +26,6 @@ let g:loaded_dubs_grep_steady_plugin = 1
 " GrepPrompt_Simple
 " ------------------------------------------------------
 
-"" Map <Leader>G0 to the Grep Prompt
-"if !hasmapto('<Plug>DubsGrepSteady_GrepPrompt_Simple')
-"  map <silent> <unique> <Leader>g
-"    \ <Plug>DubsGrepSteady_GrepPrompt_Simple
-"endif
-
-" Map <Plug> to an <SID> function
 function! s:Map_GrepPrompt_Simple() abort
   if mapcheck('<Plug>DubsGrepSteady_GrepPrompt_Simple') == ''
     noremap <silent> <unique> <script>
@@ -42,20 +35,6 @@ function! s:Map_GrepPrompt_Simple() abort
 endfunction
 
 call s:Map_GrepPrompt_Simple()
-
-" -------------------------------------------------------------------
-
-" FIXME New fcn. 2011.01.08
-"
-" Quick-search selected item on last-used search location
-" :noremap <Leader>G "sy:call <SID>GrepPrompt_Auto_Prev_Location("<C-r>s")<CR>
-" NOTE Extra <CR> to avoid Quickfix's silly prompt,
-"      'Press ENTER or type command to continue'
-":noremap <Leader>G :call <SID>GrepPrompt_Auto_Prev_Location("<C-R><C-W>")<CR>
-
-" FIXME: Add ability to restrict search by file extension.
-"        Currently, you can search a folder and then search
-"        the quickfix window by file extension.
 
 " -------------------------------------------------------------------
 
