@@ -455,14 +455,13 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
       " Save grepprg & grepformat, then temporarily set them for the search.
       call s:PrepareVimGrep()
 
-      " Change Vim's working directory to the root of the search directory,
-      " so that Vim shows partial paths relative to that path.
-      exec "cd " . split(l:locat)[0]
+      " Change Vim's working directory to fs root so qf shows full paths.
+      lcd /
 
       " HINT: Try: `:verbose set grepprg` and `:verbose gr` to see what happened.
       execute "silent gr! " . l:options . " " . l:srch_term . " " . l:locat
 
-      cd -
+      lcd -
 
       " Restore grepprg & grepformat.
       call s:RestoreVimGrep()
