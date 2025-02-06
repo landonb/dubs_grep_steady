@@ -451,7 +451,7 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
       endif
 
       " Save grepformat, then temporarily set to match the search output.
-      call s:PrepareGrepformat()
+      call s:PrepareVimGrep()
 
       " Change Vim's working directory to the root of the search directory,
       " so that Vim shows partial paths relative to that path.
@@ -462,7 +462,7 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
 
       cd -
 
-      call s:ResetGrepformat()
+      call s:RestoreVimGrep()
 
       let s:simple_grep_last_i = l:new_i
 
@@ -511,6 +511,15 @@ endfunction
 
 " ***
 
+function s:PrepareVimGrep() abort
+  " Save grepformat, then temporarily set to match the search output.
+  call s:PrepareGrepformat()
+endfunction
+
+function s:RestoreVimGrep() abort
+    call s:RestoreGrepformat()
+endfunction
+
 " REFER: Default grepformat values:
 "
 " - Note that Vim defaults to excluding column numbers:
@@ -535,7 +544,7 @@ function s:PrepareGrepformat() abort
   endif
 endfunction
 
-function s:ResetGrepformat() abort
+function s:RestoreGrepformat() abort
   let &grepformat = s:old_grepformat
 
   unlet s:old_grepformat
