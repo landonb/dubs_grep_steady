@@ -5,8 +5,11 @@
 " Summary: Dubs Vim Text Search Commands
 
 " ------------------------------------------------------
-" Choose the Best Search Utility
-" ------------------------------------------------------
+
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" Choose Your Preferred Search Utility
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" - HINT: You should prefer ripgrep...
 
 " In order of preference, this script prefers to use ripgrep,
 " then The Silver Searcher, and then egrep.
@@ -206,11 +209,11 @@ endfunction
 
 call s:SetGrepprg()
 
-" -------------------------------------------------------------------
+" ------------------------------------------------------
 
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " Setup Search Features
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 " STOLEN! From vim-abolish. Shameless!!
 " - MAYBE/2018-06-27: DRY this: Make a shared #autoload plugin?
@@ -556,11 +559,11 @@ function s:RestoreGrepformat() abort
   unlet s:old_grepformat
 endfunction
 
-" -------------------------------------------------------------------
+" ------------------------------------------------------
 
-" ------------------------------------------------------
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " Search Mappings
-" ------------------------------------------------------
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 function g:embrace#grep_steady#GrepPrompt_Term_Prev_Location(term)
   call g:embrace#grep_steady#GrepPrompt_Simple("", s:simple_grep_last_i, 0, 0)
@@ -616,15 +619,15 @@ function! g:embrace#grep_steady#Toggle_GrepIncludeColumnNumbers() abort
   call s:SetGrepprg()
 endfunction
 
-" -------------------------------------------------------------------
+" ------------------------------------------------------
 
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " Default Search Directory Choices
-" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 " vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-" DEVS: Override this list using a dubsgrep_blah.vim script,
-"       or dubs_grep_steady/dubs_projects.vim.
+" USAGE: Make your own project list script using
+"          dubs_grep_steady/dubs_projects.vim
 " ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 " Hint: For locations searched frequently, avoid numbers '6' through '0'
