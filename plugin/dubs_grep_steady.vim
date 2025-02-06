@@ -26,12 +26,12 @@ let g:loaded_dubs_grep_steady_plugin = 1
 " User map <Plug>s
 " ------------------------------------------------------
 
-function! s:Map_GrepPrompt_Simple() abort
+function! s:CreateMaps__CreatePlugs() abort
   noremap <silent> <script> <Plug>(grep-steady-prompt-simple)
     \ :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
 endfunction
 
-call s:Map_GrepPrompt_Simple()
+call s:CreateMaps__CreatePlugs()
 
 " ------------------------------------------------------
 
