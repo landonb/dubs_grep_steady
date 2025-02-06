@@ -27,7 +27,7 @@ let g:loaded_dubs_grep_steady_plugin = 1
 " ------------------------------------------------------
 
 function! s:CreateMaps__CreatePlugs() abort
-  noremap <silent> <script> <Plug>(grep-steady-prompt-simple)
+  nnoremap <silent> <script> <Plug>(grep-steady-prompt-simple)
     \ :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
 endfunction
 
