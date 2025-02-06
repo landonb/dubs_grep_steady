@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 # vim:tw=0:ts=2:sw=2:et:norl:ft=bash:nospell
 # Author: Landon Bouma <https://tallybark.com/>
 # Project: https://github.com/landonb/dubs_grep_steady#🧐
