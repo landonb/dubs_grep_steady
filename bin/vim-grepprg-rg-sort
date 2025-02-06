@@ -140,24 +140,6 @@ DUBS_VIM_RG_MAX_COLS=200
 
 check_deps () {
   must_verify_rip_grep
-  must_verify_gnu_awk
-}
-
-# SAVVY: Verify gawk, not mawk.
-# - On stock Debian 12, before gawk installed:
-#     /bin/awk -> /etc/alternatives/awk
-#   and
-#     /etc/alternatives/awk -> /usr/bin/mawk
-must_verify_gnu_awk () {
-  if awk --version 2>/dev/null | head -n 1 | grep -q -e "^GNU Awk"; then
-
-    return 0
-  fi
-
-  >&2 echo "ERROR: Could not find dependency: GNU Awk"
-  >&2 echo "- HINT: Try, e.g., \`apt install gawk\`"
-
-  exit 1
 }
 
 must_verify_rip_grep () {
@@ -177,19 +159,6 @@ must_verify_rip_grep () {
 # - CALSO: Using `command rg` would similarly achieve the same result.
 rip_grep_executable () {
   type -P rg
-}
-
-# ***
-
-expand_paths () {
-  awk -F: '
-    {
-      "realpath -- \""$1"\"" | getline abs_path;
-      printf "%s:", abs_path;
-      for (col = 2; col < NF; col++) printf "%s:", $col;
-      print $NF
-    }
-  '
 }
 
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ #
@@ -272,7 +241,6 @@ rip_grep_sleep_repeat () {
     --glob "!**/{${dir_globs}}/**" \
     --glob "!**/{${file_globs}}" \
     "$@" \
-    | expand_paths \
     | sort -t: -k1,1 -k2,2n
 }
 
