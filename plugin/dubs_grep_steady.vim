@@ -33,42 +33,41 @@ endfunction
 
 call s:Map_GrepPrompt_Simple()
 
-" -------------------------------------------------------------------
-
 " ------------------------------------------------------
+
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 " Search Mappings
+" ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 " ------------------------------------------------------
 
-function! s:WireSearchMappings() abort
+" *** Generic Search: Prompt for Query and Path
+" 
+" - Default: \g
 
-  " Generic Search: Prompt for Query and Path
-  " ------------------------------------------------------
-  " \g
+function! s:CreateMaps__GrepPrompt_Simple(key_sequence = '<Leader>g') abort
+  execute 'nnoremap <silent> ' .. a:key_sequence .. ' <Plug>(grep-steady-prompt-simple)'
+  execute 'inoremap <silent> ' .. a:key_sequence .. ' <C-O><Plug>(grep-steady-prompt-simple)'
 
-  "map <silent> <unique> <Leader>g <Plug>DubsGrepSteady_GrepPrompt_Simple
-  nnoremap <silent> <Leader>g :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR>
-  inoremap <silent> <Leader>g <C-O>:call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR>
-  " Can't do unique on onoremap 'cause it's already set?
-  " onoremap <silent> <unique> <Leader>g <C-C>:call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR>
-  " Selected word
-  "vnoremap <silent> <Leader>g :<C-U>call g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location(<C-R>)<CR>
-  "vnoremap <Leader>g :<C-U>echo "Hello ". @"
-
-  " NOTE I'm not sure we need to store registers like this but we do
-  "vnoremap <Leader>g :<C-U>
-  "  \ let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  "  \ gvy
-  "  \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 0)<CR>
-  "  \ gV
-  "  \ :call setreg('"', old_reg, old_regtype)<CR>
-  " Better: (keeps stuff selected)
-  vnoremap <silent> <Leader>g :<C-U>
-    \ <CR>gvy
-    \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 0)<CR>
+  " A previous approach:
+  "   vnoremap <Leader>g :<C-U>
+  "     \ let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  "     \ gvy
+  "     \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 0)<CR>
+  "     \ gV
+  "     \ :call setreg('"', old_reg, old_regtype)<CR>
+  " A better approach: (Keeps selection selected):
+  execute 'vnoremap <silent> ' .. a:key_sequence .. ' :<C-U>'
+    \ '<CR>gvy'
+    \ ':call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 0)<CR>'
 
   "xnoremap <silent> <Leader>g <C-U>:call g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location("<C-R><C-R>")<CR>
   "snoremap <silent> <Leader>g <C-U>:call g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location("<C-R>")<CR>
+endfunction
 
+" ***
+
+function! s:WireSearchMappings() abort
   " 2015.06.11: Early birthday present: Case-sensitive, for
   "             when you want ag to recognize all-lowercase.
   noremap <silent> <Leader>G :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 1, 0)<CR>
@@ -130,6 +129,8 @@ function! s:WireSearchMappings() abort
 endfunction
 
 call s:WireSearchMappings()
+
+call s:CreateMaps__GrepPrompt_Simple('<Leader>g')
 
 " -------------------------------------------------------------------
 
