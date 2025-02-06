@@ -20,6 +20,8 @@
 let s:using_ag = -1
 let s:using_rg = -1
 
+let s:grepprg = ''
+
 " (lb) Some history:
 "
 " - 2017-09-13: I switched from `ag` to `rg`.
@@ -54,13 +56,13 @@ function! s:SetGrepprgRg() abort
   endif
 
   if executable(l:ripgrep_shim)
-    execute 'set grepprg=' . l:ripgrep_shim
+    let s:grepprg = l:ripgrep_shim
   else
     " SYNC: set grepprg=rg
     if g:DubsGrepSteady_GrepIncludeColumnNumbers
-      set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename\ --column
+      let s:grepprg = 'rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename\ --column'
     else
-      set grepprg=rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename
+      let s:grepprg = 'rg\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --no-ignore-vcs\ --line-number\ --no-heading\ --with-filename'
     endif
   endif
 endfunction
@@ -79,9 +81,9 @@ function! s:SetGrepprgAg() abort
   "                           (.gitignore, .hgignore; still obey .ignore)
   " SYNC: set grepprg=ag
   if g:DubsGrepSteady_GrepIncludeColumnNumbers
-    set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U\ --column
+    let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U\ --column'
   else
-    set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
+    let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U'
   endif
 endfunction
 
@@ -142,7 +144,7 @@ function! s:SetGrepprgGrep() abort
     let l:exclude_arg = '\ --exclude-from=\"' .. l:exclude_file .. '\"'
   endif
 
-  execute 'set grepprg=' .. l:cmd .. '\ -n\ -R\ -i' .. l:exclude_arg
+  let s:grepprg = l:cmd .. '\ -n\ -R\ -i' .. l:exclude_arg
 endfunction
 
 " This is Vim's default grepformat. First to match wins.
@@ -344,9 +346,9 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
         if a:limit_matches == 0
           " SYNC: set grepprg=ag
           if g:DubsGrepSteady_GrepIncludeColumnNumbers
-            set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U\ --column
+            let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U\ --column'
           else
-            set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U
+            let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U'
           endif
         else
           " The Silver Search says "ERR: Too many matches" for each file
@@ -366,9 +368,9 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
           " so just punting: [2018-01-12: And I cannot remember the issue anymore]:
           " SYNC: set grepprg=ag
           if g:DubsGrepSteady_GrepIncludeColumnNumbers
-            set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ --column\ "$*"
+            let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ --column\ "$*"'
           else
-            set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"
+            let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"'
           endif
         endif
       else
@@ -450,7 +452,7 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
         let l:srch_term = "\"" . l:new_term . "\""
       endif
 
-      " Save grepformat, then temporarily set to match the search output.
+      " Save grepprg & grepformat, then temporarily set them for the search.
       call s:PrepareVimGrep()
 
       " Change Vim's working directory to the root of the search directory,
@@ -462,6 +464,7 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
 
       cd -
 
+      " Restore grepprg & grepformat.
       call s:RestoreVimGrep()
 
       let s:simple_grep_last_i = l:new_i
@@ -512,12 +515,27 @@ endfunction
 " ***
 
 function s:PrepareVimGrep() abort
-  " Save grepformat, then temporarily set to match the search output.
+  call s:PrepareGrepprg()
   call s:PrepareGrepformat()
 endfunction
 
 function s:RestoreVimGrep() abort
+    call s:RestoreGrepprg()
     call s:RestoreGrepformat()
+endfunction
+
+" ***
+
+function s:PrepareGrepprg() abort
+  let s:old_grepprg = &grepprg
+
+  execute 'set grepprg=' . s:grepprg
+endfunction
+
+function s:RestoreGrepprg() abort
+  let &grepprg = s:old_grepprg
+
+  unlet s:old_grepprg
 endfunction
 
 " REFER: Default grepformat values:
