@@ -67,7 +67,7 @@ function! s:SetGrepprgRg() abort
   endif
 endfunction
 
-function! s:SetGrepprgAg() abort
+function! s:SetGrepprgAg(limit_matches = 0) abort
   let s:using_ag = 1
   let s:using_rg = 0
 
@@ -79,11 +79,33 @@ function! s:SetGrepprgAg() abort
   "   -f --follow             Follow symlinks.
   "   -U --skip-vcs-ignores   Ignore VCS ignore files
   "                           (.gitignore, .hgignore; still obey .ignore)
-  " SYNC: set grepprg=ag
-  if g:DubsGrepSteady_GrepIncludeColumnNumbers
-    let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U\ --column'
+  if a:limit_matches == 0
+    if g:DubsGrepSteady_GrepIncludeColumnNumbers
+      let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U\ --column'
+    else
+      let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U'
+    endif
   else
-    let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U'
+    " The Silver Search says "ERR: Too many matches" for each file
+    " after printing one line, but the errs come randomly from a thread
+    " on stderr, and those messages and the search results end up being
+    " interleaved. Since we can't easily pipe between two executables
+    " using grepprg, and since Vim ends our grepprg with 2>&1, we have
+    " to go through an external party to suppress the bad messages.
+    "
+    " 2015.06.11: ARGH: Cannot get any of these to work...
+    "     set grepprg=ag_peek
+    "     set grepprg=\(ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ 2>/dev/null\)
+    "     set grepprg=(ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ 2>/dev/null)
+    "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ $*\ \\\|\ ag\ ".*"
+    "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ $*\ \\|\ ag\ ".*"
+    "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"\ 2\>\/dev\/null
+    " so just punting: [2018-01-12: And I cannot remember the issue anymore]:
+    if g:DubsGrepSteady_GrepIncludeColumnNumbers
+      let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ --column\ "$*"'
+    else
+      let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"'
+    endif
   endif
 endfunction
 
@@ -337,42 +359,9 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
       " else. no egrep option to include column numbers.
       endif
 
-      " [lb]: Be aware of another option to ignore .ignore files up a
-      "   path's hierarchy -- --no-ignore-parent -- which only makes
-      "   tracking down why a file is being ignored a little harder,
-      "   but is not a behavior we should enable.
       " Limit matches flags.
       if s:using_ag == 1
-        if a:limit_matches == 0
-          " SYNC: set grepprg=ag
-          if g:DubsGrepSteady_GrepIncludeColumnNumbers
-            let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U\ --column'
-          else
-            let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ -U'
-          endif
-        else
-          " The Silver Search says "ERR: Too many matches" for each file
-          " after printing one line, but the errs come randomly from a thread
-          " on stderr, and those messages and the search results end up being
-          " interleaved. Since we can't easily pipe between two executables
-          " using grepprg, and since Vim ends our grepprg with 2>&1, we have
-          " to go through an external party to suppress the bad messages.
-          "
-          " 2015.06.11: ARGH: Cannot get any of these to work...
-          "     set grepprg=ag_peek
-          "     set grepprg=\(ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ 2>/dev/null\)
-          "     set grepprg=(ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ 2>/dev/null)
-          "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ $*\ \\\|\ ag\ ".*"
-          "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ $*\ \\|\ ag\ ".*"
-          "     set grepprg=ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"\ 2\>\/dev\/null
-          " so just punting: [2018-01-12: And I cannot remember the issue anymore]:
-          " SYNC: set grepprg=ag
-          if g:DubsGrepSteady_GrepIncludeColumnNumbers
-            let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ --column\ "$*"'
-          else
-            let s:grepprg = 'ag\ -A\ 0\ -B\ 0\ --hidden\ --follow\ --max-count\ 1\ "$*"'
-          endif
-        endif
+        call s:SetGrepprgAg(a:limit_matches)
       else
         " RipGrep and Grep both support --max-count.
         if a:limit_matches != 0
