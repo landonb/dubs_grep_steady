@@ -23,15 +23,12 @@ let g:loaded_dubs_grep_steady_plugin = 1
 " -------------------------------------------------------------------
 
 " ------------------------------------------------------
-" GrepPrompt_Simple
+" User map <Plug>s
 " ------------------------------------------------------
 
 function! s:Map_GrepPrompt_Simple() abort
-  if mapcheck('<Plug>DubsGrepSteady_GrepPrompt_Simple') == ''
-    noremap <silent> <unique> <script>
-      \ <Plug>DubsGrepSteady_GrepPrompt_Simple
-      \ :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
-  endif
+  noremap <silent> <script> <Plug>(grep-steady-prompt-simple)
+    \ :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
 endfunction
 
 call s:Map_GrepPrompt_Simple()
