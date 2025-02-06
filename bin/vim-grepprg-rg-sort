@@ -154,7 +154,7 @@ must_verify_gnu_awk () {
     return 0
   fi
 
-  >&2 echo "ERROR: Cound not find dependency: GNU Awk"
+  >&2 echo "ERROR: Could not find dependency: GNU Awk"
   >&2 echo "- HINT: Try, e.g., \`apt install gawk\`"
 
   exit 1
