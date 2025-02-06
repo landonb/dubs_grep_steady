@@ -181,8 +181,6 @@ call s:CreateMaps__ToggleColumnNumbers('<Leader>dn')
 
 " -------------------------------------------------------------------
 
-call g:embrace#grep_steady#LoadUsersGrepProjects(0)
-
 " Use \dp (or call :GrepSteadyReload) to reload the `dubs_projects.vim` file.
 if mapcheck('<Plug>(grep-steady-load-user-projects)') == ''
   nnoremap <silent> <Plug>(grep-steady-load-user-projects) :<C-u>call g:embrace#grep_steady#LoadUsersGrepProjects(1)<CR>
@@ -203,4 +201,8 @@ if mapcheck('<Leader>dP', 'n') == ''
 endif
 
 command! -nargs=0 GrepSteadyEdit :call g:embrace#grep_steady#OpenUsersGrepProjects()
+
+" -------------------------------------------------------------------
+
+call g:embrace#grep_steady#LoadUsersGrepProjects(0)
 
