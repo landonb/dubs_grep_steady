@@ -29,6 +29,11 @@ let g:loaded_dubs_grep_steady_plugin = 1
 function! s:CreateMaps__CreatePlugs() abort
   nnoremap <silent> <script> <Plug>(grep-steady-prompt-simple)
     \ :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
+
+  vnoremap <silent> <script> <Plug>(grep-steady-prompt-simple-selected)
+    \ :<C-U>
+    \ <CR>gvy
+    \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 0)<CR>
 endfunction
 
 call s:CreateMaps__CreatePlugs()
@@ -57,12 +62,7 @@ function! s:CreateMaps__GrepPrompt_Simple(key_sequence = '<Leader>g') abort
   "     \ gV
   "     \ :call setreg('"', old_reg, old_regtype)<CR>
   " A better approach: (Keeps selection selected):
-  execute 'vnoremap <silent> ' .. a:key_sequence .. ' :<C-U>'
-    \ '<CR>gvy'
-    \ ':call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 0)<CR>'
-
-  "xnoremap <silent> <Leader>g <C-U>:call g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location("<C-R><C-R>")<CR>
-  "snoremap <silent> <Leader>g <C-U>:call g:embrace#grep_steady#GrepPrompt_Auto_Ask_Location("<C-R>")<CR>
+  execute 'vnoremap <silent> ' .. a:key_sequence .. ' <Plug>(grep-steady-prompt-simple-selected)'
 endfunction
 
 " ***
