@@ -790,7 +790,9 @@ function! s:FindFileInProjectOrRuntimeRoot_Vim(fname) abort
   let l:fpath = findfile(a:fname, pathogen#split(&rtp)[0] . '/**')
 
   if l:fpath == ''
-    let l:proj_root = expand('<script>:h:h')
+    " <script> is: /path/to/dubs_grep_steady/autoload/embrace/grep_steady.vim
+    " del 3 heads: /path/to/dubs_grep_steady/
+    let l:proj_root = expand('<script>:h:h:h')
 
     if l:proj_root != ''
       let l:fpath = findfile(a:fname, l:proj_root . '/**')
