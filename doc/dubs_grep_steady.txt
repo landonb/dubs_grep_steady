@@ -5,7 +5,7 @@ Dubs Vim -- Grep Steady 🧐 ~
 SEARCHING AND REPLACING TEXT		*dubs-grep-steady*
 
 1. About This Plugin			|dubs-grepst-about|
-2. Prerequisites			|dubs-grepst-prerequisites|
+2. Requirements				|dubs-grepst-requirements|
 3. Plugin Setup				|dubs-grepst-setup|
 4. Searching Files			|dubs-grepst-commands|
 5. Tips 'n Tricks			|dubs-grepst-tipsntricks|
@@ -18,7 +18,7 @@ This plugin sets up a powerful text search utility.
 Project page: https://github.com/landonb/dubs_grep_steady#🧐
 
 ==============================================================================
-2. Prerequisites			*dubs-grepst-prerequisites*
+2. Requirements				*dubs-grepst-requirements*
 
 This script uses an external grep utility, preferably
 `The` `Silver` `Searcher` <http://geoff.greer.fm/ag/>
@@ -27,7 +27,12 @@ The former is a tad faster and it honors `.agignore`
 and `.gitignore` files, which makes it easy to filter
 out the cruft when searching.
 
-Run `sudo` `apt-get` `install` `-y` `ag` to install Silver Searcher.
+For Vim, this plugin also requires
+Pathogen https://github.com/tpope/vim-pathogen
+(but just for the simple `pathogen#split` command;
+you're not expected to manage this plugin with Pathogen).
+
+- For Neovim, Pathogen is not required.
 
 ==============================================================================
 3. Plugin Setup				*dubs-grepst-setup*
