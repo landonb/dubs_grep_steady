@@ -1,6 +1,6 @@
 *dubs_grep_steady.txt*	For Vim version 7.4.	Last change: 2015 Jan 23
 
-Dubs Vim -- Grep Steady~
+Dubs Vim -- Grep Steady 🧐 ~
 
 SEARCHING AND REPLACING TEXT		*dubs-grep-steady*
 
