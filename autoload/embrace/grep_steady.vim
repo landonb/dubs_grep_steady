@@ -49,9 +49,9 @@ function! s:SetGrepprgRg() abort
 
   " Use the path to this script to find the grep script.
   " - CXREF:
-  "   ~/.kit/nvim/landonb/start/dubs_grep_steady/bin/vim-grepprg-rg-sort
+  "   ~/.kit/nvim/landonb/dubs_grep_steady/bin/vim-grepprg-rg-sort
   " - Note it's :h:h:h to remove 'autoload/embrace/grep_steady.vim':
-  "   ~/.kit/nvim/landonb/start/dubs_grep_steady/autoload/embrace/grep_steady.vim
+  "   ~/.kit/nvim/landonb/dubs_grep_steady/autoload/embrace/grep_steady.vim
   let l:ripgrep_shim = expand('<script>:h:h:h') .. '/bin/vim-grepprg-rg-sort'
 
   if exists("g:DUBS_GREP_STEADY_GREPPRG_SCRIPT")
@@ -740,8 +740,8 @@ function! s:FindUsersGrepProjects() abort
 endfunction
 
 " COPYD/2025-02-02: FindFile et al shared between two plugins:
-"   ~/.kit/nvim/landonb/start/dubs_grep_steady/plugin/dubs_grep_steady.vim
-"   ~/.kit/nvim/landonb/start/dubs_project_tray/plugin/dubs_project_tray.vim
+"   ~/.kit/nvim/landonb/dubs_grep_steady/plugin/dubs_grep_steady.vim
+"   ~/.kit/nvim/landonb/dubs_project_tray/plugin/dubs_project_tray.vim
 
 function! s:FindFile(fname) abort
   if a:fname == ''
