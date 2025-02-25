@@ -207,8 +207,6 @@ function! s:SetGrepprg() abort
   endif
 endfunction
 
-call s:SetGrepprg()
-
 " ------------------------------------------------------
 
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -918,4 +916,8 @@ function! g:embrace#grep_steady#OpenUsersGrepProjects() abort
 
   exe 'edit ' .. s:d_projs
 endfunction
+
+" ------------------------------------------------------
+
+call s:SetGrepprg()
 
