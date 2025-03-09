@@ -271,6 +271,17 @@ let s:simple_grep_last_i = 0
 " the histories, and I can't think of a good solution (we could call input()
 " with a default value, but that's probably annoying).
 function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) abort
+  " DUNNO/2025-03-07: There's gotta be a better way to do this...
+  let l:reactivate_noice = 0
+  if &cmdheight == 0
+    try
+      :Noice disable
+      if &cmdheight > 0
+        let l:reactivate_noice = 1
+      endif
+    endtry
+  endif
+
   call inputsave()
 
   let l:the_term = a:term
@@ -470,6 +481,10 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
   endif
 
   call inputrestore()
+
+  if l:reactivate_noice
+    :Noice enable
+  endif
 endfunction
 
 function s:GrepPrompt_Simple_GetInputlist(i_highlight) abort
