@@ -50,12 +50,12 @@ call s:CreateMaps__CreatePlugs()
 " 
 " - Default: \g
 
-function! s:CreateMaps__GrepPrompt_Simple(key_sequence = '<Leader>g') abort
+function! s:CreateMaps__GrepPrompt_Simple(key_sequence = '<LocalLeader>g') abort
   execute 'nnoremap <silent> ' .. a:key_sequence .. ' <Plug>(grep-steady-prompt-simple)'
   execute 'inoremap <silent> ' .. a:key_sequence .. ' <C-O><Plug>(grep-steady-prompt-simple)'
 
   " A previous approach:
-  "   vnoremap <Leader>g :<C-U>
+  "   vnoremap <LocalLeader>g :<C-U>
   "     \ let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
   "     \ gvy
   "     \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 0)<CR>
@@ -68,19 +68,18 @@ endfunction
 " ***
 
 function! s:WireSearchMappings() abort
-  " 2015.06.11: Early birthday present: Case-sensitive, for
-  "             when you want ag to recognize all-lowercase.
-  noremap <silent> <Leader>G :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 1, 0)<CR>
-  inoremap <silent> <Leader>G <C-O>:call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 1, 0)<CR>
-  vnoremap <silent> <Leader>G :<C-U>
+  " 2015.06.11: Case-sensitive search.
+  noremap <silent> <LocalLeader>G :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 1, 0)<CR>
+  inoremap <silent> <LocalLeader>G <C-O>:call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 1, 0)<CR>
+  vnoremap <silent> <LocalLeader>G :<C-U>
     \ <CR>gvy
     \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 1, 0)<CR>
 
   " Limit search results to one per file, if you
   " just want an idea which files contain matches.
-  noremap <silent> <Leader>C :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 1)<CR>
-  inoremap <silent> <Leader>C <C-O>:call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 1)<CR>
-  vnoremap <silent> <Leader>C :<C-U>
+  noremap <silent> <LocalLeader>C :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 1)<CR>
+  inoremap <silent> <LocalLeader>C <C-O>:call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 1)<CR>
+  vnoremap <silent> <LocalLeader>C :<C-U>
     \ <CR>gvy
     \ :call g:embrace#grep_steady#GrepPrompt_Simple(@@, 0, 0, 1)<CR>
 
@@ -130,7 +129,7 @@ endfunction
 
 call s:WireSearchMappings()
 
-call s:CreateMaps__GrepPrompt_Simple('<Leader>g')
+call s:CreateMaps__GrepPrompt_Simple('<LocalLeader>g')
 
 " -------------------------------------------------------------------
 
@@ -155,7 +154,7 @@ call s:CreateMaps__GrepPrompt_Simple('<Leader>g')
 " USAGE: Wire you own map sequence to toggle extravagant casing.
 " - The author uses \dg, mnemonic: toggle 'Dubs Grep' casing.
 
-function! s:CreateMaps__ToggleMulticase(key_sequence = '<Leader>dg') abort
+function! s:CreateMaps__ToggleMulticase(key_sequence = '<LocalLeader>dg') abort
   nnoremap <silent> <expr> <script> <Plug>(grep-steady-toggle-multicase)
     \ g:embrace#grep_steady#Toggle_GrepAllTheCases()
 
@@ -163,11 +162,11 @@ function! s:CreateMaps__ToggleMulticase(key_sequence = '<Leader>dg') abort
   execute 'inoremap <silent> ' .. a:key_sequence .. ' <C-O><Plug>(grep-steady-toggle-multicase)'
 endfunction
 
-call s:CreateMaps__ToggleMulticase('<Leader>dg')
+call s:CreateMaps__ToggleMulticase('<LocalLeader>dg')
 
 " -------------------------------------------------------------------
 
-function! s:CreateMaps__ToggleColumnNumbers(key_sequence = '<Leader>dg') abort
+function! s:CreateMaps__ToggleColumnNumbers(key_sequence = '<LocalLeader>dn') abort
   nnoremap <silent> <expr> <script> <Plug>(grep-steady-toggle-column-numbers)
     \ g:embrace#grep_steady#Toggle_GrepIncludeColumnNumbers()
 
@@ -175,7 +174,7 @@ function! s:CreateMaps__ToggleColumnNumbers(key_sequence = '<Leader>dg') abort
   execute 'inoremap <silent> ' .. a:key_sequence .. ' <C-O><Plug>(grep-steady-toggle-column-numbers)'
 endfunction
 
-call s:CreateMaps__ToggleColumnNumbers('<Leader>dn')
+call s:CreateMaps__ToggleColumnNumbers('<LocalLeader>dn')
 
 " -------------------------------------------------------------------
 
@@ -184,9 +183,9 @@ if mapcheck('<Plug>(grep-steady-load-user-projects)') == ''
   nnoremap <silent> <Plug>(grep-steady-load-user-projects)
     \ :<C-u>call g:embrace#grep_steady#LoadUsersGrepProjects(1)<CR>
 endif
-if mapcheck('<Leader>dp', 'n') == ''
-  nnoremap <silent> <unique> <Leader>dp <Plug>(grep-steady-load-user-projects)
-  inoremap <silent> <unique> <Leader>dp <C-O><Plug>(grep-steady-load-user-projects)
+if mapcheck('<LocalLeader>dp', 'n') == ''
+  nnoremap <silent> <unique> <LocalLeader>dp <Plug>(grep-steady-load-user-projects)
+  inoremap <silent> <unique> <LocalLeader>dp <C-O><Plug>(grep-steady-load-user-projects)
 endif
 
 command! -nargs=0 GrepSteadyReload :call g:embrace#grep_steady#LoadUsersGrepProjects(1)
@@ -195,9 +194,9 @@ if mapcheck('<Plug>(grep-steady-edit-user-projects)') == ''
   nnoremap <silent> <Plug>(grep-steady-edit-user-projects)
     \ :<C-u>call g:embrace#grep_steady#OpenUsersGrepProjects()<CR>
 endif
-if mapcheck('<Leader>dP', 'n') == ''
-  nnoremap <silent> <unique> <Leader>dP <Plug>(grep-steady-edit-user-projects)
-  inoremap <silent> <unique> <Leader>dP <C-O><Plug>(grep-steady-edit-user-projects)
+if mapcheck('<LocalLeader>dP', 'n') == ''
+  nnoremap <silent> <unique> <LocalLeader>dP <Plug>(grep-steady-edit-user-projects)
+  inoremap <silent> <unique> <LocalLeader>dP <C-O><Plug>(grep-steady-edit-user-projects)
 endif
 
 command! -nargs=0 GrepSteadyEdit :call g:embrace#grep_steady#OpenUsersGrepProjects()
