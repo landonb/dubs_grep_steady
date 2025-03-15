@@ -328,6 +328,10 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
         let l:new_i = inputlist(s:GrepPrompt_Simple_GetInputlist(
           \ s:simple_grep_last_i))
         call inputrestore()
+        if l:new_i == 0
+          " Use delay so user not prompted to confirm message.
+          call timer_start(0, { -> execute('echom "Cancelled search"', '')}) 
+        endif
       endif
     endif
 
