@@ -282,15 +282,17 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
     endtry
   endif
 
-  call inputsave()
-
   let l:the_term = a:term
 
   if l:the_term == ''
-    " There's a newline in the buffer, so call inputsave
-    "call inputsave()
+    " Vim's typeahead mechanism causes input() to process remaining
+    " characters from the map that calls this function, and there's
+    " a newline yet in the mapping. So without inputsave(), input()
+    " returns immediately.
+    " - REFER: See |input()|
+    call inputsave()
     let l:the_term = input("Search for: ")
-    "call inputrestore()
+    call inputrestore()
     " Ensure the "Search in:" starts on new line.
     echo "\n"
   endif
@@ -302,10 +304,10 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
     let l:new_i = a:locat_index
 
     if l:new_i == 0
-      "call inputsave()
+      call inputsave()
       let l:new_i = inputlist(s:GrepPrompt_Simple_GetInputlist(
         \ s:simple_grep_last_i))
-      "call inputrestore()
+      call inputrestore()
     endif
 
     " If the user hits Enter or Escape, inputlist returns 0, which is also
@@ -322,10 +324,10 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
     if l:new_i == 0
       let l:new_i = s:simple_grep_last_i
       if l:new_i == 0
-        "call inputsave()
+        call inputsave()
         let l:new_i = inputlist(s:GrepPrompt_Simple_GetInputlist(
           \ s:simple_grep_last_i))
-        "call inputrestore()
+        call inputrestore()
       endif
     endif
 
@@ -475,8 +477,6 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
       endif
     endif
   endif
-
-  call inputrestore()
 
   if l:reactivate_noice
     :Noice enable
