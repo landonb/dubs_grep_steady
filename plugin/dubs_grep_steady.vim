@@ -28,7 +28,7 @@ let g:loaded_dubs_grep_steady_plugin = 1
 
 function! s:CreateMaps__CreatePlugs() abort
   nnoremap <silent> <script> <Plug>(grep-steady-prompt-simple)
-    \ :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR><CR>
+    \ :call g:embrace#grep_steady#GrepPrompt_Simple("", 0, 0, 0)<CR>
 
   vnoremap <silent> <script> <Plug>(grep-steady-prompt-simple-selected)
     \ :<C-U>
