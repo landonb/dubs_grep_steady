@@ -383,16 +383,24 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
         endif
       endif
 
-      " Enable multiline if there's a newline escape sequence in the query.
-      " - Note we use single quotes because query shouldn't contain actual
-      "   newline, just the literal representation.
-      " - User must double-escape literal newline, which we sub-out so we
-      "   don't confuse our check.
-      " - Note that to match a single backslash \, user must input four \\\\
-      "   of them, because the input() prompt will resolve \\ → \ and \\ → \,
-      "   and then grep prompt resolves \\ → \ (at least that's what I think).
-      if s:using_rg && stridx(substitute(l:the_term, '\\\\n', '', 'g'), '\n') >= 0
-        let l:options = l:options . " --multiline"
+      " Enable multiline if there's a newline escape sequence in the query,
+      " and replace actual newline with the literal representation.
+      if s:using_rg
+        " If user selects text, escape literal \n → \\n
+        if a:term != ''
+          let l:pt = l:the_term
+          let l:the_term = substitute(l:the_term, "\\\\n", "\\\\\\\\\\\\\\\\n", "g")
+          echom l:pt .. " → " .. l:the_term
+        endif
+        " If user selects text across newline, replace newline with escape seq.
+        if stridx(l:the_term, "\n") >= 0
+          let l:the_term = substitute(l:the_term, "\n", "\\\\n", "g")
+        endif
+        " Check if search term contains escape seq. (that we either just
+        " subbed, or that user typed literally).
+        if stridx(l:the_term, '\n') >= 0
+          let l:options = l:options . " --multiline"
+        endif
       endif
 
       " 2018-03-29: Crude implementation of caseless-grep.
