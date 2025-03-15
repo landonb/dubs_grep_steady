@@ -291,8 +291,6 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
     "call inputsave()
     let l:the_term = input("Search for: ")
     "call inputrestore()
-    "echo "The term is" . l:the_term
-    "let TBD = input("Hit any key to continue: ")
     " Ensure the "Search in:" starts on new line.
     echo "\n"
   endif
@@ -310,17 +308,15 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
       "call inputrestore()
     endif
 
-    "echo "=== new_i: " . l:new_i
-    "let TBD = input("Hit any key to continue: ")
     " If the user hits Enter or Escape, inputlist returns 0, which is also
     " the very first item in the list. However, we put "Search in:" as the
     " first item, so we can assume the user hit Enter or Escape. In the past,
     " we interpreted that to mean the user wants us to search in the last
     " used location. But I [lb] got annoyed that Escape wouldn't cancel the
-    " operation.  I considerd making the next row (value 1) say "Cancel",
+    " operation. I considerd making the next row (value 1) say "Cancel",
     " but that seems awkward, and I still want to be able to reclaim Escape,
     " so there's now a separate keyboard shortcut to search again in the
-    " same location.  UG. This lasted ten minutes. I can't live without
+    " same location. UG. This lasted ten minutes. I can't live without
     " double-return, either!
     " Trying "1" as the cancel indicator
     if l:new_i == 0
@@ -470,7 +466,7 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
       let s:simple_grep_last_i = l:new_i
 
       if exists(':QFix')
-        " CXREF: https://github.com/landonb/dubs_quickfix_wrap#🌯
+        " CXREF: https://github.com/landonb/dubs_quickfix_wrap 🌯
         :QFix!(0)
       else
         " ALTLY: We could let user specify default height, e.g.:
