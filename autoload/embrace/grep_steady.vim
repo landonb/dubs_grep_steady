@@ -383,6 +383,12 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
         endif
       endif
 
+      " Escape double quotes, unless we prompted user for search term,
+      " in which case take them at their "word".
+      if a:term != ''
+        let l:the_term = substitute(l:the_term, '"', "\\\\\"", "g")
+      endif
+
       " Enable multiline if there's a newline escape sequence in the query,
       " and replace actual newline with the literal representation.
       if s:using_rg
