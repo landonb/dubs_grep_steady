@@ -67,6 +67,7 @@ from repeating yourself anytime you search.
 
 				*:gr* *{regex}* *{dir}*
 :gr! "{regex}" {dir}	Search for {regex} matches in files under {dir}.
+                        (REFER: See |:grep| for Vim help.)
 
 				*<Shift-F4>* *<S-F4>*
 <Shift-F4>		Start Project search on selected text or word under
