@@ -474,6 +474,8 @@ function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensiti
         " ALTLY: We could let user specify default height, e.g.:
         "  execute "botright copen " . g:grep_steady_qf_height
         botright copen
+        " :QFix!(0) opens Quickfix but doesn't focus it.
+        wincmd p
       endif
     endif
   endif
