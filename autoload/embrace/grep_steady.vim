@@ -262,12 +262,21 @@ function g:embrace#grep_steady#GrepPrompt_Simple(
 \ term, locat_index, case_sensitive, limit_matches
 \ ) abort
   " DUNNO/2025-03-07: There's gotta be a better way to do this...
-  let l:reactivate_noice = 0
   if &cmdheight == 0
     try
       :Noice disable
       if &cmdheight > 0
-        let l:reactivate_noice = 1
+        let g:grep_steady_reactivate_noice = 1
+
+        " Redirect <Ctrl-C> → <Esc>, otherwise <Ctrl-C> at the input()
+        " prompt kills this callback (and try-endtry doesn't save it).
+        " - Note also that I couldn't find an autocmd event to detect
+        "   <Ctrl-C>, either, at least not CmdlineLeave, CmdwinLeave,
+        "   or even BufEnter.
+        if maparg('<C-c>', 'c') == ''
+          " Don't kill the input() prompt on <Ctrl-C>.
+          cnoremap <C-c> <Esc>
+        endif
       endif
     endtry
   endif
@@ -488,9 +497,18 @@ function g:embrace#grep_steady#GrepPrompt_Simple(
     endif
   endif
 
-  if l:reactivate_noice
-    :Noice enable
+  call g:embrace#grep_steady#ReactivateNoice()
+endfunction
+
+function! g:embrace#grep_steady#ReactivateNoice() abort
+  if get(g:, 'grep_steady_reactivate_noice', 0)
+    if maparg('<C-c>', 'c') == '<Esc>'
+      cunmap <C-c>
+    endif
+    Noice enable
   endif
+  
+  unlet! g:grep_steady_reactivate_noice
 endfunction
 
 function s:GrepPrompt_Simple_GetInputlist(i_highlight) abort
