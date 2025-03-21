@@ -283,7 +283,7 @@ function g:embrace#grep_steady#GrepPrompt_Simple(
 
   let l:the_term = a:term
 
-  if l:the_term == ''
+  if a:term == ''
     " Vim's typeahead mechanism causes input() to process remaining
     " characters from the map that calls this function, and there's
     " a newline yet in the mapping. So without inputsave(), input()
@@ -292,10 +292,29 @@ function g:embrace#grep_steady#GrepPrompt_Simple(
     call inputsave()
     let l:the_term = input("Search for: ")
     call inputrestore()
-    " Ensure the "Search in:" starts on new line.
-    echo "\n"
   endif
 
+  " Check if term acquired, and user didn't <CR> with no input, <Esc>,
+  " or <Ctrl-C> (normally <Ctrl-C> kills input() caller, but we temp.
+  " remap <C-C> to <Esc>).
+  if l:the_term != ""
+    if a:term == ''
+      " Ensure the "Search in:" starts on new line.
+      echo "\n"
+    endif
+
+    call s:GrepPrompt_SimpleWithTerm(
+      \ l:the_term, a:term, a:locat_index, a:case_sensitive, a:limit_matches
+      \ )
+  endif
+
+  call g:embrace#grep_steady#ReactivateNoice()
+endfunction
+
+function! s:GrepPrompt_SimpleWithTerm(
+\ the_term, term, locat_index, case_sensitive, limit_matches
+\ ) abort
+  let l:the_term = a:the_term
   " Check for <ESC> lest we dismiss a help
   " page (or something not in the buffer list)
   if l:the_term != ""
@@ -496,8 +515,6 @@ function g:embrace#grep_steady#GrepPrompt_Simple(
       endif
     endif
   endif
-
-  call g:embrace#grep_steady#ReactivateNoice()
 endfunction
 
 function! g:embrace#grep_steady#ReactivateNoice() abort
