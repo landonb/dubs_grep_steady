@@ -311,6 +311,17 @@ function g:embrace#grep_steady#GrepPrompt_Simple(
   call g:embrace#grep_steady#ReactivateNoice()
 endfunction
 
+function! g:embrace#grep_steady#ReactivateNoice() abort
+  if get(g:, 'grep_steady_reactivate_noice', 0)
+    if maparg('<C-c>', 'c') == '<Esc>'
+      cunmap <C-c>
+    endif
+    Noice enable
+  endif
+  
+  unlet! g:grep_steady_reactivate_noice
+endfunction
+
 function! s:GrepPrompt_SimpleWithTerm(
 \ the_term, term, locat_index, case_sensitive, limit_matches
 \ ) abort
@@ -515,17 +526,6 @@ function! s:GrepPrompt_SimpleWithTerm(
       endif
     endif
   endif
-endfunction
-
-function! g:embrace#grep_steady#ReactivateNoice() abort
-  if get(g:, 'grep_steady_reactivate_noice', 0)
-    if maparg('<C-c>', 'c') == '<Esc>'
-      cunmap <C-c>
-    endif
-    Noice enable
-  endif
-  
-  unlet! g:grep_steady_reactivate_noice
 endfunction
 
 function s:GrepPrompt_Simple_GetInputlist(i_highlight) abort
