@@ -258,7 +258,9 @@ let s:simple_grep_last_i = 0
 " use :cold to jump back in the quickfix history). I don't think we can add to
 " the histories, and I can't think of a good solution (we could call input()
 " with a default value, but that's probably annoying).
-function g:embrace#grep_steady#GrepPrompt_Simple(term, locat_index, case_sensitive, limit_matches) abort
+function g:embrace#grep_steady#GrepPrompt_Simple(
+\ term, locat_index, case_sensitive, limit_matches
+\ ) abort
   " DUNNO/2025-03-07: There's gotta be a better way to do this...
   let l:reactivate_noice = 0
   if &cmdheight == 0
