@@ -173,29 +173,17 @@ function! s:SetGrepprgGrep() abort
 endfunction
 
 " This is Vim's default grepformat. First to match wins.
-" 1.  file:line:message
-" 2.  file:linemessage
-" 3.  file  linemessage
+"   1. file:line:message
+"   2. file:linemessage
+"   3. file  linemessage
 " Already set to:
 "  set grepformat=%f:%l:%m,%f:%l%m,%f\ \ %l%m
 
-" Grep notes:
-" NOTE: The grep exclude-from file *must* be saved
-"       in unix format
-"       i.e., if :set ff is 'dos', it won't work!
-"       so :set ff=unix
-" NOTE: The exclude-from file has one file glob
-"       per line, i.e.,
-"         *.sql
-"         *.skipme
-"         *.etc
-
-" FIXME: Map the quickfix navigation commands to, um,
-"        maybe alt-right and alt-left (in quickfix only)
-"        so you can search one term, then another, and then
-"        return to the first term's result.
-" DISCOVER: Can you show search results in a window's location list?
-"           Would you want to?
+" FTREQ: Quickfix buffer/window :colder/:cnewer navigation maps.
+" - Use case: search one term, then another, and then return to
+"   the first term's result...
+" - Something along the lines of the <Shift-Ctrl-Up|Down> or
+"   <Shift-Alt-Up|Down> maps... <Shift-Cmd-Up|Down> is avail.
 
 function! s:SetGrepprg() abort
   if executable("rg")
@@ -213,7 +201,7 @@ endfunction
 " Setup Search Features
 " ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-" STOLEN! From vim-abolish. Shameless!!
+" COPYD: Thanks, vim-abolish!
 " - MAYBE/2018-06-27: DRY this: Make a shared #autoload plugin?
 " USYNC: Not DRY: Found in: vim-abolish, dubs_grep_steady, and vim-blinky-search.
 
