@@ -425,7 +425,7 @@ function! s:GrepPrompt_SimpleWithTerm(
         if a:term != ''
           let l:pt = l:the_term
           let l:the_term = substitute(l:the_term, "\\\\n", "\\\\\\\\\\\\\\\\n", "g")
-          echom l:pt .. " → " .. l:the_term
+          " echom l:pt .. " → " .. l:the_term
         endif
         " If user selects text across newline, replace newline with escape seq.
         if stridx(l:the_term, "\n") >= 0
