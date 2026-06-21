@@ -55,7 +55,7 @@ let g:ds_simple_grep_locat_lookup = [
 " *********************************************************************** "
 
 " Above is the list of directories you'll see when performing a search
-" using the <Leader>g or <F4> commands.
+" using the <LocalLeader>g or <F4> commands.
 "
 "   See :h dubs-grep-steady
 

@@ -54,16 +54,16 @@ from repeating yourself anytime you search.
 ==============================================================================
 4. Searching Files			*dubs-grepst-commands*
 
-				*<Leader>g* *\g* *{GrepPrompt_Simple}*
-<Leader>g		Search in Project Files.
+				*<LocalLeader>g* *\g* *{GrepPrompt_Simple}*
+<LocalLeader>g		Search in Project Files.
 			- Uses *ag* (The Silver Searcher).
                         - Customize projects by editing '.vimprojects'.
 
-				*<Leader>g <Up>* *\g <Up>*
-<Leader>g<Up>		Show previous search term from search history.
+				*<LocalLeader>g <Up>* *\g <Up>*
+<LocalLeader>g<Up>	Show previous search term from search history.
 
-				*<Leader>g <Down>* *\g <Down>*
-<Leader>g<Down>		Show next search term from search history.
+				*<LocalLeader>g <Down>* *\g <Down>*
+<LocalLeader>g<Down>	Show next search term from search history.
 
 				*:gr* *{regex}* *{dir}*
 :gr! "{regex}" {dir}	Search for {regex} matches in files under {dir}.
